@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,6 +14,7 @@
     <link href="css/mdb.min.css" rel="stylesheet">
     <!-- <link href="css/style.min.css" rel="stylesheet"> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.css" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
@@ -40,9 +45,21 @@
     </nav>
     <div class="container">
 
-        <div class="row mt-3">
+        <div class="row mt-3" style="width: 30rem; margin:0 auto;">
             <div class="col-md-12">
+                <?php if (isset($_SESSION['err_register'])) : ?>
+                    <div class="alert alert-danger" role="alert">
+                        <strong><?php echo $_SESSION['err_register']; ?></strong>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['err_email'])) : ?>
+                    <div class="alert alert-danger" role="alert">
+                        <strong><?php echo $_SESSION['err_email']; ?></strong>
+                    </div>
+                <?php endif; ?>
                 <div class="card mt-4 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
+                    
                     <div class="card-header bg-transparent border-info">
                         <h3 class="text-center">Register</h3>
                     </div>
@@ -52,45 +69,37 @@
 
                                 <div class="form-outline mb-4">
                                     <input type="text" id="firstname" name="firstname" class="form-control" />
-                                    <label class="form-label" for="firstname" >First Name</label>
+                                    <label class="form-label" for="firstname">First Name</label>
                                 </div>
 
                                 <div class="form-outline mb-4">
                                     <input type="password" id="lastname" name="lastname" class="form-control" />
-                                    <label class="form-label" for="lastname" >Last Name</label>
+                                    <label class="form-label" for="lastname">Last Name</label>
                                 </div>
 
                                 <div class="form-outline mb-4">
                                     <input type="email" id="email" name="email" class="form-control" />
-                                    <label class="form-label" for="email" >Email</label>
+                                    <label class="form-label" for="email">Email</label>
                                 </div>
 
                                 <div class="form-outline mb-4">
                                     <input type="text" id="phone" name="phone" class="form-control" />
-                                    <label class="form-label" for="phone" >Phone</label>
+                                    <label class="form-label" for="phone">Phone</label>
                                 </div>
 
                                 <div class="form-outline mb-4">
                                     <input type="password" id="password" name="password" class="form-control" />
-                                    <label class="form-label" for="password" >Password</label>
+                                    <label class="form-label" for="password">Password</label>
                                 </div>
 
                                 <div class="form-outline mb-4">
                                     <input type="password" id="confirm" name="confirm" class="form-control" />
-                                    <label class="form-label" for="confirm" > Confirm Password</label>
+                                    <label class="form-label" for="confirm"> Confirm Password</label>
                                 </div>
 
                                 <!-- 2 column grid layout for inline styling -->
                                 <div class="row mb-4">
-                                    <div class="col d-flex justify-content-center">
-                                        <!-- Checkbox -->
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
-                                            <label class="form-check-label" for="form1Example3">
-                                                Remember me
-                                            </label>
-                                        </div>
-                                    </div>
+
 
                                     <div class="col">
                                         <!-- Simple link -->
@@ -98,8 +107,12 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group mb-4">
+                                    <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Lda5dAZAAAAAJ776z4Xgdu469YOgCRJvYn1KByI"></div>
+                                </div>
+
                                 <!-- Submit button -->
-                                <button type="submit" name="submit" class="btn btn-info btn-block">Register</button>
+                                <button type="submit" name="submit" id="submit" disabled class="btn btn-info btn-block">Register</button>
                             </form>
                         </p>
                     </div>
@@ -115,11 +128,12 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
+
     <script src="node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#formRegister').validate( {
-                rules:{
+            $('#formRegister').validate({
+                rules: {
                     firstname: 'required',
                     lastname: 'required',
                     email: {
@@ -142,7 +156,7 @@
                         equalTo: '#password'
                     }
                 },
-                messages:{
+                messages: {
                     firstname: 'กรุณากรอกชื่อต้น',
                     lastname: 'กรุณากรอกนามสกุล',
                     email: {
@@ -178,7 +192,17 @@
                 }
             });
         })
+
+        function recaptchaCallback() {
+            $('#submit').removeAttr('disabled');
+        }
     </script>
 </body>
 
 </html>
+
+<?php
+if (isset($_SESSION['err_register']) || isset($_SESSION['err_email'])) {
+    session_destroy();
+}
+?>
