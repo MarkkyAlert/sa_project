@@ -34,11 +34,16 @@ if (isset($_POST['submit'])) {
     else {
         $passwordenc = md5($password);
         $query = "INSERT INTO users (firstname, lastname, email, phone, password, type) VALUES ('$firstname', '$lastname', '$email', '$phone', '$passwordenc', 'U')";
-        $result - mysqli_query($conn, $query);
+        $result = mysqli_query($conn, $query);
 
         if ($result) {
             
             $_SESSION['is_logged_in'] = true;
+            $_SESSION['type'] = 'U';
+            $query = "SELECT user_id FROM users WHERE email = '$email'";
+            $result = mysqli_query($conn, $query);
+            $row = mysqli_fetch_assoc($result);
+            $_SESSION['user_id'] = $row['user_id'];
             header('location: index.php');
         }
 

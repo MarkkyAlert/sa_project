@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,24 +41,29 @@
     </nav>
     <div class="container">
 
-        <div class="row mt-3">
+        <div class="row mt-3" style="width: 30rem; margin:0 auto;">
             <div class="col-md-12">
+                <?php if (isset($_SESSION['err_login'])) : ?>
+                    <div class="alert alert-danger" role="alert">
+                        <strong><?php echo $_SESSION['err_login']; ?></strong>
+                    </div>
+                <?php endif; ?>
                 <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
                     <div class="card-header bg-transparent border-info">
                         <h3 class="text-center">Sign In</h3>
                     </div>
                     <div class="card-body">
                         <p class="card-text">
-                            <form action="register_backend" method="post">
+                            <form action="login_backend.php" method="post">
 
                                 <div class="form-outline mb-4">
-                                    <input type="email" id="form1Example1" class="form-control" />
-                                    <label class="form-label" for="form1Example1" name="email">Email</label>
+                                    <input type="email" name="email" id="form1Example1" class="form-control" value="<?php if (isset($_COOKIE['email'])) { echo $_COOKIE['email'];} ?>" />
+                                    <label class="form-label" for="form1Example1">Email</label>
                                 </div>
 
                                 <div class="form-outline mb-4">
-                                    <input type="password" id="form1Example2" class="form-control" />
-                                    <label class="form-label" for="form1Example2" name="password">Password</label>
+                                    <input type="password" name="password" id="form1Example2" class="form-control" value="<?php if (isset($_COOKIE['password'])) { echo $_COOKIE['password'];} ?>" />
+                                    <label class="form-label" for="form1Example2">Password</label>
                                 </div>
 
                                 <!-- 2 column grid layout for inline styling -->
@@ -65,7 +71,7 @@
                                     <div class="col d-flex justify-content-center">
                                         <!-- Checkbox -->
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
+                                            <input class="form-check-input" type="checkbox" name="remember"  id="form1Example3" <?php if (isset($_COOKIE['email'])) { ?> checked <?php } ?> />
                                             <label class="form-check-label" for="form1Example3">
                                                 Remember me
                                             </label>
@@ -98,3 +104,9 @@
 </body>
 
 </html>
+
+<?php
+    if (isset($_SESSION['err_login'])) {
+        unset($_SESSION['err_login']);
+    }
+?>
