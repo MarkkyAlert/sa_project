@@ -1,51 +1,45 @@
 <?php
 session_start();
-?>
+include('../auth.php');
 
+if (!isLoggedIn()) {
+    header('location: ../login.php');
+} else if ($_SESSION['type'] != 'L') {
+    header('location: ../page_not_found.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Material Design Bootstrap</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
-    <!-- <link href="css/style.min.css" rel="stylesheet"> -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.css" rel="stylesheet">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link href="../css/style.min.css" rel="stylesheet">
+
+
+
 </head>
 
-<body>
-    <nav class="navbar  navbar-expand-lg navbar-light white scrolling-navbar">
-        <div class="container-fluid">
-
-            <!-- Brand -->
-
-            <a class="navbar-brand" href="https://mdbootstrap.com/docs/jquery/">
-                <strong class="blue-text">FenFern Logistics</strong>
-            </a>
-
-            <!-- Collapse -->
+<body class="grey lighten-3">
 
 
-            <!-- Links -->
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <header>
+        <?php include('../partial/navbar_logistics.php'); ?>
+        <?php include('../partial/sidebar_logistics.php'); ?>
 
-                <ul class="navbar-nav ml-auto">
 
-                    <li class="nav-item">
-                        <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/">
-                            <i class="fas fa-truck-moving mr-1"></i>ติดตามการจัดส่ง</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container">
 
-        <div class="row mt-3" style="width: 30rem; margin:0 auto;">
+
+    </header>
+    <main class="pt-5 mx-lg-5">
+
+        <div class="container-fluid mt-1">
+        <div class="row mt-3">
             <div class="col-md-12">
                 <?php if (isset($_SESSION['err_register'])) : ?>
                     <div class="alert alert-danger" role="alert">
@@ -61,7 +55,7 @@ session_start();
                 <div class="card mt-4 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
                     
                     <div class="card-header bg-transparent border-info">
-                        <h3 class="text-center">Register</h3>
+                        <h3 class="text-center">เพิ่มข้อมูลพนักงาน</h3>
                     </div>
                     <div class="card-body">
                         <p class="card-text">
@@ -120,32 +114,20 @@ session_start();
 
             </div>
         </div>
-    </div>
+        </div>
+    </main>
+
 
 
     <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="../js/popper.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/mdb.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
-
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#formRegister').validate({
+            $('#changePW').validate({
                 rules: {
-                    firstname: 'required',
-                    lastname: 'required',
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    phone: {
-                        required: true,
-                        number: true,
-                        minlength: 9,
-                        maxlength: 10
-                    },
                     password: {
                         required: true,
                         minlength: 6
@@ -157,18 +139,6 @@ session_start();
                     }
                 },
                 messages: {
-                    firstname: 'กรุณากรอกชื่อต้น',
-                    lastname: 'กรุณากรอกนามสกุล',
-                    email: {
-                        required: 'กรุณากรอกอีเมล์',
-                        email: 'กรุณากรอกอีเมล์ให้ถูกต้อง'
-                    },
-                    phone: {
-                        required: 'กรุณากรอกเบอร์โทรศัพท์',
-                        number: 'กรุณากรอกตัวเลขเท่านั้น',
-                        minlength: 'เบอร์โทรศัพท์ต้องมี 9-10 ตัว',
-                        maxlength: 'เบอร์โทรศัพท์ต้องไม่เกิน 10 ตัว'
-                    },
                     password: {
                         required: 'กรุณากรอกรหัสผ่าน',
                         minlength: 'กรุณากรอกรหัสผ่านไม่น้อยกว่า 6 ตัวอักษร'
@@ -192,18 +162,15 @@ session_start();
                 }
             });
         })
-
-        function recaptchaCallback() {
-            $('#submit').removeAttr('disabled');
-        }
     </script>
+
 </body>
 
 </html>
 
-<?php
-if (isset($_SESSION['err_register']) || isset($_SESSION['err_email'])) {
-    unset($_SESSION['err_register']);
-    unset($_SESSION['err_email']);
-}
+<?php 
+    if (isset($_SESSION['err_change_pw']) || isset($_SESSION['suc_change_pw'])) {
+        unset($_SESSION['err_change_pw']);
+        unset($_SESSION['suc_change_pw']);
+    }
 ?>

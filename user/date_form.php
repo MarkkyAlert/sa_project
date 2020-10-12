@@ -49,35 +49,50 @@ if (!isLoggedIn()) {
                         </div>
                         <div class="card-body">
                             <p class="card-text">
-                                <form action="change_pw_backend.php" id="changePW" method="post">
+                                <form action="date_form_backend.php" id="date_form" method="post">
 
                                     <div class="form-outline mb-4">
-                                        <input type="password" name="password" id="password" class="form-control" />
-                                        <label class="form-label" for="password">ชื่อผู้ส่ง</label>
+                                        <input type="text" name="sender" id="sender" class="form-control" />
+                                        <label class="form-label" for="sender">ชื่อผู้ส่ง</label>
                                     </div>
 
                                     <div class="form-outline mb-4">
-                                        <input type="password" name="confirm" id="confirm" class="form-control" />
-                                        <label class="form-label" for="confirm">ชื่อผู้รับ</label>
+                                        <input type="text" name="receiver" id="receiver" class="form-control" />
+                                        <label class="form-label" for="receiver">ชื่อผู้รับ</label>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-6">
-                                            <select class="browser-default custom-select">
+                                            <select class="browser-default custom-select" name="product">
                                                 <option value="ถังสี">ถังสี</option>
                                             </select>
                                             <label class="form-label" for="confirm">เลือกสินค้า</label>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-outline mb-4">
-                                                <input type="text" name="confirm" id="amount" class="form-control" />
+                                                <input type="text" name="amount" id="amount" class="form-control" />
                                                 <label class="form-label" for="amount">จำนวน</label>
                                             </div>
                                         </div>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-outline mb-4 input-with-post-icon datepicker">
+                                                <input placeholder="Select date" type="date" id="date" name="date" class="form-control">
+                                                <label class="form-label" for="date">เลือกวันที่</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-outline mb-4">
+                                                <input type="time" id="time" name="time" class="form-control">
+                                                <label class="form-label" for="time">เลือกเวลา</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="form-group">
-                                        <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
+                                        <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" name="address" rows="3"></textarea>
                                         <label for="exampleFormControlTextarea2">ที่อยู่</label>
                                     </div>
 
@@ -103,7 +118,7 @@ if (!isLoggedIn()) {
 
                                         </div>
                                     </div>
-                                    <div class="row mb-4">
+                                    <div class="row">
                                         <div class="col-6">
                                             <select class="browser-default custom-select" name="districts" id="districts">
                                                 <option selected disabled>เลือกตำบล</option>
@@ -119,6 +134,11 @@ if (!isLoggedIn()) {
 
                                         </div>
                                     </div>
+                                    <div class="form-outline mb-4">
+                                        <input type="text" name="receiver_phone" id="receiver_phone" class="form-control" />
+                                        <label class="form-label" for="receiver_phone">เบอร์โทรศัพท์</label>
+                                    </div>
+
                                     <!-- Submit button -->
                                     <button type="submit" name="submit" class="btn btn-info btn-block">SUBMIT</button>
                                 </form>
@@ -138,7 +158,72 @@ if (!isLoggedIn()) {
     <script type="text/javascript" src="../js/popper.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/mdb.min.js"></script>
+    <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#date_form').validate({
+                rules: {
+                    sender: 'required',
+                    receiver: 'required',
+                    address: 'required',
+                    provinces: 'required',
+                    amphures: 'required',
+                    districts: 'required',
+                    date: 'required',
+                    time: 'required',
+                    amount: {
+                        required: true,
+                        number: true,
+                        minlength: 4,
+                    },
+                    receiver_phone: {
+                        required: true,
+                        number: true,
+                        minlength: 9,
+                        maxlength: 10
+                    }
 
+                },
+                messages: {
+                    sender: 'กรุณากรอกชื่อผู้ส่ง',
+                    receiver: 'กรุณากรอกชื่อผู้รับ',
+                    address: 'กรุณากรอกที่อยู่',
+                    provinces: 'กรุณาเลือกจังหวัด',
+                    amphures: 'กรุณาเลือกอำเภอ',
+                    districts: 'กรุณาเลือกตำบล',
+                    date: 'กรุณาเลือกวันที่',
+                    time: 'กรุณาเลือกเวลา',
+                    amount: {
+                        required: 'กรุณากรอกจำนวน',
+                        number: 'กรุณากรอกตัวเลขเท่านั้น',
+                        minlength: 'จำนวนการสั่งต้องมากกว่า 1000'
+                    },
+                    receiver_phone: {
+                        required: 'กรุณากรอกเบอร์โทรศัพท์',
+                        number: 'กรุณากรอกตัวเลขเท่านั้น',
+                        minlength: 'เบอร์โทรศัพท์ต้องมี 9-10 ตัว',
+                        maxlength: 'เบอร์โทรศัพท์ต้องไม่เกิน 10 ตัว'
+                    },
+
+                },
+                errorElement: 'div',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback')
+                    error.insertAfter(element)
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid').removeClass('is-valid')
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-valid').removeClass('is-invalid')
+                }
+            });
+        })
+
+        function recaptchaCallback() {
+            $('#submit').removeAttr('disabled');
+        }
+    </script>
     <script type="text/javascript">
         $('#provinces').change(function() {
             var id_province = $(this).val();
@@ -182,12 +267,13 @@ if (!isLoggedIn()) {
                     function: 'districts'
                 },
                 success: function(data) {
-                    
+
                     $('#zipcode').val(data);
                 }
             });
         });
     </script>
+
 
 </body>
 

@@ -33,7 +33,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link waves-effect" href="https://mdbootstrap.com/education/bootstrap/">
+                            <a class="nav-link waves-effect" href="../logout.php">
                                 <i class="fas fa-sign-out-alt mr-1"></i>Log out
                             </a>
                         </li>

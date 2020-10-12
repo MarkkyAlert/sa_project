@@ -36,6 +36,10 @@ if (isset($_POST['submit'])) {
     } else if (mysqli_num_rows($result) > 0 && $row['type'] == 'E') {
         $_SESSION['is_logged_in'] = true;
         $_SESSION['type'] = 'E';
+        $query = "SELECT user_id FROM users WHERE email = '$email'";
+        $result = mysqli_query($conn, $query);
+        $row = mysqli_fetch_assoc($result);
+        $_SESSION['user_id'] = $row['user_id'];
 
         if (!empty($_POST['remember'])) {
             setcookie('email', $_POST['email'], time() + (10 * 365 * 24 * 60 * 60));
@@ -54,6 +58,10 @@ if (isset($_POST['submit'])) {
     } else if (mysqli_num_rows($result) > 0 && $row['type'] == 'L') {
         $_SESSION['is_logged_in'] = true;
         $_SESSION['type'] = 'L';
+        $query = "SELECT user_id FROM users WHERE email = '$email'";
+        $result = mysqli_query($conn, $query);
+        $row = mysqli_fetch_assoc($result);
+        $_SESSION['user_id'] = $row['user_id'];
 
         if (!empty($_POST['remember'])) {
             setcookie('email', $_POST['email'], time() + (10 * 365 * 24 * 60 * 60));

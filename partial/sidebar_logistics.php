@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <a class="logo-wrapper waves-effect ">
-                    <img src="img/logo.png" class="img-fluid" alt="">
+                    <img src="../img/logo.png" class="img-fluid" alt="">
                 </a>
             </div>
         </div>

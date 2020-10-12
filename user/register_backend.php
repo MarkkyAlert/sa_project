@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('connectdb.php');
+include('../connectdb.php');
 
 if (isset($_POST['submit'])) {
 
@@ -44,7 +44,7 @@ if (isset($_POST['submit'])) {
             $result = mysqli_query($conn, $query);
             $row = mysqli_fetch_assoc($result);
             $_SESSION['user_id'] = $row['user_id'];
-            header('location: index.php');
+            header('location: ../index.php');
         }
 
         else {
