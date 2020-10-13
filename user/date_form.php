@@ -21,31 +21,23 @@ if (!isLoggedIn()) {
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
     <link href="../css/style.min.css" rel="stylesheet">
-
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.css" rel="stylesheet">
 
 </head>
 
 <body class="grey lighten-3">
-
-
     <header>
         <?php include('../partial/navbar_user.php'); ?>
         <?php include('../partial/sidebar_user.php'); ?>
-
-
-
-
     </header>
+    
     <main class="pt-5 mx-lg-5">
-
         <div class="container-fluid mt-1">
             <div class="row mt-3">
                 <div class="col-md-12">
-
                     <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
                         <div class="card-header bg-transparent border-info">
-                            <h3 class="text-center"><strong>ฟอร์มจัดส่งสินค้า</strong></h3>
+                            <h3 class="text-center">ฟอร์มจัดส่งสินค้า</h3>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
@@ -66,7 +58,7 @@ if (!isLoggedIn()) {
                                             <select class="browser-default custom-select" name="product">
                                                 <option value="ถังสี">ถังสี</option>
                                             </select>
-                                            <label class="form-label" for="confirm">เลือกสินค้า</label>
+                                            
                                         </div>
                                         <div class="col-6">
                                             <div class="form-outline mb-4">
@@ -78,25 +70,25 @@ if (!isLoggedIn()) {
 
                                     <div class="row">
                                         <div class="col-6">
-                                            <div class="form-outline mb-4 input-with-post-icon datepicker">
+                                            <div class="form-group mb-4 input-with-post-icon datepicker">
                                                 <input placeholder="Select date" type="date" id="date" name="date" class="form-control">
                                                 <label class="form-label" for="date">เลือกวันที่</label>
                                             </div>
                                         </div>
                                         <div class="col-6">
-                                            <div class="form-outline mb-4">
-                                                <input type="time" id="time" name="time" class="form-control">
-                                                <label class="form-label" for="time">เลือกเวลา</label>
+                                            <div class="form-group mb-4">
+                                                <input type="time" id="time" name="time" class="form-control">      
+                                                <label class="form-label" for="district">เลือกเวลา</label>                                  
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-outline mb-4">
                                         <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" name="address" rows="3"></textarea>
-                                        <label for="exampleFormControlTextarea2">ที่อยู่</label>
+                                        <label class="form-label" for="exampleFormControlTextarea2">ที่อยู่</label>
                                     </div>
 
-                                    <div class="row mb-5">
+                                    <div class="row mb-4">
                                         <div class="col-6">
                                             <select class="browser-default custom-select" name="provinces" id="provinces">
                                                 <?php
@@ -108,14 +100,14 @@ if (!isLoggedIn()) {
                                                     <option value="<?php echo $value['id'] ?>"><?php echo $value['name_th'] ?></option>
                                                 <?php } ?>
                                             </select>
-
+                                            <label class="form-label" for="province">จังหวัด</label>
                                         </div>
                                         <div class="col-6">
                                             <select class="browser-default custom-select" name="amphures" id="amphures">
                                                 <option selected disabled>เลือกอำเภอ</option>
                                                 <option value=""></option>
                                             </select>
-
+                                            <label class="form-label" for="amphure">อำเภอ</label>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -123,11 +115,12 @@ if (!isLoggedIn()) {
                                             <select class="browser-default custom-select" name="districts" id="districts">
                                                 <option selected disabled>เลือกตำบล</option>
                                                 <option value=""></option>
+                                               
                                             </select>
-
+                                            <label class="form-label" for="district">ตำบล</label>
                                         </div>
                                         <div class="col-6">
-                                            <div class="form-outline mb-4">
+                                            <div class="form-group mb-4">
                                                 <input type="text" name="zipcode" id="zipcode" readonly class="form-control" />
                                                 <label class="form-label" for="zipcode">รหัสไปรษณีย์</label>
                                             </div>
@@ -146,18 +139,16 @@ if (!isLoggedIn()) {
                             </p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </main>
 
-
-
     <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="../js/popper.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/mdb.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
     <script>
         $(document).ready(function() {

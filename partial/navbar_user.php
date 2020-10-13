@@ -3,7 +3,7 @@
             <div class="container-fluid">
 
                 <!-- Brand -->
-                <a class="navbar-brand waves-effect" href="https://mdbootstrap.com/docs/jquery/" target="_blank">
+                <a class="navbar-brand" href="https://mdbootstrap.com/docs/jquery/" target="_blank">
                     <strong class="blue-text">FenFern Logistics</strong>
                 </a>
 

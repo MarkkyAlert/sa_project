@@ -4,7 +4,7 @@ include('../auth.php');
 
 if (!isLoggedIn()) {
     header('location: ../login.php');
-} else if ($_SESSION['type'] != 'U') {
+} else if ($_SESSION['type'] != 'E') {
     header('location: ../page_not_found.php');
 }
 ?>
@@ -20,15 +20,16 @@ if (!isLoggedIn()) {
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
     <link href="../css/style.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.css" rel="stylesheet" />
 </head>
 
 <body class="grey lighten-3">
+
     <header>
-        <?php include('../partial/navbar_user.php'); ?>
-        <?php include('../partial/sidebar_user.php'); ?>
+        <?php include('../partial/navbar_emp.php'); ?>
+        <?php include('../partial/sidebar_emp.php'); ?>
     </header>
-    
+
     <main class="pt-5 mx-lg-5">
         <div class="container-fluid mt-1">
             <div class="row mt-3">
@@ -45,7 +46,7 @@ if (!isLoggedIn()) {
                     <?php endif; ?>
                     <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
                         <div class="card-header bg-transparent border-info">
-                            <h3 class="text-center">Change Password</h3>
+                            <h3 class="text-center">เปลี่ยนรหัสผ่าน</h3>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
@@ -59,7 +60,11 @@ if (!isLoggedIn()) {
                                     <div class="form-outline mb-5">
                                         <input type="password" name="confirm" id="confirm" class="form-control" />
                                         <label class="form-label" for="confirm">Confirm Password</label>
-                                    </div>              
+                                    </div>
+
+                                    <!-- 2 column grid layout for inline styling -->
+
+
                                     <!-- Submit button -->
                                     <button type="submit" name="submit" class="btn btn-info btn-block">Change Password</button>
                                 </form>

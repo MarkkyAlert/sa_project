@@ -26,10 +26,6 @@ session_start();
             <a class="navbar-brand" href="https://mdbootstrap.com/docs/jquery/">
                 <strong class="blue-text">FenFern Logistics</strong>
             </a>
-
-            <!-- Collapse -->
-
-
             <!-- Links -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
@@ -58,7 +54,7 @@ session_start();
                         <strong><?php echo $_SESSION['err_email']; ?></strong>
                     </div>
                 <?php endif; ?>
-                <div class="card mt-4 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
+                <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
                     
                     <div class="card-header bg-transparent border-info">
                         <h3 class="text-center">Register</h3>
@@ -110,7 +106,6 @@ session_start();
                                 <div class="form-group mb-4">
                                     <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Lda5dAZAAAAAJ776z4Xgdu469YOgCRJvYn1KByI"></div>
                                 </div>
-
                                 <!-- Submit button -->
                                 <button type="submit" name="submit" id="submit" disabled class="btn btn-info btn-block">Register</button>
                             </form>
@@ -122,13 +117,11 @@ session_start();
         </div>
     </div>
 
-
     <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="../js/popper.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
-
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
     <script>
         $(document).ready(function() {

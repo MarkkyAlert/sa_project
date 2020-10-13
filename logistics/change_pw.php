@@ -20,24 +20,17 @@ if (!isLoggedIn()) {
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
     <link href="../css/style.min.css" rel="stylesheet">
-
-
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.css" rel="stylesheet" />
 </head>
 
 <body class="grey lighten-3">
 
-
     <header>
         <?php include('../partial/navbar_logistics.php'); ?>
         <?php include('../partial/sidebar_logistics.php'); ?>
-
-
-
-
     </header>
-    <main class="pt-5 mx-lg-5">
 
+    <main class="pt-5 mx-lg-5">
         <div class="container-fluid mt-1">
             <div class="row mt-3">
                 <div class="col-md-12">
@@ -53,18 +46,18 @@ if (!isLoggedIn()) {
                     <?php endif; ?>
                     <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
                         <div class="card-header bg-transparent border-info">
-                            <h3 class="text-center"><strong>Change Password</strong></h3>
+                            <h3 class="text-center">เปลี่ยนรหัสผ่าน</h3>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
                                 <form action="change_pw_backend.php" id="changePW" method="post">
 
-                                    <div class="form-outline mb-4">
+                                    <div class="form-outline mb-5">
                                         <input type="password" name="password" id="password" class="form-control" />
                                         <label class="form-label" for="password">New Password</label>
                                     </div>
 
-                                    <div class="form-outline mb-4">
+                                    <div class="form-outline mb-5">
                                         <input type="password" name="confirm" id="confirm" class="form-control" />
                                         <label class="form-label" for="confirm">Confirm Password</label>
                                     </div>
@@ -78,18 +71,16 @@ if (!isLoggedIn()) {
                             </p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </main>
 
-
-
     <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="../js/popper.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/mdb.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
     <script>
         $(document).ready(function() {
