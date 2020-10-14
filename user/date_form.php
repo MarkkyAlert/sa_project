@@ -35,6 +35,16 @@ if (!isLoggedIn()) {
         <div class="container-fluid mt-1">
             <div class="row mt-3">
                 <div class="col-md-12">
+                <?php if (isset($_SESSION['err_date_form'])) : ?>
+                        <div class="alert alert-danger" role="alert">
+                            <strong><?php echo $_SESSION['err_date_form']; ?></strong>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['suc_date_form'])) : ?>
+                        <div class="alert alert-success" role="alert">
+                            <strong><?php echo $_SESSION['suc_date_form']; ?></strong>
+                        </div>
+                    <?php endif; ?>
                     <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
                         <div class="card-header bg-transparent border-info">
                             <h3 class="text-center">ฟอร์มจัดส่งสินค้า</h3>
@@ -269,3 +279,10 @@ if (!isLoggedIn()) {
 </body>
 
 </html>
+
+<?php 
+    if (isset($_SESSION['err_date_form']) || isset($_SESSION['suc_date_form'])) {
+        unset($_SESSION['err_date_form']);
+        unset($_SESSION['suc_date_form']);
+    }
+?>

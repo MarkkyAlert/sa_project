@@ -1,4 +1,5 @@
 <?php
+    
     $conn = mysqli_connect('localhost', 'root', '', 'logistics');
 
     if(!$conn) {
@@ -6,4 +7,5 @@
     }
     
     date_default_timezone_set('Asia/Bangkok');
+    $_SESSION['now'] = date("Y-m-d H:i:s");
 ?>
