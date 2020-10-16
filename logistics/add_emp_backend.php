@@ -19,9 +19,17 @@
         }
         else {
             $query = "INSERT INTO users (firstname, lastname, email, phone, password, type) VALUES ('$firstname', '$lastname', '$email', '$phone', '$passwordenc', 'E')";
-            $resutl = mysqli_query($conn, $query);
+            $result = mysqli_query($conn, $query);
 
             if ($result) {
+                $query = "SELECT * FROM users WHERE email = '$email'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $user_id = $row['user_id'];
+
+                $query = "INSERT INTO employees (user_id) VALUES ($user_id)";
+                $result = mysqli_query($conn, $query);
+                
                 $_SESSION['suc_add_emp'] = 'เพิ่มข้อมูลเรียบร้อย';
                 header('location: add_emp.php');
             }

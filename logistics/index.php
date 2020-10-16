@@ -2,7 +2,6 @@
 session_start();
 include('../auth.php');
 include('../connectdb.php');
-$delivery_date = $_SESSION['delivery_date'];
 
 if (!isLoggedIn()) {
     header('location: ../login.php');
@@ -39,7 +38,7 @@ if (!isLoggedIn()) {
         <div class="container-fluid mt-1">
             <div class="row mt-5">
                 <div class="col-12">
-                    <h3 class="text-center">มอบหมายพนักงาน</h3>
+                    <h3 class="text-center">รายการที่รอตรวจสอบ</h3>
                 </div>
             </div>
             <div class="row mt-3">
@@ -48,34 +47,70 @@ if (!isLoggedIn()) {
                         <thead>
                             <tr>
                                 <th>
-                                    <p class="text-center font-weight-bold">ชื่อ</p>
+                                    <p class="text-center font-weight-bold">เลขที่สินค้า</p>
                                 </th>
                                 <th>
-                                    <p class="text-center font-weight-bold">นามสกุล</p>
+                                    <p class="text-center font-weight-bold">จำนวน</p>
                                 </th>
                                 <th>
-                                    <p class="text-center font-weight-bold">จำนวนออเดอร์</p>
+                                    <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
                                 </th>
                                 <th>
-                                    <p class="text-center font-weight-bold">มอบหมาย</p>
+                                    <p class="text-center font-weight-bold">เวลาที่ต้องการส่ง</p>
+                                </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">ผู้ส่ง</p>
+                                </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">ผู้รับ</p>
+                                </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">เบอร์โทรศัพท์</p>
+                                </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">ที่อยู่</p>
+                                </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">จังหวัด</p>
+                                </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">อำเภอ</p>
+                                </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">ตำบล</p>
+                                </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">รหัสไปรษณีย์</p>
+                                </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">วันที่ทำเรื่อง</p>
+                                </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">เวลาที่ทำเรื่อง</p>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            
-                            $query = "SELECT e.employee_id, u.firstname, u.lastname,";
-                            $query = $query . "(SELECT COUNT(1) FROM orders o WHERE o.employee_id = e.employee_id";
-                            $query = $query . " AND o.order_status = 'verifying' AND '".  $delivery_date ."' = o.delivery_date) AS order_amount";
-                            $query = $query . " FROM employees e, users u WHERE e.user_id = u.user_id";
-                            $query = $query . " AND u.type = 'E' ORDER BY order_amount";
+                    
+                            $query = "SELECT * FROM users WHERE type = 'E'";
                             $result = mysqli_query($conn, $query);
                             
                             while ($row = mysqli_fetch_assoc($result)) { ?>
                                 <tr>
                                     <td><?php echo $row['firstname']; ?></td>
+                                    <td><?php echo $row['firstname']; ?></td>
+                                    <td><?php echo $row['firstname']; ?></td>
+                                    <td><?php echo $row['firstname']; ?></td>
+                                    <td><?php echo $row['firstname']; ?></td>
+                                    <td><?php echo $row['firstname']; ?></td>
+                                    <td><?php echo $row['firstname']; ?></td>
+                                    <td><?php echo $row['firstname']; ?></td>
+                                    <td><?php echo $row['firstname']; ?></td>
+                                    <td><?php echo $row['firstname']; ?></td>
+                                    <td><?php echo $row['firstname']; ?></td>
+                                    <td>skdfjkdfjksfjkjfkjksjkfjskfjkjfksjksjkfjskfssfdf</td>
                                     <td><?php echo $row['lastname']; ?></td>
-                                    <td><?php echo $row['order_amount']; ?></td>
                                     <td>
                                         <p class="text-center"><a href="edit.php?update_id=<?php echo $row['user_id']; ?>" class="btn btn-warning btn-sm">มอบหมาย</a></p>
                                     </td>
