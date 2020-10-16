@@ -87,7 +87,7 @@ if (!isLoggedIn()) {
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group mb-4">
-                                                <input type="time" id="time" name="time" class="form-control">      
+                                                <input type="time" id="time" name="time" class="form-control" min="08:00" max="10:00">      
                                                 <label class="form-label" for="district">เลือกเวลา</label>                                  
                                             </div>
                                         </div>

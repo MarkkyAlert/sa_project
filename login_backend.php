@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        header('location: index_logistics.php');
+        header('location: logistics/index.php');
     } else {
         $_SESSION['err_login'] = 'อีเมล์หรือรหัสผ่านไม่ถูกต้อง';
         header('location: login.php');
