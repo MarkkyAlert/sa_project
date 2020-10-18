@@ -11,9 +11,8 @@
         $receiver = mysqli_real_escape_string($conn, $_POST['receiver']);
         $amount = mysqli_real_escape_string($conn, $_POST['amount']);
         $date = mysqli_real_escape_string($conn, $_POST['date']);
-        $_SESSION['delivery_date'] = $date;
-        //$time = mysqli_real_escape_string($conn, $_POST['time']);
-        //$datetime = $date . " " . $time;
+        $time = mysqli_real_escape_string($conn, $_POST['time']);
+        $datetime = $date . " " . $time;
         $address = mysqli_real_escape_string($conn, $_POST['address']);
         $provinces = mysqli_real_escape_string($conn, $_POST['provinces']);
         $amphures = mysqli_real_escape_string($conn, $_POST['amphures']);
@@ -23,7 +22,7 @@
         $order_no = uniqid();
         
         
-        $query = "INSERT INTO orders (sender, receiver, amount, delivery_date, address, province_id, amphure_id, district_id, zipcode, receiver_phone, order_no, user_id, order_status, request_date) VALUES ('$sender', '$receiver', $amount, '$date', '$address', $provinces, $amphures, $districts, $zipcode, '$receiver_phone', '$order_no', $user_id, 'verifying', NOW())";
+        $query = "INSERT INTO orders (sender, receiver, amount, delivery_date, address, province_id, amphure_id, district_id, zipcode, receiver_phone, order_no, user_id, order_status, request_date) VALUES ('$sender', '$receiver', $amount, '$datetime', '$address', $provinces, $amphures, $districts, $zipcode, '$receiver_phone', '$order_no', $user_id, 'verifying', NOW())";
         $result = mysqli_query($conn, $query);
 
         if ($result) {

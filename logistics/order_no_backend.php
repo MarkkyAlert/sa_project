@@ -11,6 +11,7 @@
 
         if ($row['order_no'] === $order_no) {
             $_SESSION['order_no'] = $row['order_no'];
+            $_SESSION['delivery_date'] = $row['delivery_date'];
             header('location: assign_emp.php');
         }
         else {

@@ -92,21 +92,31 @@ if (!isLoggedIn()) {
                         </thead>
                         <tbody>
                             <?php
-                    
-                            $query = "SELECT * FROM users WHERE type = 'E'";
+
+                            $query = "SELECT * FROM orders o, users u, provinces p , amphures a, districts d 
+                            WHERE o.province_id = p.id
+                            AND o.amphure_id = a.id
+                            AND o.district_id = d.id
+                            AND o.user_id = u.user_id";
                             $result = mysqli_query($conn, $query);
-                            
+
                             while ($row = mysqli_fetch_assoc($result)) { ?>
                                 <tr>
-                                    <td><?php echo $row['firstname']; ?></td>
-                                    <td><?php echo $row['firstname']; ?></td>
-                                    <td><?php echo $row['firstname']; ?></td>
-                                    <td><?php echo $row['firstname']; ?></td>
-                                    <td><?php echo $row['firstname']; ?></td>
-                                    <td><?php echo $row['firstname']; ?></td>
-                                    <td><?php echo $row['firstname']; ?></td>
-                                    <td><?php echo $row['firstname']; ?></td>
-                                    <td><?php echo $row['firstname']; ?></td>
+                                    <?php
+                                    $date = strtotime($row['delivery_date']);
+                                    $date = date("d/m/Y", $date);
+                                    $time = strtotime($row['delivery_date']);
+                                    $time = date("H:i:s", $time);             
+                                    ?>
+                                    <td><?php echo $row['order_no']; ?></td>
+                                    <td><?php echo $row['amount']; ?></td>
+                                    <td><?php echo $date; ?></td>
+                                    <td><?php echo $time; ?></td>
+                                    <td><?php echo $row['sender']; ?></td>
+                                    <td><?php echo $row['receiver']; ?></td>
+                                    <td><?php echo $row['receiver_phone']; ?></td>
+                                    <td><?php echo $row['address']; ?></td>
+                                    <td><?php echo $row['name_th']; ?></td>
                                     <td><?php echo $row['firstname']; ?></td>
                                     <td><?php echo $row['firstname']; ?></td>
                                     <td>skdfjkdfjksfjkjfkjksjkfjskfjkjfksjksjkfjskfssfdf</td>
@@ -114,7 +124,7 @@ if (!isLoggedIn()) {
                                     <td>
                                         <p class="text-center"><a href="edit.php?update_id=<?php echo $row['user_id']; ?>" class="btn btn-warning btn-sm">มอบหมาย</a></p>
                                     </td>
-                                    
+
                                 </tr>
 
                             <?php } ?>

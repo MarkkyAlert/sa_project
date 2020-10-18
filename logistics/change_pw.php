@@ -126,9 +126,9 @@ if (!isLoggedIn()) {
 
 </html>
 
-<?php 
-    if (isset($_SESSION['err_change_pw']) || isset($_SESSION['suc_change_pw'])) {
-        unset($_SESSION['err_change_pw']);
-        unset($_SESSION['suc_change_pw']);
-    }
+<?php
+if (isset($_SESSION['err_change_pw']) || isset($_SESSION['suc_change_pw'])) {
+    unset($_SESSION['err_change_pw']);
+    unset($_SESSION['suc_change_pw']);
+}
 ?>

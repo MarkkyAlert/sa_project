@@ -23,8 +23,6 @@ if (!isLoggedIn()) {
     <link href="../css/mdb.min.css" rel="stylesheet">
     <link href="../css/style.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.css" rel="stylesheet" />
-
-
 </head>
 
 <body class="grey lighten-3">
@@ -37,8 +35,23 @@ if (!isLoggedIn()) {
     <main class="pt-5 mx-lg-5">
 
         <div class="container-fluid mt-1">
+            <div class="row mt-3">
+                <div class="col-12">
+                    <?php if (isset($_SESSION['suc_assign_emp'])) : ?>
+                        <div class="alert alert-success" role="alert">
+                            <strong><?php echo $_SESSION['suc_assign_emp']; ?></strong>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['err_assign_emp'])) : ?>
+                        <div class="alert alert-danger" role="alert">
+                            <strong><?php echo $_SESSION['err_assign_emp']; ?></strong>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
             <div class="row mt-5">
                 <div class="col-12">
+
                     <h3 class="text-center">มอบหมายพนักงาน</h3>
                 </div>
             </div>
@@ -63,23 +76,29 @@ if (!isLoggedIn()) {
                         </thead>
                         <tbody>
                             <?php
-                            
+
                             $query = "SELECT e.employee_id, u.firstname, u.lastname,";
                             $query = $query . "(SELECT COUNT(1) FROM orders o WHERE o.employee_id = e.employee_id";
-                            $query = $query . " AND o.order_status = 'verifying' AND '".  $delivery_date ."' = o.delivery_date) AS order_amount";
+                            $query = $query . " AND o.order_status = 'checking' AND '" .  $delivery_date . "' = o.delivery_date) AS order_amount";
                             $query = $query . " FROM employees e, users u WHERE e.user_id = u.user_id";
                             $query = $query . " AND u.type = 'E' ORDER BY order_amount";
                             $result = mysqli_query($conn, $query);
-                            
+
                             while ($row = mysqli_fetch_assoc($result)) { ?>
                                 <tr>
-                                    <td><?php echo $row['firstname']; ?></td>
-                                    <td><?php echo $row['lastname']; ?></td>
-                                    <td><?php echo $row['order_amount']; ?></td>
                                     <td>
-                                        <p class="text-center"><a href="edit.php?update_id=<?php echo $row['user_id']; ?>" class="btn btn-warning btn-sm">มอบหมาย</a></p>
+                                        <p class="text-center"><?php echo $row['firstname']; ?></p>
                                     </td>
-                                    
+                                    <td>
+                                        <p class="text-center"><?php echo $row['lastname']; ?></p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center"><?php echo $row['order_amount']; ?></p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center"><a href="assign_emp_backend.php?id=<?php echo $row['employee_id']; ?>" class="btn btn-warning btn-sm">มอบหมาย</a></p>
+                                    </td>
+
                                 </tr>
 
                             <?php } ?>
@@ -97,62 +116,15 @@ if (!isLoggedIn()) {
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
-    <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#add_emp').validate({
 
-                rules: {
-                    firstname: 'required',
-                    lastname: 'required',
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    phone: {
-                        required: true,
-                        number: true,
-                        minlength: 9,
-                        maxlength: 10
-                    },
-                },
-                messages: {
-                    firstname: 'กรุณากรอกชื่อต้น',
-                    lastname: 'กรุณากรอกนามสกุล',
-                    email: {
-                        required: 'กรุณากรอกอีเมล์',
-                        email: 'กรุณากรอกอีเมล์ให้ถูกต้อง'
-                    },
-                    phone: {
-                        required: 'กรุณากรอกเบอร์โทรศัพท์',
-                        number: 'กรุณากรอกตัวเลขเท่านั้น',
-                        minlength: 'เบอร์โทรศัพท์ต้องมี 9-10 ตัว',
-                        maxlength: 'เบอร์โทรศัพท์ต้องไม่เกิน 10 ตัว'
-                    }
-                },
-                errorElement: 'div',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback')
-                    error.insertAfter(element)
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid').removeClass('is-valid')
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-valid').removeClass('is-invalid')
-                }
-            });
-        })
-    </script>
 
 </body>
 
 </html>
 
 <?php
-if (isset($_SESSION['err_email']) || isset($_SESSION['err_add_emp']) || isset($_SESSION['suc_add_emp'])) {
-    unset($_SESSION['err_email']);
-    unset($_SESSION['err_add_emp']);
-    unset($_SESSION['suc_add_emp']);
+if (isset($_SESSION['suc_assign_emp']) || isset($_SESSION['err_assign_emp'])) {
+    unset($_SESSION['suc_assign_emp']);
+    unset($_SESSION['err_assign_emp']);
 }
 ?>

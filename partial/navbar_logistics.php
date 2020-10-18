@@ -18,12 +18,12 @@
                     <ul class="navbar-nav ml-auto">
 
                     <li class="nav-item">
-                            <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/">
+                            <a class="nav-link waves-effect" href="add_emp.php">
                             <i class="fas fa-user-plus mr-1"></i>เพิ่มพนักงาน</a>
                         </li>
                     
                     <li class="nav-item">
-                            <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/">
+                            <a class="nav-link waves-effect" href="order_no.php">
                             <i class="fas fa-users mr-1"></i>มอบหมายพนักงาน</a>
                         </li>
 

@@ -15,7 +15,7 @@
     <div class="list-group list-group-flush">
         <p>ยินดีต้อนรับคุณ...</p>
 
-        <a href="#" class="list-group-item list-group-item-action waves-effect mb-1">
+        <a href="index.php" class="list-group-item list-group-item-action waves-effect mb-1">
             <i class="fas fa-calendar-alt mr-3"></i>รายการที่รอตรวจสอบ
         </a>
 

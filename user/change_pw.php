@@ -28,7 +28,7 @@ if (!isLoggedIn()) {
         <?php include('../partial/navbar_user.php'); ?>
         <?php include('../partial/sidebar_user.php'); ?>
     </header>
-    
+
     <main class="pt-5 mx-lg-5">
         <div class="container-fluid mt-1">
             <div class="row mt-3">
@@ -59,7 +59,7 @@ if (!isLoggedIn()) {
                                     <div class="form-outline mb-5">
                                         <input type="password" name="confirm" id="confirm" class="form-control" />
                                         <label class="form-label" for="confirm">Confirm Password</label>
-                                    </div>              
+                                    </div>
                                     <!-- Submit button -->
                                     <button type="submit" name="submit" class="btn btn-info btn-block">Change Password</button>
                                 </form>
@@ -121,9 +121,9 @@ if (!isLoggedIn()) {
 
 </html>
 
-<?php 
-    if (isset($_SESSION['err_change_pw']) || isset($_SESSION['suc_change_pw'])) {
-        unset($_SESSION['err_change_pw']);
-        unset($_SESSION['suc_change_pw']);
-    }
+<?php
+if (isset($_SESSION['err_change_pw']) || isset($_SESSION['suc_change_pw'])) {
+    unset($_SESSION['err_change_pw']);
+    unset($_SESSION['suc_change_pw']);
+}
 ?>
