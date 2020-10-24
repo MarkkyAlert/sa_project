@@ -14,10 +14,10 @@
             <div class="list-group list-group-flush">
                 <p>ยินดีต้อนรับคุณ...</p>
                 
-                <a href="#" class="list-group-item list-group-item-action waves-effect mb-1">
+                <a href="index.php" class="list-group-item list-group-item-action waves-effect mb-1">
                 <i class="fas fa-tasks mr-3"></i>งานที่ได้รับมอบหมาย
                 </a>
-                <a href="#" class="list-group-item list-group-item-action waves-effect mb-1">
+                <a href="order_no.php" class="list-group-item list-group-item-action waves-effect mb-1">
                 <i class="fas fa-truck-moving mr-3"></i>ตรวจสอบรถ
                 </a>
                 
