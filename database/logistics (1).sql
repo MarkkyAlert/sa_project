@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 16, 2020 at 08:26 PM
+-- Generation Time: Oct 27, 2020 at 09:15 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.33
 
@@ -1051,6 +1051,29 @@ CREATE TABLE `cars` (
   `category` varchar(255) NOT NULL,
   `capacity` int(11) NOT NULL,
   `status` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `cars`
+--
+
+INSERT INTO `cars` (`car_id`, `license`, `category`, `capacity`, `status`) VALUES
+(1, 'ก0001', 'สี่ล้อ(ใหญ่)', 1500, 'ready'),
+(2, 'ก0002', 'สี่ล้อ(เล็ก)', 1000, 'ready');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `car_orders`
+--
+
+CREATE TABLE `car_orders` (
+  `car_order_id` int(11) NOT NULL,
+  `car_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
+  `amount` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -9945,7 +9968,7 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`employee_id`, `user_id`) VALUES
-(5, 4);
+(6, 9);
 
 -- --------------------------------------------------------
 
@@ -10005,8 +10028,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_id`, `user_id`, `employee_id`, `car_id`, `province_id`, `amphure_id`, `district_id`, `reason_id`, `order_no`, `sender`, `receiver`, `receiver_phone`, `address`, `zipcode`, `amount`, `delivery_date`, `request_date`, `accept_date`, `order_status`, `delivery_status`, `file`) VALUES
-(31, 1, NULL, NULL, 1, 6, 100601, NULL, '5f882109db137', 'Selena', 'Justin', '0911111111', 'Bangkok', 10240, 1000, '2020-10-15 00:00:00', '2020-10-15 17:14:33', NULL, 'verifying', NULL, NULL),
-(32, 1, NULL, NULL, 10, 127, 190504, NULL, '5f884246e5fc4', 'aaaaa', 'aaaa', '0911111111', '123456/11', 18170, 1000, '2020-10-16 00:00:00', '2020-10-15 19:36:22', NULL, 'verifying', NULL, NULL);
+(33, 8, NULL, NULL, 1, 3, 100302, NULL, '5f97bf0ab3874', 'aaaaa', 'bbbbb', '0911111111', '1544/111111', 10530, 1000, '2020-10-27 16:00:00', '2020-10-27 13:32:42', NULL, 'verifying', NULL, NULL),
+(34, 8, NULL, NULL, 4, 69, 130402, NULL, '5f97bf56a55c4', 'bbbbbb', 'cccccc', '0911111111', '1544/22222', 12170, 1500, '2020-10-28 14:30:00', '2020-10-27 13:33:58', NULL, 'verifying', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -10137,11 +10160,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `phone`, `password`, `type`) VALUES
-(1, 'dfsdfdfs', 'sdfsdfdf', 'puettipong.o@gmail.com', '123456789', 'fcea920f7412b5da7be0cf42b8c93759', 'U'),
-(2, 'John', 'Doe', 'logistics@gmail.com', '0911111111', 'fcea920f7412b5da7be0cf42b8c93759', 'L'),
-(4, 'John', 'Doe', 'employee@gmail.com', '0911111111', 'fcea920f7412b5da7be0cf42b8c93759', 'E'),
-(5, 'cvc', 'xcvx', 'ee@gmail.com', '0911111111', 'e10adc3949ba59abbe56e057f20f883e', 'E'),
-(6, 'df', 'df', 'as@gmail.com', '0911111111', 'e10adc3949ba59abbe56e057f20f883e', 'E');
+(7, 'John ', 'Doe', 'logistics@gmail.com', '0911111111', 'e10adc3949ba59abbe56e057f20f883e', 'L'),
+(8, 'Charlie', 'Puth', 'user@gmail.com', '0911111111', 'e10adc3949ba59abbe56e057f20f883e', 'U'),
+(9, 'Justin', 'Bieber', 'employee@gmail.com', '0911111111', 'e10adc3949ba59abbe56e057f20f883e', 'E');
 
 --
 -- Indexes for dumped tables
@@ -10158,6 +10179,14 @@ ALTER TABLE `amphures`
 --
 ALTER TABLE `cars`
   ADD PRIMARY KEY (`car_id`);
+
+--
+-- Indexes for table `car_orders`
+--
+ALTER TABLE `car_orders`
+  ADD PRIMARY KEY (`car_order_id`),
+  ADD KEY `car_orders_ibfk_1` (`car_id`),
+  ADD KEY `car_orders_ibfk_2` (`order_id`);
 
 --
 -- Indexes for table `districts`
@@ -10223,13 +10252,19 @@ ALTER TABLE `amphures`
 -- AUTO_INCREMENT for table `cars`
 --
 ALTER TABLE `cars`
-  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `car_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `car_orders`
+--
+ALTER TABLE `car_orders`
+  MODIFY `car_order_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `geographies`
@@ -10241,7 +10276,7 @@ ALTER TABLE `geographies`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `provinces`
@@ -10259,11 +10294,18 @@ ALTER TABLE `reasons`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `car_orders`
+--
+ALTER TABLE `car_orders`
+  ADD CONSTRAINT `car_orders_ibfk_1` FOREIGN KEY (`car_id`) REFERENCES `cars` (`car_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `car_orders_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `employees`
