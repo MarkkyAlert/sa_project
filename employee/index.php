@@ -2,7 +2,7 @@
 session_start();
 include('../auth.php');
 include('../connectdb.php');
-
+$emp_id = $_SESSION['employee_id'];
 if (!isLoggedIn()) {
     header('location: ../login.php');
 } else if ($_SESSION['type'] != 'E') {
@@ -92,7 +92,8 @@ if (!isLoggedIn()) {
                             WHERE o.province_id = p.id
                             AND o.amphure_id = a.id
                             AND o.district_id = d.id
-                            AND o.user_id = u.user_id";
+                            AND o.user_id = u.user_id
+                            AND o.employee_id = $emp_id";
                             $result = mysqli_query($conn, $query);
 
                             while ($row = mysqli_fetch_assoc($result)) { ?>
