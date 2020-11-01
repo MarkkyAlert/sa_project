@@ -38,23 +38,34 @@ if (!isLoggedIn()) {
         <div class="container-fluid mt-1">
             <div class="row mt-5">
                 <div class="col-12">
+                <?php if (isset($_SESSION['suc_delivering'])) : ?>
+                    <div class="alert alert-success" role="alert">
+                        <strong><?php echo $_SESSION['suc_delivering']; ?></strong>
+                    </div>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['err_delivering'])) : ?>
+                    <div class="alert alert-danger" role="alert">
+                        <strong><?php echo $_SESSION['err_delivering']; ?></strong>
+                    </div>
+                <?php endif; ?>
                     <?php
 
-                    $query = "SELECT o.order_no, o.amount, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d 
+                    $query = "SELECT o.order_id, o.order_no, o.amount, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d 
                             WHERE o.province_id = p.id
                             AND o.amphure_id = a.id
                             AND o.district_id = d.id
                             AND o.user_id = u.user_id
                             AND o.employee_id = $emp_id
-                            AND o.order_status = 'checking'";
+                            AND o.order_status = 'accept'
+                            AND o.delivery_status = 'waiting'";
                     $result = mysqli_query($conn, $query);
                     $row1 = mysqli_num_rows($result);
                     ?>
                     <?php if ($row1 == 0) : ?>
-                        <h3 class="text-center text-danger">ไม่มีงานที่ได้รับมอบหมาย</h3>
+                        <h3 class="text-center text-danger">ไม่มีรายการที่ต้องจัดส่ง</h3>
                     <?php endif; ?>
                     <?php if ($row1 > 0) : ?>
-                        <h3 class="text-center">งานที่ได้รับมอบหมาย</h3>
+                        <h3 class="text-center">รายการที่ต้องจัดส่ง</h3>
 
                 </div>
             </div>
@@ -100,6 +111,9 @@ if (!isLoggedIn()) {
                                     <th>
                                         <p class="text-center font-weight-bold">รหัสไปรษณีย์</p>
                                     </th>
+                                    <th>
+                                        <p class="text-center font-weight-bold">Action</p>
+                                    </th>
 
                                 </tr>
                             </thead>
@@ -128,7 +142,9 @@ if (!isLoggedIn()) {
                                         <td><?php echo $row['amphure']; ?></td>
                                         <td><?php echo $row['district']; ?></td>
                                         <td><?php echo $row['zipcode']; ?></td>
-
+                                        <td>
+                                    <p class="text-center"><a href="order_waiting_backend.php?order_id=<?php echo $row['order_id']; ?>" class="btn btn-warning btn-sm">DELIVER</a></p>
+                                </td>
 
                                     </tr>
 
@@ -201,9 +217,8 @@ if (!isLoggedIn()) {
 </html>
 
 <?php
-if (isset($_SESSION['err_email']) || isset($_SESSION['err_add_emp']) || isset($_SESSION['suc_add_emp'])) {
-    unset($_SESSION['err_email']);
-    unset($_SESSION['err_add_emp']);
-    unset($_SESSION['suc_add_emp']);
+if (isset($_SESSION['err_delivering']) || isset($_SESSION['suc_delivering'])) {
+    unset($_SESSION['err_delivering']);
+    unset($_SESSION['suc_delivering']);
 }
 ?>
