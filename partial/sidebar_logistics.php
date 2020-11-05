@@ -19,32 +19,32 @@
             <i class="fas fa-calendar-alt mr-3"></i>รายการที่รอตรวจสอบ
         </a>
 
-        <a href="#" class="list-group-item list-group-item-action waves-effect mb-1">
+        <a href="accept_order.php" class="list-group-item list-group-item-action waves-effect mb-1">
             <i class="fas fa-check-square mr-3"></i>รายการที่อนุมัติ
         </a>
 
-        <a href="#" class="list-group-item list-group-item-action waves-effect mb-1">
+        <a href="not_accept_order.php" class="list-group-item list-group-item-action waves-effect mb-1">
             <i class="fas fa-times-circle mr-3"></i>รายการที่ไม่อนุมัติ
         </a>
 
-        <a href="#" class="list-group-item list-group-item-action waves-effect mb-1">
+        <a href="order_waiting.php" class="list-group-item list-group-item-action waves-effect mb-1">
             <i class="fas fa-clock mr-3"></i></i>รายการที่รอจัดส่ง
         </a>
 
-        <a href="#" class="list-group-item list-group-item-action waves-effect mb-1">
+        <a href="order_delivering.php" class="list-group-item list-group-item-action waves-effect mb-1">
             <i class="fas fa-spinner mr-3"></i>รายการที่กำลังจัดส่ง
         </a>
 
-        <a href="#" class="list-group-item list-group-item-action waves-effect mb-1">
+        <a href="order_success.php" class="list-group-item list-group-item-action waves-effect mb-1">
             <i class="fas fa-check-circle mr-3"></i>รายการที่จัดส่งสำเร็จ
         </a>
 
-        <a href="#" class="list-group-item list-group-item-action waves-effect mb-1">
+        <a href="order_failed.php" class="list-group-item list-group-item-action waves-effect mb-1">
             <i class="fas fa-times-circle mr-3"></i>รายการที่จัดส่งไม่สำเร็จ
         </a>
 
         <a href="#" class="list-group-item list-group-item-action waves-effect mb-1">
-            <i class="fas fa-table mr-3"></i>ตารางการจัดส่ง
+            <i class="fas fa-table mr-3"></i>ตารางวันส่งของ
         </a>
 
     </div>

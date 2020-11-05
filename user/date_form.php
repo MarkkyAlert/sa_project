@@ -63,20 +63,7 @@ if (!isLoggedIn()) {
                                         <label class="form-label" for="receiver">ชื่อผู้รับ</label>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <select class="browser-default custom-select" name="product">
-                                                <option value="ถังสี">ถังสี</option>
-                                            </select>
-                                            
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-outline mb-4">
-                                                <input type="text" name="amount" id="amount" class="form-control" />
-                                                <label class="form-label" for="amount">จำนวน</label>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="row">
                                         <div class="col-6">

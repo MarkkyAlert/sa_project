@@ -38,16 +38,16 @@ if (!isLoggedIn()) {
         <div class="container-fluid mt-1">
             <div class="row mt-5">
                 <div class="col-12">
-                <?php if (isset($_SESSION['suc_delivering'])) : ?>
-                    <div class="alert alert-success" role="alert">
-                        <strong><?php echo $_SESSION['suc_delivering']; ?></strong>
-                    </div>
-                <?php endif; ?>
-                <?php if (isset($_SESSION['err_delivering'])) : ?>
-                    <div class="alert alert-danger" role="alert">
-                        <strong><?php echo $_SESSION['err_delivering']; ?></strong>
-                    </div>
-                <?php endif; ?>
+                    <?php if (isset($_SESSION['suc_upload'])) : ?>
+                        <div class="alert alert-success" role="alert">
+                            <strong><?php echo $_SESSION['suc_upload']; ?></strong>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['err_upload'])) : ?>
+                        <div class="alert alert-danger" role="alert">
+                            <strong><?php echo $_SESSION['err_upload']; ?></strong>
+                        </div>
+                    <?php endif; ?>
                     <?php
 
                     $query = "SELECT o.order_id, o.order_no, o.amount, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d 
@@ -114,6 +114,9 @@ if (!isLoggedIn()) {
                                     <th>
                                         <p class="text-center font-weight-bold">Action</p>
                                     </th>
+                                    <th>
+                                        <p class="text-center font-weight-bold">Action</p>
+                                    </th>
 
                                 </tr>
                             </thead>
@@ -143,9 +146,85 @@ if (!isLoggedIn()) {
                                         <td><?php echo $row['district']; ?></td>
                                         <td><?php echo $row['zipcode']; ?></td>
                                         <td>
-                                    <p class="text-center"><a href="order_delivering_backend.php?order_id=<?php echo $row['order_id']; ?>" class="btn btn-success btn-sm">SUCCESS</a></p>
-                                    <p class="text-center"><a href="order_delivering_backend.php?order_id=<?php echo $row['order_id']; ?>" class="btn btn-danger btn-sm">FAILED</a></p>
-                                </td>
+                                            <!-- Button trigger modal -->
+                                            <p class="text-center"><button type="button" class="btn btn-success btm-sm" data-toggle="modal" data-target="#exampleModal">
+                                                    SUCCESS
+                                                </button></p>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">เลือกไฟล์บิล</h5>
+                                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="order_delivering_backend.php" id="bill" method="post" enctype="multipart/form-data">
+                                                                <div class="form-file">
+                                                                    <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
+                                                                    <input type="hidden" name="check" value="success">
+                                                                    <input type="file" name="file" class="" id="customFile" />
+
+                                                                </div>
+
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                                                Close
+                                                            </button>
+                                                            <button type="submit" name="submit" class="btn btn-info">Submit</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <!-- Button trigger modal -->
+                                            <p class="text-center"><button type="button" class="btn btn-danger btm-sm" data-toggle="modal" data-target="#exampleModal1">
+                                                    FAILED
+                                                </button></p>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel1">เลือกเหตุผล</h5>
+                                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="order_delivering_backend.php" method="post">
+                                                                <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
+                                                                <input type="hidden" name="check" value="failed">
+                                                                <select class="browser-default custom-select" name="reasons">
+                                                                    <?php
+                                                                    $query = "SELECT * FROM reasons";
+                                                                    $result = mysqli_query($conn, $query);
+                                                                    ?>
+                                                                    <option selected disabled>เลือกเหตุผล</option>
+                                                                    <?php foreach ($result as $value) { ?>
+                                                                        <option value="<?php echo $value['reason_id'] ?>"><?php echo $value['reason'] ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                                                Close
+                                                            </button>
+                                                            <button type="submit" name="submit" class="btn btn-info">Submit</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
 
                                     </tr>
 
@@ -166,36 +245,23 @@ if (!isLoggedIn()) {
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+
     <script>
         $(document).ready(function() {
-            $('#add_emp').validate({
+            $('#bill').validate({
 
                 rules: {
-                    firstname: 'required',
-                    lastname: 'required',
-                    email: {
+                    file: {
                         required: true,
-                        email: true
-                    },
-                    phone: {
-                        required: true,
-                        number: true,
-                        minlength: 9,
-                        maxlength: 10
+                        extension: "jpg|png"
                     },
                 },
                 messages: {
-                    firstname: 'กรุณากรอกชื่อต้น',
-                    lastname: 'กรุณากรอกนามสกุล',
-                    email: {
-                        required: 'กรุณากรอกอีเมล์',
-                        email: 'กรุณากรอกอีเมล์ให้ถูกต้อง'
-                    },
-                    phone: {
-                        required: 'กรุณากรอกเบอร์โทรศัพท์',
-                        number: 'กรุณากรอกตัวเลขเท่านั้น',
-                        minlength: 'เบอร์โทรศัพท์ต้องมี 9-10 ตัว',
-                        maxlength: 'เบอร์โทรศัพท์ต้องไม่เกิน 10 ตัว'
+
+                    file: {
+                        required: 'กรุณาเลือกไฟล์รูปภาพ',
+                        extension: "ต้องเป็นไฟล์ .jpg หรือ .png เท่านั้น"
                     }
                 },
                 errorElement: 'div',
@@ -218,8 +284,8 @@ if (!isLoggedIn()) {
 </html>
 
 <?php
-if (isset($_SESSION['err_delivering']) || isset($_SESSION['suc_delivering'])) {
-    unset($_SESSION['err_delivering']);
-    unset($_SESSION['suc_delivering']);
+if (isset($_SESSION['err_upload']) || isset($_SESSION['suc_upload'])) {
+    unset($_SESSION['err_upload']);
+    unset($_SESSION['suc_upload']);
 }
 ?>
