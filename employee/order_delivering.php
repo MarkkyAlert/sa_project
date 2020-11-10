@@ -48,16 +48,31 @@ if (!isLoggedIn()) {
                             <strong><?php echo $_SESSION['err_upload']; ?></strong>
                         </div>
                     <?php endif; ?>
+                    <?php if (isset($_SESSION['err_reason'])) : ?>
+                        <div class="alert alert-danger" role="alert">
+                            <strong><?php echo $_SESSION['err_reason']; ?></strong>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['suc_reason'])) : ?>
+                        <div class="alert alert-success" role="alert">
+                            <strong><?php echo $_SESSION['suc_reason']; ?></strong>
+                        </div>
+                    <?php endif; ?>
                     <?php
 
-                    $query = "SELECT o.order_id, o.order_no, o.amount, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d 
-                            WHERE o.province_id = p.id
-                            AND o.amphure_id = a.id
-                            AND o.district_id = d.id
-                            AND o.user_id = u.user_id
-                            AND o.employee_id = $emp_id
-                            AND o.order_status = 'accept'
-                            AND o.delivery_status = 'delivering'";
+                    $query = "SELECT o.order_id, o.order_no, 
+                    (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, 
+                    (select IFNULL (sum(od.sum_capacity), 0) from order_details od where od.order_id = o.order_id) 
+                    as capacity, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address
+                    , p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode 
+                    FROM orders o, users u, provinces p , amphures a, districts d 
+                    WHERE o.province_id = p.id
+                    AND o.amphure_id = a.id
+                    AND o.district_id = d.id
+                    AND o.user_id = u.user_id
+                    AND o.employee_id = $emp_id
+                    AND o.order_status = 'accept'
+                    AND o.delivery_status = 'delivering'";
                     $result = mysqli_query($conn, $query);
                     $row1 = mysqli_num_rows($result);
                     ?>
@@ -65,7 +80,8 @@ if (!isLoggedIn()) {
                         <h3 class="text-center text-danger">ไม่มีรายการที่กำลังจัดส่ง</h3>
                     <?php endif; ?>
                     <?php if ($row1 > 0) : ?>
-                        <h3 class="text-center">รายการที่กำลังจัดส่ง</h3>
+
+                        <h3 class="text-center">รายการที่กำลังจัดส่ง: <?php echo $row1; ?> รายการ</h3>
 
                 </div>
             </div>
@@ -80,6 +96,9 @@ if (!isLoggedIn()) {
                                     </th>
                                     <th>
                                         <p class="text-center font-weight-bold">จำนวน</p>
+                                    </th>
+                                    <th>
+                                        <p class="text-center font-weight-bold">ความจุ</p>
                                     </th>
                                     <th>
                                         <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
@@ -123,18 +142,19 @@ if (!isLoggedIn()) {
                             <tbody>
                                 <?php
 
-
-
+                                $result = mysqli_query($conn, $query);
                                 while ($row = mysqli_fetch_assoc($result)) { ?>
                                     <tr>
                                         <?php
+
                                         $date = strtotime($row['delivery_date']);
                                         $date = date("d/m/Y", $date);
                                         $time = strtotime($row['delivery_date']);
                                         $time = date("H:i:s", $time);
                                         ?>
-                                        <td><?php echo $row['order_no']; ?></td>
+                                        <td><u><a href="order_detail.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
                                         <td><?php echo $row['amount']; ?></td>
+                                        <td><?php echo $row['capacity']; ?></td>
                                         <td><?php echo $date; ?></td>
                                         <td><?php echo $time; ?></td>
                                         <td><?php echo $row['sender']; ?></td>
@@ -152,34 +172,7 @@ if (!isLoggedIn()) {
                                                 </button></p>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">เลือกไฟล์บิล</h5>
-                                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form action="order_delivering_backend.php" id="bill" method="post" enctype="multipart/form-data">
-                                                                <div class="form-file">
-                                                                    <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
-                                                                    <input type="hidden" name="check" value="success">
-                                                                    <input type="file" name="file" class="" id="customFile" />
 
-                                                                </div>
-
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">
-                                                                Close
-                                                            </button>
-                                                            <button type="submit" name="submit" class="btn btn-info">Submit</button>
-                                                        </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                         </td>
                                         <td>
@@ -189,40 +182,7 @@ if (!isLoggedIn()) {
                                                 </button></p>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel1">เลือกเหตุผล</h5>
-                                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form action="order_delivering_backend.php" method="post">
-                                                                <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
-                                                                <input type="hidden" name="check" value="failed">
-                                                                <select class="browser-default custom-select" name="reasons">
-                                                                    <?php
-                                                                    $query = "SELECT * FROM reasons";
-                                                                    $result = mysqli_query($conn, $query);
-                                                                    ?>
-                                                                    <option selected disabled>เลือกเหตุผล</option>
-                                                                    <?php foreach ($result as $value) { ?>
-                                                                        <option value="<?php echo $value['reason_id'] ?>"><?php echo $value['reason'] ?></option>
-                                                                    <?php } ?>
-                                                                </select>
 
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">
-                                                                Close
-                                                            </button>
-                                                            <button type="submit" name="submit" class="btn btn-info">Submit</button>
-                                                        </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                         </td>
 
@@ -238,7 +198,89 @@ if (!isLoggedIn()) {
             </div>
         </div>
     </main>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">เลือกไฟล์บิล</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="order_delivering_backend.php" id="bill" method="post" enctype="multipart/form-data">
+                        <div class="form-file">
+                            <?php
+                            $query = "SELECT o.order_id, o.order_no, 
+                                (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, 
+                                (select IFNULL (sum(od.sum_capacity), 0) from order_details od where od.order_id = o.order_id) 
+                                as capacity, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address
+                                , p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode 
+                                FROM orders o, users u, provinces p , amphures a, districts d 
+                                WHERE o.province_id = p.id
+                                AND o.amphure_id = a.id
+                                AND o.district_id = d.id
+                                AND o.user_id = u.user_id
+                                AND o.employee_id = $emp_id
+                                AND o.order_status = 'accept'
+                                AND o.delivery_status = 'delivering'";
+                            $result = mysqli_query($conn, $query);
+                            $row = fetch_assoc($result);
+                            ?>
+                            <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
+                            <input type="hidden" name="check" value="success">
+                            <input type="file" name="file" class="" id="customFile" />
 
+                        </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" name="submit" class="btn btn-info">Submit</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">เลือกเหตุผล</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="order_delivering_backend.php" method="post">
+                        <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
+                        <input type="hidden" name="check" value="failed">
+                        <select class="browser-default custom-select" name="reasons" onchange="myReason()" id="reasons">
+                            <?php
+                            $query = "SELECT * FROM reasons";
+                            $result = mysqli_query($conn, $query);
+                            ?>
+                            <option selected disabled>เลือกเหตุผล</option>
+                            <?php foreach ($result as $value) { ?>
+                                <option value="<?php echo $value['reason_id'] ?>"><?php echo $value['reason'] ?></option>
+                            <?php } ?>
+                        </select>
+                        <br><br>
+                        <div id="reasonDesc" >
+
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" name="submit" class="btn btn-info">Submit</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="../js/popper.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
@@ -246,6 +288,7 @@ if (!isLoggedIn()) {
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 
     <script>
         $(document).ready(function() {
@@ -277,6 +320,39 @@ if (!isLoggedIn()) {
                 }
             });
         })
+        // document.getElementById("reasons").onchange = function() {
+        //     var reasons = document.getElementById("reasons").value
+        //     if (reasons == 3) {
+        //         document.getElementById("reasonDesc").display = "block";
+        //     }
+        // }
+
+        function myReason() {
+            var reasonId = document.getElementById("reasons").value;
+            var div = document.createElement('div');
+            div.className = 'form-group';
+            var div1 = document.createElement('div');
+            div1.className = 'col-sm-10';
+            if (reasonId == 3) {
+                var reasonDesc = document.createElement('textarea');
+                reasonDesc.className = 'form-control';
+                reasonDesc.id = 'desc';
+                reasonDesc.rows = '3';
+                reasonDesc.placeholder = 'Write your reason';
+                reasonDesc.name = 'reasonDesc';
+                div1.appendChild(reasonDesc);
+                div.appendChild(div1);
+                // var reasonDesc = document.createElement("input");
+                // reasonDesc.setAttribute("type", "text");
+                // reasonDesc.setAttribute("id", "desc");
+                // reasonDesc.className = "form-control";
+
+                document.getElementById("reasonDesc").appendChild(reasonDesc);
+
+            } else {
+                $("#desc").remove();
+            }
+        }
     </script>
 
 </body>
@@ -284,8 +360,10 @@ if (!isLoggedIn()) {
 </html>
 
 <?php
-if (isset($_SESSION['err_upload']) || isset($_SESSION['suc_upload'])) {
+if (isset($_SESSION['err_upload']) || isset($_SESSION['suc_upload']) || isset($_SESSION['err_reason']) || isset($_SESSION['suc_reason'])) {
     unset($_SESSION['err_upload']);
     unset($_SESSION['suc_upload']);
+    unset($_SESSION['err_reason']);
+    unset($_SESSION['suc_reason']);
 }
 ?>

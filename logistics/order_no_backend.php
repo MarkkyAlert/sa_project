@@ -2,8 +2,8 @@
     session_start();
     include('../connectdb.php');
 
-    if (isset($_POST['submit'])) {
-        $order_no = mysqli_real_escape_string($conn, $_POST['order_no']);
+    if (isset($_REQUEST['order_no'])) {
+        $order_no = mysqli_real_escape_string($conn, $_REQUEST['order_no']);
 
         $query = "SELECT * FROM orders WHERE order_no = '$order_no'";
         $result = mysqli_query($conn, $query);

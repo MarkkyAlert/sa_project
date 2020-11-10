@@ -20,12 +20,12 @@
     }
 
     function fetch_assoc($result) {
-        global $conn;
+        
         return mysqli_fetch_assoc($result);
     }
 
     function num_rows($result) {
-        global $conn;
+        
         return mysqli_num_rows($result);
     }
 

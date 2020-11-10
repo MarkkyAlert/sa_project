@@ -56,89 +56,94 @@ if (!isLoggedIn()) {
                             <table class="table table-bordered table-hover table-light">
                                 <thead>
                                     <tr>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">เลขที่สินค้า</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">จำนวน</p>
-                                        </th scope="col">
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">สถานะ</p>
-                                        </th scope="col">
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">เวลาที่ต้องการส่ง</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">ผู้ส่ง</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">ผู้รับ</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">เบอร์โทรศัพท์</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">ที่อยู่</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">จังหวัด</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">อำเภอ</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">ตำบล</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">รหัสไปรษณีย์</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">วันที่ทำรายการ</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
-                                        </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">ลำดับที่</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">เลขที่สินค้า</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">จำนวน</p>
+                                    </th scope="col">
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">สถานะ</p>
+                                    </th scope="col">
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">เวลาที่ต้องการส่ง</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">ผู้ส่ง</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">ผู้รับ</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">เบอร์โทรศัพท์</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">ที่อยู่</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">จังหวัด</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">อำเภอ</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">ตำบล</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">รหัสไปรษณีย์</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">วันที่ทำรายการ</p>
+                                    </th>
+                                    <th scope="col">
+                                        <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
+                                    </th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
 
-                                    $query = "SELECT o.order_no, o.amount, o.delivery_date, o.request_date, o.sender,o.delivery_status, o.receiver, o.receiver_phone, o.order_status, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d 
-                            WHERE o.province_id = p.id
-                            AND o.amphure_id = a.id
-                            AND o.district_id = d.id
-                            AND o.user_id = u.user_id
-                            AND o.delivery_status = 'delivering'";
-                            
+$query = "SELECT o.order_id, o.delivery_status, o.order_status, o.request_date, (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, o.order_no, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d
+WHERE o.province_id = p.id
+AND o.amphure_id = a.id
+AND o.district_id = d.id
+AND o.user_id = u.user_id
+AND o.delivery_status = 'delivering'";
+
 
                                     $result = mysqli_query($conn, $query);
-
+                                    $i = 1;
                                     while ($row = mysqli_fetch_assoc($result)) { ?>
                                         <tr>
                                             <?php
+    
                                             $date = strtotime($row['delivery_date']);
                                             $date = date("d/m/Y", $date);
                                             $time = strtotime($row['delivery_date']);
                                             $time = date("H:i:s", $time);
-                                            $date2 = strtotime($row['request_date']);
-                                            $date2 = date("d/m/Y", $date2);
-                                            $time2 = strtotime($row['request_date']);
-                                            $time2 = date("H:i:s", $time2);
+                                            $request_date = strtotime($row['request_date']);
+                                            $request_date = date("d/m/Y", $request_date);
+                                            $request_time = strtotime($row['request_date']);
+                                            $request_time = date("H:i:s", $request_time);
                                             ?>
-                                            <td><?php echo $row['order_no']; ?></td>
+                                            <td><?php echo $i; ?></td>
+                                            <td><u><a href="order_detail_delivering.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
                                             <td><?php echo $row['amount']; ?></td>
                                             <td>
                                                 <?php
                                                 if ($row['delivery_status'] == 'waiting') {
-                                                    echo "<p class=text-warning>เตรียมจัดส่ง</p>";
+                                                    echo "<p class=text-primary>เตรียมจัดส่ง</p>";
                                                 } else if ($row['delivery_status'] == 'delivering') {
-                                                    echo "<p class=text-success>กำลังจัดส่ง</p>";
+                                                    echo "<p class=text-warning>กำลังจัดส่ง</p>";
                                                 } else if ($row['order_status'] == 'success') {
-                                                    echo '<p class="text-danger">จัดส่งสำเร็จ</p>';
+                                                    echo '<p class="text-success">จัดส่งสำเร็จ</p>';
                                                 } else if ($row['order_status'] == 'failed') {
                                                     echo '<p class="text-danger">จัดส่งไม่สำเร็จ</p>';
                                                 }
@@ -155,14 +160,12 @@ if (!isLoggedIn()) {
                                             <td><?php echo $row['amphure']; ?></td>
                                             <td><?php echo $row['district']; ?></td>
                                             <td><?php echo $row['zipcode']; ?></td>
-                                            <td><?php echo $date2; ?></td>
-                                            <td><?php echo $time2; ?></td>
-
-
+                                            <td><?php echo $request_date; ?></td>
+                                            <td><?php echo $request_time; ?></td>
+                                            <?php $i++; ?>
                                         </tr>
-
+    
                                     <?php } ?>
-
 
                                 </tbody>
                             </table>

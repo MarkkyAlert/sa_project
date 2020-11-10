@@ -36,122 +36,32 @@ if (!isLoggedIn()) {
     <main class="pt-5 mx-lg-5">
 
         <div class="container-fluid mt-1">
-            <div class="row mt-5">
-                <div class="col-12">
-                    <h3 class="text-center">สถานะการตรวจสอบ</h3>
-                </div>
-            </div>
             <div class="row mt-3">
-                <div class="col-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-light">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">เลขที่สินค้า</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">จำนวน</p>
-                                    </th scope="col">
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">สถานะ</p>
-                                    </th scope="col">
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">เวลาที่ต้องการส่ง</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">ผู้ส่ง</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">ผู้รับ</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">เบอร์โทรศัพท์</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">ที่อยู่</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">จังหวัด</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">อำเภอ</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">ตำบล</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">รหัสไปรษณีย์</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">วันที่ทำรายการ</p>
-                                    </th>
-                                    <th scope="col">
-                                        <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
-                                    </th>
+                <div class="col-md-12">
+                    <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 25rem; margin:0 auto;">
+                        <div class="card-header bg-transparent border-info">
+                            <h3 class="text-center">สถานะการตรวจสอบ</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <div class="list-group list-group-flush">
+                                   
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
+                                    <a href="status_all.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                                    <i class="fas fa-list-ul mr-3"></i>รายการทั้งหมด
+                                    </a>
+                                    <a href="status_accept.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                                    <i class="fas fa-check-circle mr-3"></i>รายการที่อนุมัติ
+                                    </a>
 
-                                $query = "SELECT o.order_no, o.amount, o.delivery_date, o.request_date, o.sender, o.receiver, o.receiver_phone, o.order_status, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d 
-                            WHERE o.province_id = p.id
-                            AND o.amphure_id = a.id
-                            AND o.district_id = d.id
-                            AND o.user_id = u.user_id";
+                                    <a href="status_not_accept.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                                    <i class="fas fa-times-circle mr-3"></i>รายการที่ไม่อนุมัติ
+                                    </a>
 
-                                $result = mysqli_query($conn, $query);
-
-                                while ($row = mysqli_fetch_assoc($result)) { ?>
-                                    <tr>
-                                        <?php
-                                        $date = strtotime($row['delivery_date']);
-                                        $date = date("d/m/Y", $date);
-                                        $time = strtotime($row['delivery_date']);
-                                        $time = date("H:i:s", $time);
-                                        $date2 = strtotime($row['request_date']);
-                                        $date2 = date("d/m/Y", $date2);
-                                        $time2 = strtotime($row['request_date']);
-                                        $time2 = date("H:i:s", $time2);
-                                        ?>
-                                        <td><?php echo $row['order_no']; ?></td>
-                                        <td><?php echo $row['amount']; ?></td>
-                                        <td>
-                                            <?php
-                                            if ($row['order_status'] == 'verifying' || $row['order_status'] == 'checking') {
-                                                echo "<p class=text-warning>กำลังตรวจสอบ</p>";
-                                            } else if ($row['order_status'] == 'accept') {
-                                                echo "<p class=text-success>อนุมัติ</p>";
-                                            } else if ($row['order_status'] == 'not accept') {
-                                                echo '<p class="text-danger">ไม่อนุมัติ</p>';
-                                            }
-                                            ?>
-                                        </td>
-                                        <td><?php echo $date; ?></td>
-                                        <td><?php echo $time; ?></td>
-                                        <td><?php echo $row['sender']; ?></td>
-                                        <td><?php echo $row['receiver']; ?></td>
-                                        <td><?php echo $row['receiver_phone']; ?></td>
-                                        <td><?php echo $row['address']; ?></td>
-                                        <td><?php echo $row['province']; ?></td>
-                                        <td><?php echo $row['amphure']; ?></td>
-                                        <td><?php echo $row['district']; ?></td>
-                                        <td><?php echo $row['zipcode']; ?></td>
-                                        <td><?php echo $date2; ?></td>
-                                        <td><?php echo $time2; ?></td>
-
-
-                                    </tr>
-
-                                <?php } ?>
-
-
-                            </tbody>
-                        </table>
+                                    
+                                </div>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

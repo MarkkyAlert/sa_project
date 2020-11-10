@@ -5,10 +5,9 @@ include('../connectdb.php');
 
 if (!isLoggedIn()) {
     header('location: ../login.php');
-} else if ($_SESSION['type'] != 'E') {
+} else if ($_SESSION['type'] != 'L') {
     header('location: ../page_not_found.php');
 }
-$emp_id = $_SESSION['employee_id'];
 
 ?>
 <!DOCTYPE html>
@@ -31,20 +30,15 @@ $emp_id = $_SESSION['employee_id'];
 <body class="grey lighten-3">
 
     <header>
-        <?php include('../partial/navbar_emp.php'); ?>
-        <?php include('../partial/sidebar_emp.php'); ?>
+        <?php include('../partial/navbar_logistics.php'); ?>
+        <?php include('../partial/sidebar_logistics.php'); ?>
     </header>
 
     <main class="pt-5 mx-lg-5">
 
         <div class="container-fluid mt-1">
-            <?php if (isset($_SESSION['suc_delivering'])) : ?>
-                <div class="alert alert-success" role="alert">
-                    <strong><?php echo $_SESSION['suc_delivering']; ?></strong>
-                </div>
-            <?php endif; ?>
             <?php
-            $query_count = "SELECT COUNT(order_no) AS count FROM orders WHERE delivery_status = 'waiting' AND employee_id = $emp_id";
+            $query_count = "SELECT COUNT(order_no) AS count FROM orders WHERE delivery_status = 'delivering'";
             $result_count = mysqli_query($conn, $query_count);
             $row_count = mysqli_fetch_assoc($result_count);
             ?>
@@ -53,7 +47,7 @@ $emp_id = $_SESSION['employee_id'];
 
                 <div class="row mt-5">
                     <div class="col-12">
-                        <h3 class="text-center ">รายการที่ต้องจัดส่ง: <?php echo $row_count['count'] ?> รายการ</h3>
+                        <h3 class="text-center ">รายการที่กำลังจัดส่ง: <?php echo $row_count['count'] ?> รายการ</h3>
 
                     </div>
                 </div>
@@ -71,11 +65,11 @@ $emp_id = $_SESSION['employee_id'];
                                         </th>
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">จำนวน</p>
-                                        </th>
+                                        </th scope="col">
                                         <th scope="col">
-                                            <p class="text-center font-weight-bold">ความจุ</p>
-                                        </th>
-
+                                            <p class="text-center font-weight-bold">สถานะ</p>
+                                        </th scope="col">
+                                        
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
                                         </th>
@@ -112,28 +106,18 @@ $emp_id = $_SESSION['employee_id'];
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
                                         </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">DELIVER</p>
-                                        </th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
 
-                                    $query = "SELECT o.order_id, o.order_no,o.request_date, 
-(select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, 
-(select IFNULL (sum(od.sum_capacity), 0) from order_details od where od.order_id = o.order_id) 
-as capacity, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address
-, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode 
-FROM orders o, users u, provinces p , amphures a, districts d 
-WHERE o.province_id = p.id
-AND o.amphure_id = a.id
-AND o.district_id = d.id
-AND o.user_id = u.user_id
-AND o.employee_id = $emp_id
-AND o.order_status = 'accept'
-AND o.delivery_status = 'waiting'";
+                                    $query = "SELECT o.order_id, o.delivery_status, o.order_status, o.request_date, (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, o.order_no, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d
+                                WHERE o.province_id = p.id
+                                AND o.amphure_id = a.id
+                                AND o.district_id = d.id
+                                AND o.user_id = u.user_id
+                                AND o.delivery_status = 'delivering'";
                                     $result = mysqli_query($conn, $query);
 
 
@@ -155,7 +139,16 @@ AND o.delivery_status = 'waiting'";
                                             <td><?php echo $i; ?></td>
                                             <td><u><a href="order_detail.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
                                             <td><?php echo $row['amount']; ?></td>
-                                            <td><?php echo $row['capacity']; ?></td>
+                                            <td><?php
+                                                if ($row['delivery_status'] === 'delivering') {
+                                                    echo "<p class=text-warning>กำลังจัดส่ง</p>";
+                                                } else if ($row['delivery_status'] === 'waiting') {
+                                                    echo "<p class=text-success>เตรียมจัดส่ง</p>";
+                                                } else if ($row['delivery_status'] === 'failed') {
+                                                    echo "<p class=text-danger>จัดส่งไม่สำเร็จ</p>";
+                                                }
+                                                ?>
+                                            </td>
                                             <td><?php echo $date; ?></td>
                                             <td><?php echo $time; ?></td>
                                             <td><?php echo $row['sender']; ?></td>
@@ -168,7 +161,6 @@ AND o.delivery_status = 'waiting'";
                                             <td><?php echo $row['zipcode']; ?></td>
                                             <td><?php echo $request_date; ?></td>
                                             <td><?php echo $request_time; ?></td>
-                                            <td><a class="btn btn-warning btn-sm" href="order_waiting_backend.php?order_id=<?php echo $row['order_id']; ?>">DELIVER</a></td>
                                             <?php $i++; ?>
                                         </tr>
 
@@ -184,7 +176,7 @@ AND o.delivery_status = 'waiting'";
             <?php if ($row_count['count'] == 0) : ?>
                 <div class="row mt-5">
                     <div class="col-12">
-                        <h3 class="text-center text-danger">ไม่มีรายการที่ต้องจัดส่ง</h3>
+                        <h3 class="text-center text-danger">ไม่มีรายการที่กำลังจัดส่ง</h3>
                     </div>
                 </div>
             <?php endif; ?>
@@ -249,7 +241,9 @@ AND o.delivery_status = 'waiting'";
 </html>
 
 <?php
-if (isset($_SESSION['suc_delivering'])) {
-    unset($_SESSION['suc_delivering']);
+if (isset($_SESSION['err_email']) || isset($_SESSION['err_add_emp']) || isset($_SESSION['suc_add_emp'])) {
+    unset($_SESSION['err_email']);
+    unset($_SESSION['err_add_emp']);
+    unset($_SESSION['suc_add_emp']);
 }
 ?>

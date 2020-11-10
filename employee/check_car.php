@@ -7,10 +7,12 @@ error_reporting(E_ALL ^ E_NOTICE);
 $order_no = $_SESSION['order_no'];
 $amount = $_SESSION['amount'];
 $amount_display = $amount;
+$sum_capacity_display = $_SESSION['sum_capacity'];
 $delivery_date = $_SESSION['delivery_date'];
 $delivery_date = strtotime('+7 hours', strtotime($delivery_date));
-$delivery_date2 = gmdate("Y-m-d H:i:s", $delivery_date);
+$delivery_date2 = gmdate("d-m-Y H:i:s", $delivery_date);
 $delivery_date3 = $delivery_date2;
+$delivery_date4 = gmdate("Y-m-d H:i:s", $delivery_date);
 $capacity = $_SESSION['capacity'];
 $category = $_SESSION['category'];
 $car_id = $_SESSION['car_id'];
@@ -57,19 +59,20 @@ if (!isLoggedIn()) {
             <div class="row">
                 <div class="col-12">
                     <?php
-                    $query = "select IFNULL(sum(co.amount),0) AS sum_amount from 
+                    $query = "select IFNULL(sum(co.capacity),0) AS capacity from 
                         car_orders co 
                         where 1=1
                         and order_id = $order_id";
                     $result = mysqli_query($conn, $query);
                     $row = mysqli_fetch_assoc($result);
-                    $sum_amount = $row['sum_amount'];
+                    $sum_capacity = $row['capacity'];
 
-                    if ($sum_amount > 0) {
-                        $amount_display = $amount_display - $sum_amount;
+                    if ($sum_capacity > 0) {
+                        $sum_capacity_display = $sum_capacity_display - $sum_capacity;
                     }
                     ?>
-                    <h4 class="text-center">จำนวนสินค้า: <?php echo $amount_display ?></h4>
+                    <h4 class="text-center">จำนวนรวม: <?php echo $amount_display ?></h4>
+                    <h4 class="text-center">ความจุรวม: <?php echo $sum_capacity_display ?></h4>
                 </div>
             </div>
             <div class="row">
@@ -121,7 +124,7 @@ if (!isLoggedIn()) {
                             <?php
                             $query = "SELECT * FROM cars c WHERE 1=1
                             AND NOT EXISTS ( SELECT * FROM  car_orders co WHERE co.car_id = c.car_id 
-                            AND '$delivery_date3'  BETWEEN co.start_date AND  co.end_date )";
+                            AND '$delivery_date4'  BETWEEN co.start_date AND  co.end_date )";
 
                             $result = mysqli_query($conn, $query);
                             $row = mysqli_fetch_assoc($result);
@@ -134,7 +137,8 @@ if (!isLoggedIn()) {
                             <?php } ?>
 
                         </select>
-                        <button type="submit" name="submit">OK</button>
+
+                        <button class="btn btn-info" type="submit" name="submit">OK</button>
                     </form>
                 </div>
             </div>
@@ -146,11 +150,13 @@ if (!isLoggedIn()) {
                         <label for="capacity">ประเภทรถ</label>
                         <input type="text" readonly value="<?php echo $category; ?>">
                         <label for="start_date">วันที่เริ่มส่งสินค้า</label>
-                        <input type="text" name="start_date" value="<?php echo $delivery_date3; ?>">
+                        <input type="text" name="start_date" readonly value="<?php echo $delivery_date3; ?>">
                         <label for="end_date">วันที่สิ้นสุดการส่งสินค้า</label>
-                        <input type="datetime-local" name="end_date">
-                        <label for="amount">จำนวน</label>
-                        <input type="text" name="amount" onkeyup="numOnly(this)" onblur="numOnly(this)">
+                        <input type="date" name="end_date">
+                        <label for="end_time">เวลาที่สิ้นสุดการส่งสินค้า</label>
+                        <input type="time" name="end_time">
+                        <label for="use_capacity">ความจุ</label>
+                        <input type="text" name="use_capacity" onkeyup="numOnly(this)" onblur="numOnly(this)">
                         <input type="hidden" name="car_id" value="<?php echo $car_id; ?>">
                         <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
                         <button type="submit" name="submit">OK</button>
@@ -189,7 +195,7 @@ if (!isLoggedIn()) {
                         <tbody>
                             <?php
 
-                            $query = "SELECT co.car_order_id, o.order_no, c.license, co.start_date, co.end_date, co.amount 
+                            $query = "SELECT co.car_order_id, o.order_no, c.license, co.start_date, co.end_date, co.capacity
                             FROM car_orders co , cars c,orders o WHERE 1=1
                             AND co.car_id = c.car_id
                             AND co.order_id = o.order_id
@@ -208,7 +214,7 @@ if (!isLoggedIn()) {
                                     <td><?php echo $row['license']; ?></td>
                                     <td><?php echo $start_date; ?></td>
                                     <td><?php echo $end_date; ?></td>
-                                    <td><?php echo $row['amount']; ?></td>
+                                    <td><?php echo $row['capacity']; ?></td>
                                     <td>
                                         <p class="text-center"><a href="delete_car_backend.php?car_order_id=<?php echo $row['car_order_id']; ?>" class="btn btn-danger btn-sm">DELETE</a></p>
                                     </td>
@@ -244,6 +250,8 @@ if (!isLoggedIn()) {
         function numOnly(selector) {
             selector.value = selector.value.replace(/[^0-9]/g, '');
         }
+
+        
     </script>
 
 </body>

@@ -4,13 +4,16 @@ include('../auth.php');
 include('../connectdb.php');
 error_reporting(E_ALL ^ E_NOTICE);
 
-$order_no = $_SESSION['order_no'];
-$order_id = $_SESSION['order_id'];
+if (isset($_REQUEST['order_id'])) {
+   
+    $order_id = $_REQUEST['order_id'];
+}
+
 
 
 if (!isLoggedIn()) {
     header('location: ../login.php');
-} else if ($_SESSION['type'] != 'U') {
+} else if ($_SESSION['type'] != 'L') {
     header('location: ../page_not_found.php');
 }
 ?>
@@ -34,8 +37,8 @@ if (!isLoggedIn()) {
 <body class="grey lighten-3">
 
     <header>
-        <?php include('../partial/navbar_emp.php'); ?>
-        <?php include('../partial/sidebar_emp.php'); ?>
+        <?php include('../partial/navbar_logistics.php'); ?>
+        <?php include('../partial/sidebar_logistics.php'); ?>
     </header>
 
     <main class="pt-5 mx-lg-5">
@@ -43,43 +46,15 @@ if (!isLoggedIn()) {
         <div class="container-fluid mt-1">
             <div class="row mt-5">
                 <div class="col-12">
-                    <h3 class="text-center">เลขที่สินค้า: <?php echo $order_no ?></h3>
+                <?php
+                        $query = "SELECT order_no FROM orders WHERE order_id = $order_id";
+                        $result = query($query);
+                        $row = fetch_assoc($result);
+                    ?>
+                    <h3 class="text-center">เลขที่สินค้า: <?php echo $row['order_no']; ?></h3>
                 </div>
             </div>
-            
-            <div class="row">
-                <div class="col-12">
-                    <?php if (isset($_SESSION['err_date_form2'])) : ?>
-                        <div class="alert alert-danger" role="alert">
-                            <strong><?php echo $_SESSION['err_date_form2']; ?></strong>
-                        </div>
-                    <?php endif; ?>
-
-                    
-
-                    <form action="date_form2_backend.php" method="post">
-                        <select class="browser-default custom-select" name="products" id="products">
-                            <?php
-                            $query = "SELECT * FROM products";
-
-                            $result = mysqli_query($conn, $query);
-                            $row = mysqli_fetch_assoc($result);
-
-                            ?>
-                            <option selected disabled>เลือกสินค้า</option>
-                            <?php foreach ($result as $value) { ?>
-                                <?php $product_name = $value['product_name']; ?>
-                                <option value="<?php echo $value['product_id'] ?>"><?php echo $product_name; ?></option>
-                            <?php } ?>
-
-                        </select>
-                        <label for="capacity">จำนวนสินค้า</label>
-                        <input type="number" name="amount" onkeyup="numOnly(this)" onblur="numOnly(this)">
-                        <button type="submit" name="submit">OK</button>
-                    </form>
-                </div>
-            </div>
-            
+         
             <div class="row mt-3">
                 <div class="col-12">
                     <table class="table table-bordered table-hover table-light">
@@ -93,9 +68,6 @@ if (!isLoggedIn()) {
                                 </th>
                                 <th>
                                     <p class="text-center font-weight-bold">ความจุรวม</p>
-                                </th>
-                                <th>
-                                    <p class="text-center font-weight-bold">DELETE</p>
                                 </th>
 
                             </tr>
@@ -115,11 +87,7 @@ if (!isLoggedIn()) {
                                     <td><p class="text-center"><?php echo $row['product_name']; ?></p></td>
                                     <td><p class="text-center"><?php echo $row['amount']; ?></p></td>
                                     <td><p class="text-center"><?php echo $row['sum_capacity']; ?></p></td>
-                                    <td>
-                                        <p class="text-center"><a href="date_form2_backend.php?order_detail_id=<?php echo $row['order_detail_id']; ?>" class="btn btn-danger btn-sm">DELETE</a></p>
-                                    </td>
-
-
+                                 
                                 </tr>
 
                             <?php } ?>
@@ -131,7 +99,16 @@ if (!isLoggedIn()) {
             </div>
             <div class="row">
                 <div class="col-6 text-right">
-                    <a href="date_form2_backend.php?confirm=submit" class="btn btn-success btn-sm">SUBMIT</a>
+                    <a href="index.php" class="btn btn-muted btn-sm">BACK</a>
+                </div>
+                <div class="col-6 text-left">
+                <?php
+                        $query = "SELECT order_no FROM orders WHERE order_id = $order_id";
+                        $result = query($query);
+                        $row = fetch_assoc($result);
+                    ?>
+                    
+                    <a href="order_no_backend.php?order_no=<?php echo $row['order_no']; ?>" class="btn btn-info btn-sm">Appoint</a>
                 </div>
                 
             </div>

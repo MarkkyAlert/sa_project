@@ -50,14 +50,19 @@ if (!isLoggedIn()) {
                     <?php endif; ?>
                     <?php
 
-                    $query = "SELECT o.order_id, o.file, o.order_no, o.amount, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d 
-                            WHERE o.province_id = p.id
-                            AND o.amphure_id = a.id
-                            AND o.district_id = d.id
-                            AND o.user_id = u.user_id
-                            AND o.employee_id = $emp_id
-                            AND o.order_status = 'accept'
-                            AND o.delivery_status = 'success'";
+                    $query =  "SELECT o.order_id, o.order_no,o.file, 
+                    (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, 
+                    (select IFNULL (sum(od.sum_capacity), 0) from order_details od where od.order_id = o.order_id) 
+                    as capacity, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address
+                    , p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode 
+                    FROM orders o, users u, provinces p , amphures a, districts d 
+                    WHERE o.province_id = p.id
+                    AND o.amphure_id = a.id
+                    AND o.district_id = d.id
+                    AND o.user_id = u.user_id
+                    AND o.employee_id = $emp_id
+                    AND o.order_status = 'accept'
+                    AND o.delivery_status = 'success'";
                     $result = mysqli_query($conn, $query);
                     $row1 = mysqli_num_rows($result);
                     ?>
@@ -65,7 +70,7 @@ if (!isLoggedIn()) {
                         <h3 class="text-center text-danger">ไม่มีรายการที่จัดส่งสำเร็จ</h3>
                     <?php endif; ?>
                     <?php if ($row1 > 0) : ?>
-                        <h3 class="text-center">รายการที่จัดส่งสำเร็จ</h3>
+                        <h3 class="text-center">รายการที่จัดส่งสำเร็จ: <?php echo $row1; ?> รายการ</h3>
 
                 </div>
             </div>
@@ -80,6 +85,9 @@ if (!isLoggedIn()) {
                                     </th>
                                     <th>
                                         <p class="text-center font-weight-bold">จำนวน</p>
+                                    </th>
+                                    <th>
+                                        <p class="text-center font-weight-bold">ความจุ</p>
                                     </th>
                                     <th>
                                         <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
@@ -131,8 +139,9 @@ if (!isLoggedIn()) {
                                         $time = strtotime($row['delivery_date']);
                                         $time = date("H:i:s", $time);
                                         ?>
-                                        <td><?php echo $row['order_no']; ?></td>
+                                        <td><u><a href="order_detail.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
                                         <td><?php echo $row['amount']; ?></td>
+                                        <td><?php echo $row['capacity']; ?></td>
                                         <td><?php echo $date; ?></td>
                                         <td><?php echo $time; ?></td>
                                         <td><?php echo $row['sender']; ?></td>
@@ -143,7 +152,7 @@ if (!isLoggedIn()) {
                                         <td><?php echo $row['amphure']; ?></td>
                                         <td><?php echo $row['district']; ?></td>
                                         <td><?php echo $row['zipcode']; ?></td>
-                                        <td><img src="../uploads/<?php echo $row['file']; ?>" width="50"></td>
+                                        <td><a target="_blank" href="../uploads/<?php echo $row['file']; ?>"><img src="../uploads/<?php echo $row['file']; ?>" width="50"></a></td>
                                         
                                         
 

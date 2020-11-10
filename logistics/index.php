@@ -8,6 +8,7 @@ if (!isLoggedIn()) {
 } else if ($_SESSION['type'] != 'L') {
     header('location: ../page_not_found.php');
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,111 +37,150 @@ if (!isLoggedIn()) {
     <main class="pt-5 mx-lg-5">
 
         <div class="container-fluid mt-1">
-            <div class="row mt-5">
-                <div class="col-12">
-                    <h3 class="text-center">รายการที่รอตรวจสอบ</h3>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-light">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <p class="text-center font-weight-bold">เลขที่สินค้า</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">ชื่อสินค้า</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">จำนวน</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">เวลาที่ต้องการส่ง</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">ผู้ส่ง</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">ผู้รับ</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">เบอร์โทรศัพท์</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">ที่อยู่</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">จังหวัด</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">อำเภอ</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">ตำบล</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">รหัสไปรษณีย์</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">วันที่ทำรายการ</p>
-                                    </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-
-                                $query = "SELECT o.order_id, o.request_date, o.order_no, o.amount, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d
-                            WHERE o.province_id = p.id
-                            AND o.amphure_id = a.id
-                            AND o.district_id = d.id
-                            AND o.user_id = u.user_id
-                            AND o.order_status = 'verifying'";
-                                $result = mysqli_query($conn, $query);
-
-                                while ($row = mysqli_fetch_assoc($result)) { ?>
-                                    <tr>
-                                        <?php
-                                        $date = strtotime($row['delivery_date']);
-                                        $date = date("d/m/Y", $date);
-                                        $time = strtotime($row['delivery_date']);
-                                        $time = date("H:i:s", $time);
-                                        $request_date = strtotime($row['request_date']);
-                                        $request_date = date("d/m/Y", $request_date);
-                                        $request_time = strtotime($row['request_date']);
-                                        $request_time = date("H:i:s", $request_time);
-                                        ?>
-                                        <td><?php echo $row['order_no']; ?></td>
-                                        <td><?php echo $row['amount']; ?></td>
-                                        <td><?php echo $date; ?></td>
-                                        <td><?php echo $time; ?></td>
-                                        <td><?php echo $row['sender']; ?></td>
-                                        <td><?php echo $row['receiver']; ?></td>
-                                        <td><?php echo $row['receiver_phone']; ?></td>
-                                        <td><?php echo $row['address']; ?></td>
-                                        <td><?php echo $row['province']; ?></td>
-                                        <td><?php echo $row['amphure']; ?></td>
-                                        <td><?php echo $row['district']; ?></td>
-                                        <td><?php echo $row['zipcode']; ?></td>
-                                        <td><?php echo $request_date; ?></td>
-                                        <td><?php echo $request_time; ?></td>
-                                    </tr>
-
-                                <?php } ?>
+            <?php
+            $query_count = "SELECT COUNT(order_no) AS count FROM orders WHERE order_status = 'verifying' OR order_status = 'checking'";
+            $result_count = mysqli_query($conn, $query_count);
+            $row_count = mysqli_fetch_assoc($result_count);
+            ?>
+            <?php if ($row_count['count'] != 0) : ?>
 
 
-                            </tbody>
-                        </table>
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <h3 class="text-center ">รายการที่รอตรวจสอบ: <?php echo $row_count['count'] ?> รายการ</h3>
+
                     </div>
                 </div>
-            </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-light">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">ลำดับที่</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">เลขที่สินค้า</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">จำนวน</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">สถานะ</p>
+                                        </th>
+                                        
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">เวลาที่ต้องการส่ง</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">ผู้ส่ง</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">ผู้รับ</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">เบอร์โทรศัพท์</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">ที่อยู่</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">จังหวัด</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">อำเภอ</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">ตำบล</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">รหัสไปรษณีย์</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">วันที่ทำรายการ</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+
+                                    $query = "SELECT o.order_id, o.order_status, o.request_date, (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, o.order_no, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d
+                                WHERE o.province_id = p.id
+                                AND o.amphure_id = a.id
+                                AND o.district_id = d.id
+                                AND o.user_id = u.user_id
+                                AND (o.order_status = 'verifying'
+                                OR o.order_status = 'checking')";
+                                    $result = mysqli_query($conn, $query);
+
+
+
+                                    $i = 1;
+                                    while ($row = mysqli_fetch_assoc($result)) { ?>
+                                        <tr>
+                                            <?php
+
+                                            $date = strtotime($row['delivery_date']);
+                                            $date = date("d/m/Y", $date);
+                                            $time = strtotime($row['delivery_date']);
+                                            $time = date("H:i:s", $time);
+                                            $request_date = strtotime($row['request_date']);
+                                            $request_date = date("d/m/Y", $request_date);
+                                            $request_time = strtotime($row['request_date']);
+                                            $request_time = date("H:i:s", $request_time);
+                                            ?>
+                                            <td><?php echo $i; ?></td>
+                                            <td><u><a href="order_detail.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
+                                            <td><?php echo $row['amount']; ?></td>
+                                            <td><?php
+                                                if ($row['order_status'] === 'checking' || $row['order_status'] === 'verifying') {
+                                                    echo "<p class=text-warning>รอตรวจสอบ</p>";
+                                                } else if ($row['order_status'] === 'accept') {
+                                                    echo "<p class=text-success>อนุมัติ</p>";
+                                                } else if ($row['order_status'] === 'not accept') {
+                                                    echo "<p class=text-danger>ไม่อนุมัติ</p>";
+                                                }
+                                                ?>
+                                            </td>
+                                            <td><?php echo $date; ?></td>
+                                            <td><?php echo $time; ?></td>
+                                            <td><?php echo $row['sender']; ?></td>
+                                            <td><?php echo $row['receiver']; ?></td>
+                                            <td><?php echo $row['receiver_phone']; ?></td>
+                                            <td><?php echo $row['address']; ?></td>
+                                            <td><?php echo $row['province']; ?></td>
+                                            <td><?php echo $row['amphure']; ?></td>
+                                            <td><?php echo $row['district']; ?></td>
+                                            <td><?php echo $row['zipcode']; ?></td>
+                                            <td><?php echo $request_date; ?></td>
+                                            <td><?php echo $request_time; ?></td>
+                                            <?php $i++; ?>
+                                        </tr>
+
+                                    <?php } ?>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <?php if ($row_count['count'] == 0) : ?>
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <h3 class="text-center text-danger">ไม่มีรายการที่รอตรวจสอบ</h3>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </main>
 

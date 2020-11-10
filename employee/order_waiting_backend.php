@@ -9,7 +9,7 @@
         $result = mysqli_query($conn, $query);
 
         if ($result) {
-            $_SESSION['suc_delivering'] = "กำลังจัดส่งสินค้า";
+            $_SESSION['suc_delivering'] = "ทำรายการเรียบร้อย";
             header('location: order_waiting.php');
         }
         else {

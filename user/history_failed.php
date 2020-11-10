@@ -134,11 +134,11 @@ if (!isLoggedIn()) {
                                             <td>
                                                 <?php
                                                 if ($row['delivery_status'] == 'waiting') {
-                                                    echo "<p class=text-warning>เตรียมจัดส่ง</p>";
+                                                    echo "<p class=text-primary>เตรียมจัดส่ง</p>";
                                                 } else if ($row['delivery_status'] == 'delivering') {
-                                                    echo "<p class=text-success>กำลังจัดส่ง</p>";
+                                                    echo "<p class=text-warning>กำลังจัดส่ง</p>";
                                                 } else if ($row['order_status'] == 'success') {
-                                                    echo '<p class="text-danger">จัดส่งสำเร็จ</p>';
+                                                    echo '<p class="text-success">จัดส่งสำเร็จ</p>';
                                                 } else if ($row['order_status'] == 'failed') {
                                                     echo '<p class="text-danger">จัดส่งไม่สำเร็จ</p>';
                                                 }
