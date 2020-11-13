@@ -12,7 +12,7 @@
 
 
             <div class="list-group list-group-flush">
-                <p>ยินดีต้อนรับคุณ...</p>
+                <p>ยินดีต้อนรับคุณ <?php echo $_SESSION['firstname']; ?></p>
                 
                 <a href="#" class="list-group-item list-group-item-action waves-effect mb-2">
                     <i class="fas fa-calendar-alt mr-3"></i>เลือกเวลาการจัดส่ง

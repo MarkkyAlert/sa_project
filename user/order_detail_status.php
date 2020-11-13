@@ -24,7 +24,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap</title>
+    <title>รายละเอียดออเดอร์</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -38,7 +38,39 @@ if (!isLoggedIn()) {
 
     <header>
         <?php include('../partial/navbar_user.php'); ?>
-        <?php include('../partial/sidebar_user.php'); ?>
+        <!-- Sidebar -->
+        <div class="sidebar-fixed position-fixed overflow-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a class="logo-wrapper waves-effect ">
+                            <img src="../img/logo.png" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="list-group list-group-flush">
+                <p>ยินดีต้อนรับคุณ <strong><?php echo $_SESSION['firstname']; ?></strong></p>
+
+                <a href="index.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-calendar-alt mr-3"></i>เลือกเวลาการจัดส่ง
+                </a>
+                <a href="status.php" class="active list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-check-square mr-3"></i>สถานะการตรวจสอบ
+                </a>
+
+                <a href="history.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-history mr-3"></i>ประวัติการจัดส่ง
+                </a>
+
+                <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
+                    <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
+                </a>
+            </div>
+        </div>
+        <!-- Sidebar -->
     </header>
 
     <main class="pt-5 mx-lg-5">
@@ -51,7 +83,7 @@ if (!isLoggedIn()) {
                         $result = query($query);
                         $row = fetch_assoc($result);
                     ?>
-                    <h3 class="text-center">เลขที่สินค้า: <?php echo $row['order_no']; ?></h3>
+                    <h3 class="text-center">เลขที่สินค้า: <mark><?php echo $row['order_no']; ?></mark></h3>
                 </div>
             </div>
          
@@ -111,18 +143,9 @@ if (!isLoggedIn()) {
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script>
-        function numOnly(selector) {
-            selector.value = selector.value.replace(/[^0-9]/g, '');
-        }
-    </script>
+    
 
 </body>
 
 </html>
 
-<?php
-if (isset($_SESSION['err_date_form2'])) {
-    unset($_SESSION['err_date_form2']);
-}
-?>

@@ -18,7 +18,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap</title>
+    <title>จัดส่งสำเร็จ</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -32,7 +32,39 @@ if (!isLoggedIn()) {
 
     <header>
         <?php include('../partial/navbar_user.php'); ?>
-        <?php include('../partial/sidebar_user.php'); ?>
+        <!-- Sidebar -->
+        <div class="sidebar-fixed position-fixed overflow-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a class="logo-wrapper waves-effect ">
+                            <img src="../img/logo.png" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="list-group list-group-flush">
+                <p>ยินดีต้อนรับคุณ <strong><?php echo $_SESSION['firstname']; ?></strong></p>
+
+                <a href="index.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-calendar-alt mr-3"></i>เลือกเวลาการจัดส่ง
+                </a>
+                <a href="status.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-check-square mr-3"></i>สถานะการตรวจสอบ
+                </a>
+
+                <a href="history.php" class="active list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-history mr-3"></i>ประวัติการจัดส่ง
+                </a>
+
+                <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
+                    <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
+                </a>
+            </div>
+        </div>
+        <!-- Sidebar -->
     </header>
 
     <main class="pt-5 mx-lg-5">
@@ -107,7 +139,7 @@ if (!isLoggedIn()) {
                                 <tbody>
                                     <?php
 
-                                    $query = "SELECT o.order_no, o.amount, o.delivery_date, o.request_date, o.sender,o.delivery_status, o.receiver, o.receiver_phone, o.order_status, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d 
+                                    $query = "SELECT o.order_no, o.order_id, (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, o.delivery_date, o.request_date, o.sender,o.delivery_status, o.receiver, o.receiver_phone, o.order_status, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d 
                             WHERE o.province_id = p.id
                             AND o.amphure_id = a.id
                             AND o.district_id = d.id
@@ -117,19 +149,22 @@ if (!isLoggedIn()) {
 
                                     $result = mysqli_query($conn, $query);
 
+                                    $i = 1;
                                     while ($row = mysqli_fetch_assoc($result)) { ?>
                                         <tr>
                                             <?php
+    
                                             $date = strtotime($row['delivery_date']);
                                             $date = date("d/m/Y", $date);
                                             $time = strtotime($row['delivery_date']);
                                             $time = date("H:i:s", $time);
-                                            $date2 = strtotime($row['request_date']);
-                                            $date2 = date("d/m/Y", $date2);
-                                            $time2 = strtotime($row['request_date']);
-                                            $time2 = date("H:i:s", $time2);
+                                            $request_date = strtotime($row['request_date']);
+                                            $request_date = date("d/m/Y", $request_date);
+                                            $request_time = strtotime($row['request_date']);
+                                            $request_time = date("H:i:s", $request_time);
                                             ?>
-                                            <td><?php echo $row['order_no']; ?></td>
+                                            <td><?php echo $i; ?></td>
+                                            <td><u><a href="order_detail_success.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
                                             <td><?php echo $row['amount']; ?></td>
                                             <td>
                                                 <?php
@@ -137,9 +172,9 @@ if (!isLoggedIn()) {
                                                     echo "<p class=text-primary>เตรียมจัดส่ง</p>";
                                                 } else if ($row['delivery_status'] == 'delivering') {
                                                     echo "<p class=text-warning>กำลังจัดส่ง</p>";
-                                                } else if ($row['order_status'] == 'success') {
+                                                } else if ($row['delivery_status'] == 'success') {
                                                     echo '<p class="text-success">จัดส่งสำเร็จ</p>';
-                                                } else if ($row['order_status'] == 'failed') {
+                                                } else if ($row['delivery_status'] == 'failed') {
                                                     echo '<p class="text-danger">จัดส่งไม่สำเร็จ</p>';
                                                 }
 
@@ -155,12 +190,11 @@ if (!isLoggedIn()) {
                                             <td><?php echo $row['amphure']; ?></td>
                                             <td><?php echo $row['district']; ?></td>
                                             <td><?php echo $row['zipcode']; ?></td>
-                                            <td><?php echo $date2; ?></td>
-                                            <td><?php echo $time2; ?></td>
-
-
+                                            <td><?php echo $request_date; ?></td>
+                                            <td><?php echo $request_time; ?></td>
+                                            <?php $i++; ?>
                                         </tr>
-
+    
                                     <?php } ?>
 
 
@@ -170,6 +204,11 @@ if (!isLoggedIn()) {
 
 
 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <a href="history.php" class="btn btn-danger btn-sm">BACK</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -189,61 +228,9 @@ if (!isLoggedIn()) {
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#add_emp').validate({
-
-                rules: {
-                    firstname: 'required',
-                    lastname: 'required',
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    phone: {
-                        required: true,
-                        number: true,
-                        minlength: 9,
-                        maxlength: 10
-                    },
-                },
-                messages: {
-                    firstname: 'กรุณากรอกชื่อต้น',
-                    lastname: 'กรุณากรอกนามสกุล',
-                    email: {
-                        required: 'กรุณากรอกอีเมล์',
-                        email: 'กรุณากรอกอีเมล์ให้ถูกต้อง'
-                    },
-                    phone: {
-                        required: 'กรุณากรอกเบอร์โทรศัพท์',
-                        number: 'กรุณากรอกตัวเลขเท่านั้น',
-                        minlength: 'เบอร์โทรศัพท์ต้องมี 9-10 ตัว',
-                        maxlength: 'เบอร์โทรศัพท์ต้องไม่เกิน 10 ตัว'
-                    }
-                },
-                errorElement: 'div',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback')
-                    error.insertAfter(element)
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid').removeClass('is-valid')
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-valid').removeClass('is-invalid')
-                }
-            });
-        })
-    </script>
+    
 
 </body>
 
 </html>
 
-<?php
-if (isset($_SESSION['err_email']) || isset($_SESSION['err_add_emp']) || isset($_SESSION['suc_add_emp'])) {
-    unset($_SESSION['err_email']);
-    unset($_SESSION['err_add_emp']);
-    unset($_SESSION['suc_add_emp']);
-}
-?>

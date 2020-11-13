@@ -24,7 +24,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>รายละเอียดออเดอร์</title>
+    <title>รายละเอียดอเดอร์</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -129,7 +129,7 @@ if (!isLoggedIn()) {
             </div>
             <div class="row">
                 <div class="col-12 text-center">
-                    <a href="history_waiting.php" class="btn btn-danger btn-sm">BACK</a>
+                    <a href="history_failed.php" class="btn btn-danger btn-sm">BACK</a>
                 </div>
                 
                 

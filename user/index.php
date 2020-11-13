@@ -16,7 +16,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap</title>
+    <title>เลือกเวลาจัดส่ง</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -28,14 +28,46 @@ if (!isLoggedIn()) {
 <body class="grey lighten-3">
     <header>
         <?php include('../partial/navbar_user.php'); ?>
-        <?php include('../partial/sidebar_user.php'); ?>
+        <!-- Sidebar -->
+        <div class="sidebar-fixed position-fixed overflow-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a class="logo-wrapper waves-effect ">
+                            <img src="../img/logo.png" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="list-group list-group-flush">
+                <p>ยินดีต้อนรับคุณ <strong><?php echo $_SESSION['firstname']; ?></strong></p>
+
+                <a href="index.php" class="active list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-calendar-alt mr-3"></i>เลือกเวลาการจัดส่ง
+                </a>
+                <a href="status.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-check-square mr-3"></i>สถานะการตรวจสอบ
+                </a>
+
+                <a href="history.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-history mr-3"></i>ประวัติการจัดส่ง
+                </a>
+
+                <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
+                    <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
+                </a>
+            </div>
+        </div>
+        <!-- Sidebar -->
     </header>
-    
+
     <main class="pt-5 mx-lg-5">
         <div class="container-fluid mt-1">
             <div class="row mt-3">
                 <div class="col-md-12">
-                <?php if (isset($_SESSION['err_date_form'])) : ?>
+                    <?php if (isset($_SESSION['err_date_form'])) : ?>
                         <div class="alert alert-danger" role="alert">
                             <strong><?php echo $_SESSION['err_date_form']; ?></strong>
                         </div>
@@ -63,7 +95,7 @@ if (!isLoggedIn()) {
                                         <label class="form-label" for="receiver">ชื่อผู้รับ</label>
                                     </div>
 
-                                    
+
 
                                     <div class="row">
                                         <div class="col-6">
@@ -74,8 +106,8 @@ if (!isLoggedIn()) {
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group mb-4">
-                                                <input type="time" id="time" name="time" class="form-control" min="08:00" max="16:00">      
-                                                <label class="form-label" for="district">เลือกเวลา</label>                                  
+                                                <input type="time" id="time" name="time" class="form-control" min="08:00" max="16:00">
+                                                <label class="form-label" for="district">เลือกเวลา 08.00 - 16.00 น.</label>
                                             </div>
                                         </div>
                                     </div>
@@ -112,7 +144,7 @@ if (!isLoggedIn()) {
                                             <select class="browser-default custom-select" name="districts" id="districts">
                                                 <option selected disabled>เลือกตำบล</option>
                                                 <option value=""></option>
-                                               
+
                                             </select>
                                             <label class="form-label" for="district">ตำบล</label>
                                         </div>
@@ -267,9 +299,9 @@ if (!isLoggedIn()) {
 
 </html>
 
-<?php 
-    if (isset($_SESSION['err_date_form']) || isset($_SESSION['suc_date_form'])) {
-        unset($_SESSION['err_date_form']);
-        unset($_SESSION['suc_date_form']);
-    }
+<?php
+if (isset($_SESSION['err_date_form']) || isset($_SESSION['suc_date_form'])) {
+    unset($_SESSION['err_date_form']);
+    unset($_SESSION['suc_date_form']);
+}
 ?>

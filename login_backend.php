@@ -14,9 +14,10 @@ if (isset($_POST['submit'])) {
     if (mysqli_num_rows($result) > 0 && $row['type'] == 'U') {
         $_SESSION['is_logged_in'] = true;
         $_SESSION['type'] = 'U';
-        $query = "SELECT user_id FROM users WHERE email = '$email'";
+        $query = "SELECT user_id, firstname FROM users WHERE email = '$email'";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_assoc($result);
+        $_SESSION['firstname'] = $row['firstname'];
         $_SESSION['user_id'] = $row['user_id'];
 
         if (!empty($_POST['remember'])) {

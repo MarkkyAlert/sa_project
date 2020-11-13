@@ -17,6 +17,9 @@
 
         $query = "DELETE FROM order_details WHERE order_detail_id = $order_detail_id";
         $result = mysqli_query($conn, $query);
+        if ($result) {
+            $_SESSION['suc_delete'] = 'ลบรายการสำเร็จ';
+        }
         header('location: date_form2.php');
     }
     if (isset($_POST['submit'])) {
@@ -35,7 +38,7 @@
             header('location: date_form2.php');
         }
         else {
-            $_SESSION['err_date_form2'] = 'เกิดข้อผิดพลาด';
+            $_SESSION['err_date_form2'] = 'Cannot insert data into database';
             header('location: date_form2.php');
         }
     }

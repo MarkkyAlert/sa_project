@@ -15,7 +15,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap</title>
+    <title>เปลี่ยนรหัสผ่าน</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -26,7 +26,39 @@ if (!isLoggedIn()) {
 <body class="grey lighten-3">
     <header>
         <?php include('../partial/navbar_user.php'); ?>
-        <?php include('../partial/sidebar_user.php'); ?>
+        <!-- Sidebar -->
+        <div class="sidebar-fixed position-fixed overflow-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a class="logo-wrapper waves-effect ">
+                            <img src="../img/logo.png" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="list-group list-group-flush">
+                <p>ยินดีต้อนรับคุณ <strong><?php echo $_SESSION['firstname']; ?></strong></p>
+
+                <a href="index.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-calendar-alt mr-3"></i>เลือกเวลาการจัดส่ง
+                </a>
+                <a href="status.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-check-square mr-3"></i>สถานะการตรวจสอบ
+                </a>
+
+                <a href="history.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                    <i class="fas fa-history mr-3"></i>ประวัติการจัดส่ง
+                </a>
+
+                <a href="change_pw.php" class="active list-group-item list-group-item-action  waves-effect mb-2">
+                    <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
+                </a>
+            </div>
+        </div>
+        <!-- Sidebar -->
     </header>
 
     <main class="pt-5 mx-lg-5">
@@ -45,7 +77,7 @@ if (!isLoggedIn()) {
                     <?php endif; ?>
                     <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
                         <div class="card-header bg-transparent border-info">
-                            <h3 class="text-center">Change Password</h3>
+                            <h3 class="text-center">เปลี่ยนรหัสผ่าน</h3>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
@@ -53,15 +85,15 @@ if (!isLoggedIn()) {
 
                                     <div class="form-outline mb-5">
                                         <input type="password" name="password" id="password" class="form-control" />
-                                        <label class="form-label" for="password">New Password</label>
+                                        <label class="form-label" for="password">รหัสผ่านใหม่</label>
                                     </div>
 
                                     <div class="form-outline mb-5">
                                         <input type="password" name="confirm" id="confirm" class="form-control" />
-                                        <label class="form-label" for="confirm">Confirm Password</label>
+                                        <label class="form-label" for="confirm">ยืนยันรหัสผ่าน</label>
                                     </div>
                                     <!-- Submit button -->
-                                    <button type="submit" name="submit" class="btn btn-info btn-block">Change Password</button>
+                                    <button type="submit" name="submit" class="btn btn-info btn-block">เปลี่ยนรหัสผ่าน</button>
                                 </form>
                             </p>
                         </div>
