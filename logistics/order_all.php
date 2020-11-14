@@ -1,15 +1,16 @@
 <?php
 session_start();
+
 include('../auth.php');
 include('../connectdb.php');
-
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+}
 if (!isLoggedIn()) {
     header('location: ../login.php');
-} else if ($_SESSION['type'] != 'E') {
+} else if ($_SESSION['type'] != 'L') {
     header('location: ../page_not_found.php');
 }
-$emp_id = $_SESSION['employee_id'];
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +19,7 @@ $emp_id = $_SESSION['employee_id'];
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>งานที่ได้รับมอบหมาย</title>
+    <title>การจัดส่งทั้งหมด</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -31,8 +32,9 @@ $emp_id = $_SESSION['employee_id'];
 <body class="grey lighten-3">
 
     <header>
-        <?php include('../partial/navbar_emp.php'); ?>
+        <?php include('../partial/navbar_logistics.php'); ?>
         <!-- Sidebar -->
+
         <div class="sidebar-fixed position-fixed overflow-auto">
             <div class="container">
                 <div class="row">
@@ -46,34 +48,32 @@ $emp_id = $_SESSION['employee_id'];
 
 
             <div class="list-group list-group-flush">
-                <p>ยินดีต้อนรับคุณ...</p>
+                <p>ยินดีต้อนรับคุณ <strong><?php echo $_SESSION['firstname']; ?></strong></p>
 
-                <a href="index.php" class="active list-group-item list-group-item-action waves-effect mb-1">
-                    <i class="fas fa-tasks mr-3"></i>งานที่ได้รับมอบหมาย
+                <a href="index.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-calendar-alt mr-3"></i>รายการที่รอตรวจสอบ
                 </a>
 
-
-                <a href="order_waiting.php" class="list-group-item list-group-item-action waves-effect mb-1">
-                    <i class="fas fa-clock mr-3"></i>รายการที่รอจัดส่ง
+                <a href="accept_order.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-check-square mr-3"></i>รายการที่อนุมัติ
                 </a>
 
-                <a href="order_delivering.php" class="list-group-item list-group-item-action waves-effect mb-1">
-                    <i class="fas fa-spinner mr-3"></i>รายการที่กำลังจัดส่ง
+                <a href="not_accept_order.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-times-circle mr-3"></i>รายการที่ไม่อนุมัติ
                 </a>
 
-                <a href="order_success.php" class="list-group-item list-group-item-action waves-effect mb-1">
-                    <i class="fas fa-check-circle mr-3"></i>รายการที่จัดส่งสำเร็จ
+                <a href="order.php" class="active list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
                 </a>
 
-                <a href="order_failed.php" class="list-group-item list-group-item-action waves-effect mb-1">
-                    <i class="fas fa-times-circle mr-3"></i>รายการที่จัดส่งไม่สำเร็จ
-                </a>
-
-                <a href="change_pw.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
                     <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
                 </a>
+
+
             </div>
         </div>
+
         <!-- Sidebar -->
     </header>
 
@@ -81,21 +81,19 @@ $emp_id = $_SESSION['employee_id'];
 
         <div class="container-fluid mt-1">
             <?php
-            $query_count = "SELECT COUNT(order_no) AS count FROM orders WHERE order_status = 'checking' AND employee_id = $emp_id";
+            $query_count = "SELECT COUNT(order_no) AS count FROM orders WHERE  delivery_status = 'waiting' OR delivery_status = 'delivering' OR delivery_status = 'success' OR delivery_status = 'failed'";
             $result_count = mysqli_query($conn, $query_count);
             $row_count = mysqli_fetch_assoc($result_count);
             ?>
             <?php if ($row_count['count'] != 0) : ?>
-
-
                 <div class="row mt-5">
                     <div class="col-12">
-                        <h3 class="text-center ">งานที่ได้รับมอบหมาย: <?php echo $row_count['count'] ?> รายการ</h3>
-
+                        <h3 class="text-center">การจัดส่งทั้งหมด: <?php echo $row_count['count'] ?> รายการ</h3>
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col-12">
+
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover table-light">
                                 <thead>
@@ -108,8 +106,10 @@ $emp_id = $_SESSION['employee_id'];
                                         </th>
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">จำนวน</p>
-                                        </th>
-                                        
+                                        </th scope="col">
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">สถานะ</p>
+                                        </th scope="col">
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
                                         </th>
@@ -146,23 +146,30 @@ $emp_id = $_SESSION['employee_id'];
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
                                         </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">บิล</p>
+                                        </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">เหตุผล</p>
+                                        </th>
+
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
 
-                                    $query = "SELECT o.order_id, o.order_status, o.request_date, (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, o.order_no, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d
-                                WHERE o.province_id = p.id
-                                AND o.amphure_id = a.id
-                                AND o.district_id = d.id
-                                AND o.user_id = u.user_id
-                                AND o.employee_id = $emp_id
-                                AND o.order_status = 'checking'";
+                                    $query = "SELECT o.file,o.order_no, o.order_id, (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount,  o.delivery_date, o.request_date, o.sender,o.delivery_status, o.receiver, o.receiver_phone, o.order_status, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d 
+                            WHERE o.province_id = p.id
+                            AND o.amphure_id = a.id
+                            AND o.district_id = d.id
+                            AND o.user_id = u.user_id
+                            AND (o.delivery_status = 'waiting'
+                            OR o.delivery_status = 'delivering'
+                            OR o.delivery_status = 'success'
+                            OR o.delivery_status = 'failed')";
+
                                     $result = mysqli_query($conn, $query);
-
-
-
                                     $i = 1;
                                     while ($row = mysqli_fetch_assoc($result)) { ?>
                                         <tr>
@@ -177,22 +184,41 @@ $emp_id = $_SESSION['employee_id'];
                                             $request_time = strtotime($row['request_date']);
                                             $request_time = date("H:i:s", $request_time);
                                             ?>
-                                            <td><?php echo $i; ?></td>
-                                            <td><u><a href="order_detail.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
-                                            <td><?php echo $row['amount']; ?></td>
-                                            
-                                            <td><?php echo $date; ?></td>
-                                            <td><?php echo $time; ?></td>
-                                            <td><?php echo $row['sender']; ?></td>
-                                            <td><?php echo $row['receiver']; ?></td>
-                                            <td><?php echo $row['receiver_phone']; ?></td>
-                                            <td><?php echo $row['address']; ?></td>
-                                            <td><?php echo $row['province']; ?></td>
-                                            <td><?php echo $row['amphure']; ?></td>
-                                            <td><?php echo $row['district']; ?></td>
-                                            <td><?php echo $row['zipcode']; ?></td>
-                                            <td><?php echo $request_date; ?></td>
-                                            <td><?php echo $request_time; ?></td>
+                                            <td><p class="text-center"><?php echo $i; ?></p></td>
+                                            <td><p class="text-center"><u><a href="order_detail_all.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></p></td>
+                                            <td><p class="text-center"><?php echo $row['amount']; ?></p></td>
+                                            <td>
+                                                <?php
+                                                if ($row['delivery_status'] == 'waiting') {
+                                                    echo "<p class=text-primary text-center>เตรียมจัดส่ง</p>";
+                                                } else if ($row['delivery_status'] == 'delivering') {
+                                                    echo "<p class=text-warning text-center>กำลังจัดส่ง</p>";
+                                                } else if ($row['delivery_status'] == 'success') {
+                                                    echo '<p class="text-success text-center">จัดส่งสำเร็จ</p>';
+                                                } else if ($row['delivery_status'] == 'failed') {
+                                                    echo '<p class="text-danger text-center">จัดส่งไม่สำเร็จ</p>';
+                                                }
+
+                                                ?>
+                                            </td>
+                                            <td><p class="text-center"><?php echo $date; ?></p></td>
+                                            <td><p class="text-center"><?php echo $time; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['sender']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['receiver']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['receiver_phone']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['address']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['province']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['amphure']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['district']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['zipcode']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $request_date; ?></p></td>
+                                            <td><p class="text-center"><?php echo $request_time; ?></p></td>
+                                            <?php if ($row['file'] !== '-' ) : ?>
+                                            <td><p class="text-center"><a target="_blank" href="../uploads/<?php echo $row['file']; ?>"><img src="../uploads/<?php echo $row['file']; ?>" width="50"></a></p></td>
+                                            <?php endif; ?>
+                                            <?php if ($row['file'] === '-') : ?>
+                                                <td><h4 class="text-center text-danger">-</h4></td>
+                                            <?php endif; ?>
                                             <?php $i++; ?>
                                         </tr>
 
@@ -202,13 +228,21 @@ $emp_id = $_SESSION['employee_id'];
                                 </tbody>
                             </table>
                         </div>
+
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <a href="order.php" class="btn btn-danger btn-sm">BACK</a>
                     </div>
                 </div>
             <?php endif; ?>
             <?php if ($row_count['count'] == 0) : ?>
                 <div class="row mt-5">
                     <div class="col-12">
-                        <h3 class="text-center text-danger">ไม่มีงานที่ได้รับมอบหมาย</h3>
+                        <h3 class="text-center text-danger">ไม่มีรายการจัดส่ง</h3>
                     </div>
                 </div>
             <?php endif; ?>
@@ -221,61 +255,8 @@ $emp_id = $_SESSION['employee_id'];
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#add_emp').validate({
 
-                rules: {
-                    firstname: 'required',
-                    lastname: 'required',
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    phone: {
-                        required: true,
-                        number: true,
-                        minlength: 9,
-                        maxlength: 10
-                    },
-                },
-                messages: {
-                    firstname: 'กรุณากรอกชื่อต้น',
-                    lastname: 'กรุณากรอกนามสกุล',
-                    email: {
-                        required: 'กรุณากรอกอีเมล์',
-                        email: 'กรุณากรอกอีเมล์ให้ถูกต้อง'
-                    },
-                    phone: {
-                        required: 'กรุณากรอกเบอร์โทรศัพท์',
-                        number: 'กรุณากรอกตัวเลขเท่านั้น',
-                        minlength: 'เบอร์โทรศัพท์ต้องมี 9-10 ตัว',
-                        maxlength: 'เบอร์โทรศัพท์ต้องไม่เกิน 10 ตัว'
-                    }
-                },
-                errorElement: 'div',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback')
-                    error.insertAfter(element)
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid').removeClass('is-valid')
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-valid').removeClass('is-invalid')
-                }
-            });
-        })
-    </script>
 
 </body>
 
 </html>
-
-<?php
-if (isset($_SESSION['err_email']) || isset($_SESSION['err_add_emp']) || isset($_SESSION['suc_add_emp'])) {
-    unset($_SESSION['err_email']);
-    unset($_SESSION['err_add_emp']);
-    unset($_SESSION['suc_add_emp']);
-}
-?>

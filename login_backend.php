@@ -33,7 +33,7 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        header('location: index.php');
+        header('location: user/index.php');
     } else if (mysqli_num_rows($result) > 0 && $row['type'] == 'E') {
         $_SESSION['is_logged_in'] = true;
         $_SESSION['type'] = 'E';
@@ -42,6 +42,7 @@ if (isset($_POST['submit'])) {
         and u.email = '$email'";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_assoc($result);
+        $_SESSION['firstname'] = $row['firstname'];
         $_SESSION['user_id'] = $row['user_id'];
         $_SESSION['employee_id'] = $row['employee_id'];
 
@@ -58,13 +59,14 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        header('location: index_emp.php');
+        header('location: employee/index.php');
     } else if (mysqli_num_rows($result) > 0 && $row['type'] == 'L') {
         $_SESSION['is_logged_in'] = true;
         $_SESSION['type'] = 'L';
-        $query = "SELECT user_id FROM users WHERE email = '$email'";
+        $query = "SELECT user_id, firstname FROM users WHERE email = '$email'";
         $result = mysqli_query($conn, $query);
         $row = mysqli_fetch_assoc($result);
+        $_SESSION['firstname'] = $row['firstname'];
         $_SESSION['user_id'] = $row['user_id'];
 
         if (!empty($_POST['remember'])) {

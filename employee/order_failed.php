@@ -16,7 +16,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>จัดส่งสำเร็จ</title>
+    <title>จัดส่งไม่สำเร็จ</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -59,11 +59,11 @@ if (!isLoggedIn()) {
                     <i class="fas fa-spinner mr-3"></i>รายการที่กำลังจัดส่ง
                 </a>
 
-                <a href="order_success.php" class="active list-group-item list-group-item-action waves-effect mb-1">
+                <a href="order_success.php" class="list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-check-circle mr-3"></i>รายการที่จัดส่งสำเร็จ
                 </a>
 
-                <a href="order_failed.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <a href="order_failed.php" class="active list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-times-circle mr-3"></i>รายการที่จัดส่งไม่สำเร็จ
                 </a>
 
@@ -104,15 +104,15 @@ if (!isLoggedIn()) {
                     AND o.user_id = u.user_id
                     AND o.employee_id = $emp_id
                     AND o.order_status = 'accept'
-                    AND o.delivery_status = 'success'";
+                    AND o.delivery_status = 'failed'";
                     $result = mysqli_query($conn, $query);
                     $row1 = mysqli_num_rows($result);
                     ?>
                     <?php if ($row1 == 0) : ?>
-                        <h3 class="text-center text-danger">ไม่มีรายการที่จัดส่งสำเร็จ</h3>
+                        <h3 class="text-center text-danger">ไม่มีรายการที่จัดส่งไม่สำเร็จ</h3>
                     <?php endif; ?>
                     <?php if ($row1 > 0) : ?>
-                        <h3 class="text-center">รายการที่จัดส่งสำเร็จ: <?php echo $row1; ?> รายการ</h3>
+                        <h3 class="text-center">รายการที่จัดส่งไม่สำเร็จ: <?php echo $row1; ?> รายการ</h3>
 
                 </div>
             </div>
@@ -162,7 +162,7 @@ if (!isLoggedIn()) {
                                         <p class="text-center font-weight-bold">รหัสไปรษณีย์</p>
                                     </th>
                                     <th>
-                                        <p class="text-center font-weight-bold">บิล</p>
+                                        <p class="text-center font-weight-bold">เหตุผล</p>
                                     </th>
                                     
 
@@ -181,7 +181,7 @@ if (!isLoggedIn()) {
                                         $time = strtotime($row['delivery_date']);
                                         $time = date("H:i:s", $time);
                                         ?>
-                                        <td><u><a href="order_detail_success.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
+                                        <td><u><a href="order_detail_failed.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
                                         <td><?php echo $row['amount']; ?></td>
                                         <td><?php echo $row['capacity']; ?></td>
                                         <td><?php echo $date; ?></td>
@@ -194,7 +194,7 @@ if (!isLoggedIn()) {
                                         <td><?php echo $row['amphure']; ?></td>
                                         <td><?php echo $row['district']; ?></td>
                                         <td><?php echo $row['zipcode']; ?></td>
-                                        <td><a target="_blank" href="../uploads/<?php echo $row['file']; ?>"><img src="../uploads/<?php echo $row['file']; ?>" width="50"></a></td>
+                                        
                                         
                                         
 

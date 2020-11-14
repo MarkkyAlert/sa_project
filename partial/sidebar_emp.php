@@ -17,9 +17,7 @@
                 <a href="index.php" class="list-group-item list-group-item-action waves-effect mb-1">
                 <i class="fas fa-tasks mr-3"></i>งานที่ได้รับมอบหมาย
                 </a>
-                <a href="order_no.php" class="list-group-item list-group-item-action waves-effect mb-1">
-                <i class="fas fa-truck-moving mr-3"></i>ตรวจสอบรถ
-                </a>
+                
                 
                 <a href="order_waiting.php" class="list-group-item list-group-item-action waves-effect mb-1">
                 <i class="fas fa-clock mr-3"></i>รายการที่รอจัดส่ง

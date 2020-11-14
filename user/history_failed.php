@@ -88,6 +88,9 @@ if (!isLoggedIn()) {
                             <table class="table table-bordered table-hover table-light">
                                 <thead>
                                     <tr>
+                                    <th scope="col">
+                                            <p class="text-center font-weight-bold">ลำดับที่</p>
+                                        </th>
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">เลขที่สินค้า</p>
                                         </th>
@@ -133,6 +136,9 @@ if (!isLoggedIn()) {
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
                                         </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">เหตุผล</p>
+                                        </th>
 
                                     </tr>
                                 </thead>
@@ -165,33 +171,35 @@ if (!isLoggedIn()) {
                                             ?>
                                             <td><?php echo $i; ?></td>
                                             <td><u><a href="order_detail_failed.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
-                                            <td><?php echo $row['amount']; ?></td>
+                                            <td><p class="text-center"><?php echo $row['amount']; ?></p></td>
                                             <td>
                                                 <?php
                                                 if ($row['delivery_status'] == 'waiting') {
-                                                    echo "<p class=text-primary>เตรียมจัดส่ง</p>";
+                                                    echo "<p class=text-primary text-center>เตรียมจัดส่ง</p>";
                                                 } else if ($row['delivery_status'] == 'delivering') {
-                                                    echo "<p class=text-warning>กำลังจัดส่ง</p>";
+                                                    echo "<p class=text-warning text-center>กำลังจัดส่ง</p>";
                                                 } else if ($row['delivery_status'] == 'success') {
-                                                    echo '<p class="text-success">จัดส่งสำเร็จ</p>';
+                                                    echo '<p class="text-success text-center">จัดส่งสำเร็จ</p>';
                                                 } else if ($row['delivery_status'] == 'failed') {
-                                                    echo '<p class="text-danger">จัดส่งไม่สำเร็จ</p>';
+                                                    echo '<p class="text-danger text-center">จัดส่งไม่สำเร็จ</p>';
                                                 }
 
                                                 ?>
                                             </td>
-                                            <td><?php echo $date; ?></td>
-                                            <td><?php echo $time; ?></td>
-                                            <td><?php echo $row['sender']; ?></td>
-                                            <td><?php echo $row['receiver']; ?></td>
-                                            <td><?php echo $row['receiver_phone']; ?></td>
-                                            <td><?php echo $row['address']; ?></td>
-                                            <td><?php echo $row['province']; ?></td>
-                                            <td><?php echo $row['amphure']; ?></td>
-                                            <td><?php echo $row['district']; ?></td>
-                                            <td><?php echo $row['zipcode']; ?></td>
-                                            <td><?php echo $request_date; ?></td>
-                                            <td><?php echo $request_time; ?></td>
+                                            <td><p class="text-center"><?php echo $date; ?></p></td>
+                                            <td><p class="text-center"><?php echo $time; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['sender']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['receiver']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['receiver_phone']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['address']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['province']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['amphure']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['district']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['zipcode']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $request_date; ?></p></td>
+                                            <td><p class="text-center"><?php echo $request_time; ?></p></td>
+                                            
+
                                             <?php $i++; ?>
                                         </tr>
     

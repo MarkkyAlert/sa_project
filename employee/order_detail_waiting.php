@@ -54,12 +54,12 @@ if (!isLoggedIn()) {
             <div class="list-group list-group-flush">
                 <p>ยินดีต้อนรับคุณ...</p>
 
-                <a href="index.php" class="active list-group-item list-group-item-action waves-effect mb-1">
+                <a href="index.php" class="list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-tasks mr-3"></i>งานที่ได้รับมอบหมาย
                 </a>
 
 
-                <a href="order_waiting.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <a href="order_waiting.php" class="active list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-clock mr-3"></i>รายการที่รอจัดส่ง
                 </a>
 
@@ -93,7 +93,7 @@ if (!isLoggedIn()) {
                     $result = query($query);
                     $row = fetch_assoc($result);
                     ?>
-                    <h3 class="text-center">เลขที่สินค้า: <?php echo $row['order_no'] ?></h3>
+                    <h3 class="text-center">เลขที่สินค้า: <mark><?php echo $row['order_no'] ?></mark></h3>
                 </div>
             </div>
 
@@ -145,17 +145,10 @@ if (!isLoggedIn()) {
                 </div>
             </div>
             <div class="row">
-                <div class="col-6 text-right">
-                    <a href="index.php" class="btn btn-danger btn-sm">BACK</a>
+                <div class="col-12 text-center">
+                    <a href="order_waiting.php" class="btn btn-danger btn-sm">BACK</a>
                 </div>
-                <div class="col-6 text-left">
-                    <?php
-                    $query = "SELECT order_no FROM orders WHERE order_id = $order_id";
-                    $result = query($query);
-                    $row = fetch_assoc($result);
-                    ?>
-                    <a href="order_no_backend.php?order_no=<?php echo $row['order_no']; ?>" class="btn btn-info btn-sm">Check car</a>
-                </div>
+                
 
             </div>
         </div>
@@ -167,18 +160,9 @@ if (!isLoggedIn()) {
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script>
-        function numOnly(selector) {
-            selector.value = selector.value.replace(/[^0-9]/g, '');
-        }
-    </script>
+    
 
 </body>
 
 </html>
 
-<?php
-if (isset($_SESSION['err_date_form2'])) {
-    unset($_SESSION['err_date_form2']);
-}
-?>

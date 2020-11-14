@@ -50,10 +50,10 @@ if (isset($_POST['submit'])) {
                     $result = mysqli_query($conn, $query);
 
                     if ($result) {
-                        $_SESSION['suc_query'] = $query;
+                        $_SESSION['suc_query'] = 'ทำรายการเรียบร้อย';
                         header('location: check_car.php');
                     } else {
-
+                        $_SESSION['err_query'] = 'Cannot insert data into database';
                         header('location: check_car.php');
                     }
                 }

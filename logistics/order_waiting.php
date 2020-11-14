@@ -16,7 +16,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap</title>
+    <title>รายการที่รอจัดส่ง</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -30,7 +30,48 @@ if (!isLoggedIn()) {
 
     <header>
         <?php include('../partial/navbar_logistics.php'); ?>
-        <?php include('../partial/sidebar_logistics.php'); ?>
+        <!-- Sidebar -->
+
+        <div class="sidebar-fixed position-fixed overflow-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a class="logo-wrapper waves-effect ">
+                            <img src="../img/logo.png" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="list-group list-group-flush">
+                <p>ยินดีต้อนรับคุณ <strong><?php echo $_SESSION['firstname']; ?></strong></p>
+
+                <a href="index.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-calendar-alt mr-3"></i>รายการที่รอตรวจสอบ
+                </a>
+
+                <a href="accept_order.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-check-square mr-3"></i>รายการที่อนุมัติ
+                </a>
+
+                <a href="not_accept_order.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-times-circle mr-3"></i>รายการที่ไม่อนุมัติ
+                </a>
+
+                <a href="order.php" class="active list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
+                </a>
+
+                <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
+                    <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
+                </a>
+
+
+            </div>
+        </div>
+
+        <!-- Sidebar -->
     </header>
 
     <main class="pt-5 mx-lg-5">
@@ -131,35 +172,36 @@ AND o.delivery_status = 'waiting'";
                                             $request_time = strtotime($row['request_date']);
                                             $request_time = date("H:i:s", $request_time);
                                             ?>
-                                            <td><?php echo $i; ?></td>
-                                            <td><u><a href="order_detail_delivering.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
-                                            <td><?php echo $row['amount']; ?></td>
+                                            <td><p class="text-center"><?php echo $i; ?></p></td>
+                                            <td><u><a href="order_detail_waiting.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
+                                            <td><p class="text-center"><?php echo $row['amount']; ?></p></td>
                                             <td>
                                                 <?php
                                                 if ($row['delivery_status'] == 'waiting') {
-                                                    echo "<p class=text-primary>เตรียมจัดส่ง</p>";
+                                                    echo "<p class=text-primary text-center>เตรียมจัดส่ง</p>";
                                                 } else if ($row['delivery_status'] == 'delivering') {
-                                                    echo "<p class=text-warning>กำลังจัดส่ง</p>";
-                                                } else if ($row['order_status'] == 'success') {
-                                                    echo '<p class="text-success">จัดส่งสำเร็จ</p>';
-                                                } else if ($row['order_status'] == 'failed') {
-                                                    echo '<p class="text-danger">จัดส่งไม่สำเร็จ</p>';
+                                                    echo "<p class=text-warning text-center>กำลังจัดส่ง</p>";
+                                                } else if ($row['delivery_status'] == 'success') {
+                                                    echo '<p class="text-success text-center">จัดส่งสำเร็จ</p>';
+                                                } else if ($row['delivery_status'] == 'failed') {
+                                                    echo '<p class="text-danger text-center">จัดส่งไม่สำเร็จ</p>';
                                                 }
 
                                                 ?>
                                             </td>
-                                            <td><?php echo $date; ?></td>
-                                            <td><?php echo $time; ?></td>
-                                            <td><?php echo $row['sender']; ?></td>
-                                            <td><?php echo $row['receiver']; ?></td>
-                                            <td><?php echo $row['receiver_phone']; ?></td>
-                                            <td><?php echo $row['address']; ?></td>
-                                            <td><?php echo $row['province']; ?></td>
-                                            <td><?php echo $row['amphure']; ?></td>
-                                            <td><?php echo $row['district']; ?></td>
-                                            <td><?php echo $row['zipcode']; ?></td>
-                                            <td><?php echo $request_date; ?></td>
-                                            <td><?php echo $request_time; ?></td>
+                                            <td><p class="text-center"><?php echo $date; ?></p></td>
+                                            <td><p class="text-center"><?php echo $time; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['sender']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['receiver']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['receiver_phone']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['address']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['province']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['amphure']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['district']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['zipcode']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $request_date; ?></p></td>
+                                            <td><p class="text-center"><?php echo $request_time; ?></p></td>
+                                            
                                             <?php $i++; ?>
                                         </tr>
     
@@ -171,6 +213,11 @@ AND o.delivery_status = 'waiting'";
 
 
 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <a href="order.php" class="btn btn-danger btn-sm">BACK</a>
                     </div>
                 </div>
             <?php endif; ?>

@@ -31,7 +31,48 @@ if (!isLoggedIn()) {
 
     <header>
         <?php include('../partial/navbar_logistics.php'); ?>
-        <?php include('../partial/sidebar_logistics.php'); ?>
+        <!-- Sidebar -->
+
+        <div class="sidebar-fixed position-fixed overflow-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a class="logo-wrapper waves-effect ">
+                            <img src="../img/logo.png" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="list-group list-group-flush">
+                <p>ยินดีต้อนรับคุณ <strong><?php echo $_SESSION['firstname']; ?></strong></p>
+
+                <a href="index.php" class="active list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-calendar-alt mr-3"></i>รายการที่รอตรวจสอบ
+                </a>
+
+                <a href="accept_order.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-check-square mr-3"></i>รายการที่อนุมัติ
+                </a>
+
+                <a href="not_accept_order.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-times-circle mr-3"></i>รายการที่ไม่อนุมัติ
+                </a>
+
+                <a href="order.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
+                </a>
+
+                <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
+                    <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
+                </a>
+
+
+            </div>
+        </div>
+
+        <!-- Sidebar -->
     </header>
 
     <main class="pt-5 mx-lg-5">
@@ -137,31 +178,31 @@ if (!isLoggedIn()) {
                                             $request_time = strtotime($row['request_date']);
                                             $request_time = date("H:i:s", $request_time);
                                             ?>
-                                            <td><?php echo $i; ?></td>
+                                            <td><p class="text-center"><?php echo $i; ?></p></td>
                                             <td><u><a href="order_detail.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
-                                            <td><?php echo $row['amount']; ?></td>
+                                            <td><p class="text-center"><?php echo $row['amount']; ?></p></td>
                                             <td><?php
                                                 if ($row['order_status'] === 'checking' || $row['order_status'] === 'verifying') {
-                                                    echo "<p class=text-warning>รอตรวจสอบ</p>";
+                                                    echo "<p class=text-warning text-center>รอตรวจสอบ</p>";
                                                 } else if ($row['order_status'] === 'accept') {
-                                                    echo "<p class=text-success>อนุมัติ</p>";
+                                                    echo "<p class=text-success text-center>อนุมัติ</p>";
                                                 } else if ($row['order_status'] === 'not accept') {
-                                                    echo "<p class=text-danger>ไม่อนุมัติ</p>";
+                                                    echo "<p class=text-danger text-center>ไม่อนุมัติ</p>";
                                                 }
                                                 ?>
                                             </td>
-                                            <td><?php echo $date; ?></td>
-                                            <td><?php echo $time; ?></td>
-                                            <td><?php echo $row['sender']; ?></td>
-                                            <td><?php echo $row['receiver']; ?></td>
-                                            <td><?php echo $row['receiver_phone']; ?></td>
-                                            <td><?php echo $row['address']; ?></td>
-                                            <td><?php echo $row['province']; ?></td>
-                                            <td><?php echo $row['amphure']; ?></td>
-                                            <td><?php echo $row['district']; ?></td>
-                                            <td><?php echo $row['zipcode']; ?></td>
-                                            <td><?php echo $request_date; ?></td>
-                                            <td><?php echo $request_time; ?></td>
+                                            <td><p class="text-center"><?php echo $date; ?></p></td>
+                                            <td><p class="text-center"><?php echo $time; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['sender']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['receiver']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['receiver_phone']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['address']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['province']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['amphure']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['district']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['zipcode']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $request_date; ?></p></td>
+                                            <td><p class="text-center"><?php echo $request_time; ?></p></td>
                                             <?php $i++; ?>
                                         </tr>
 

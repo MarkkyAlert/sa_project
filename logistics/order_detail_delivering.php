@@ -2,7 +2,14 @@
 session_start();
 include('../auth.php');
 include('../connectdb.php');
-$delivery_date = $_SESSION['delivery_date'];
+error_reporting(E_ALL ^ E_NOTICE);
+
+if (isset($_REQUEST['order_id'])) {
+   
+    $order_id = $_REQUEST['order_id'];
+}
+
+
 
 if (!isLoggedIn()) {
     header('location: ../login.php');
@@ -17,12 +24,14 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>มอบหมายพนักงาน</title>
+    <title>รายละเอียดออเดอร์</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
     <link href="../css/style.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.css" rel="stylesheet" />
+
+
 </head>
 
 <body class="grey lighten-3">
@@ -58,7 +67,7 @@ if (!isLoggedIn()) {
                     <i class="fas fa-times-circle mr-3"></i>รายการที่ไม่อนุมัติ
                 </a>
 
-                <a href="order.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <a href="order.php" class="active list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
                 </a>
 
@@ -76,70 +85,50 @@ if (!isLoggedIn()) {
     <main class="pt-5 mx-lg-5">
 
         <div class="container-fluid mt-1">
-            <div class="row mt-3">
-                <div class="col-12">
-                    <?php if (isset($_SESSION['suc_assign_emp'])) : ?>
-                        <div class="alert alert-success" role="alert">
-                            <strong><?php echo $_SESSION['suc_assign_emp']; ?></strong>
-                        </div>
-                    <?php endif; ?>
-                    <?php if (isset($_SESSION['err_assign_emp'])) : ?>
-                        <div class="alert alert-danger" role="alert">
-                            <strong><?php echo $_SESSION['err_assign_emp']; ?></strong>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
             <div class="row mt-5">
                 <div class="col-12">
-
-                    <h3 class="text-center">มอบหมายพนักงาน</h3>
+                <?php
+                        $query = "SELECT order_no FROM orders WHERE order_id = $order_id";
+                        $result = query($query);
+                        $row = fetch_assoc($result);
+                    ?>
+                    <h3 class="text-center">เลขที่สินค้า: <mark><?php echo $row['order_no']; ?></mark></h3>
                 </div>
             </div>
+         
             <div class="row mt-3">
                 <div class="col-12">
                     <table class="table table-bordered table-hover table-light">
                         <thead>
                             <tr>
                                 <th>
-                                    <p class="text-center font-weight-bold">ชื่อ</p>
+                                    <p class="text-center font-weight-bold">ชื่อสินค้า</p>
                                 </th>
                                 <th>
-                                    <p class="text-center font-weight-bold">นามสกุล</p>
+                                    <p class="text-center font-weight-bold">จำนวนสินค้า</p>
                                 </th>
                                 <th>
-                                    <p class="text-center font-weight-bold">จำนวนออเดอร์</p>
+                                    <p class="text-center font-weight-bold">ความจุรวม</p>
                                 </th>
-                                <th>
-                                    <p class="text-center font-weight-bold">มอบหมาย</p>
-                                </th>
+
                             </tr>
                         </thead>
                         <tbody>
                             <?php
 
-                            $query = "SELECT e.employee_id, u.firstname, u.lastname,";
-                            $query = $query . "(SELECT COUNT(1) FROM orders o WHERE o.employee_id = e.employee_id";
-                            $query = $query . " AND o.order_status = 'checking' AND '" .  $delivery_date . "' = o.delivery_date) AS order_amount";
-                            $query = $query . " FROM employees e, users u WHERE e.user_id = u.user_id";
-                            $query = $query . " AND u.type = 'E' ORDER BY order_amount";
+                            $query = "select p.product_name, od.order_detail_id , od.amount, od.sum_capacity from products p, order_details od 
+                            where 1=1
+                            and p.product_id = od.product_id
+                            and od.order_id = $order_id";
                             $result = mysqli_query($conn, $query);
 
                             while ($row = mysqli_fetch_assoc($result)) { ?>
                                 <tr>
-                                    <td>
-                                        <p class="text-center"><?php echo $row['firstname']; ?></p>
-                                    </td>
-                                    <td>
-                                        <p class="text-center"><?php echo $row['lastname']; ?></p>
-                                    </td>
-                                    <td>
-                                        <p class="text-center"><?php echo $row['order_amount']; ?></p>
-                                    </td>
-                                    <td>
-                                        <p class="text-center"><a href="assign_emp_backend.php?id=<?php echo $row['employee_id']; ?>" class="btn btn-warning btn-sm">มอบหมาย</a></p>
-                                    </td>
-
+                                    
+                                    <td><p class="text-center"><?php echo $row['product_name']; ?></p></td>
+                                    <td><p class="text-center"><?php echo $row['amount']; ?></p></td>
+                                    <td><p class="text-center"><?php echo $row['sum_capacity']; ?></p></td>
+                                 
                                 </tr>
 
                             <?php } ?>
@@ -149,6 +138,13 @@ if (!isLoggedIn()) {
                     </table>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a href="order_delivering.php" class="btn btn-danger btn-sm">BACK</a>
+                </div>
+                
+                
+            </div>
         </div>
     </main>
 
@@ -157,15 +153,10 @@ if (!isLoggedIn()) {
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
-
+    <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    
 
 </body>
 
 </html>
 
-<?php
-if (isset($_SESSION['suc_assign_emp']) || isset($_SESSION['err_assign_emp'])) {
-    unset($_SESSION['suc_assign_emp']);
-    unset($_SESSION['err_assign_emp']);
-}
-?>

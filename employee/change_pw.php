@@ -15,7 +15,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap</title>
+    <title>เปลี่ยนรหัสผ่าน</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -27,7 +27,49 @@ if (!isLoggedIn()) {
 
     <header>
         <?php include('../partial/navbar_emp.php'); ?>
-        <?php include('../partial/sidebar_emp.php'); ?>
+        <!-- Sidebar -->
+<div class="sidebar-fixed position-fixed overflow-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a class="logo-wrapper waves-effect ">
+                            <img src="../img/logo.png" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="list-group list-group-flush">
+                <p>ยินดีต้อนรับคุณ...</p>
+                
+                <a href="index.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <i class="fas fa-tasks mr-3"></i>งานที่ได้รับมอบหมาย
+                </a>
+                
+                
+                <a href="order_waiting.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <i class="fas fa-clock mr-3"></i>รายการที่รอจัดส่ง
+                </a>
+
+                <a href="order_delivering.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <i class="fas fa-spinner mr-3"></i>รายการที่กำลังจัดส่ง
+                </a>
+
+                <a href="order_success.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <i class="fas fa-check-circle mr-3"></i>รายการที่จัดส่งสำเร็จ
+                </a>
+
+                <a href="order_failed.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <i class="fas fa-times-circle mr-3"></i>รายการที่จัดส่งไม่สำเร็จ
+                </a>
+
+                <a href="change_pw.php" class="list-group-item active waves-effect mb-1">
+                    <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
+                </a>
+            </div>
+        </div>
+        <!-- Sidebar -->
     </header>
 
     <main class="pt-5 mx-lg-5">
@@ -54,19 +96,19 @@ if (!isLoggedIn()) {
 
                                     <div class="form-outline mb-5">
                                         <input type="password" name="password" id="password" class="form-control" />
-                                        <label class="form-label" for="password">New Password</label>
+                                        <label class="form-label" for="password">รหัสผ่านใหม่</label>
                                     </div>
 
                                     <div class="form-outline mb-5">
                                         <input type="password" name="confirm" id="confirm" class="form-control" />
-                                        <label class="form-label" for="confirm">Confirm Password</label>
+                                        <label class="form-label" for="confirm">ยืนยันรหัสผ่าน</label>
                                     </div>
 
                                     <!-- 2 column grid layout for inline styling -->
 
 
                                     <!-- Submit button -->
-                                    <button type="submit" name="submit" class="btn btn-info btn-block">Change Password</button>
+                                    <button type="submit" name="submit" class="btn btn-info btn-block">เปลี่ยนรหัสผ่าน</button>
                                 </form>
                             </p>
                         </div>

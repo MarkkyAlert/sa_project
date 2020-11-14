@@ -31,7 +31,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap</title>
+    <title>ตรวจสอบ</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -45,41 +45,67 @@ if (!isLoggedIn()) {
 
     <header>
         <?php include('../partial/navbar_emp.php'); ?>
-        <?php include('../partial/sidebar_emp.php'); ?>
+        <!-- Sidebar -->
+        <div class="sidebar-fixed position-fixed overflow-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a class="logo-wrapper waves-effect ">
+                            <img src="../img/logo.png" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="list-group list-group-flush">
+                <p>ยินดีต้อนรับคุณ...</p>
+
+                <a href="index.php" class="active list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-tasks mr-3"></i>งานที่ได้รับมอบหมาย
+                </a>
+
+
+                <a href="order_waiting.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-clock mr-3"></i>รายการที่รอจัดส่ง
+                </a>
+
+                <a href="order_delivering.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-spinner mr-3"></i>รายการที่กำลังจัดส่ง
+                </a>
+
+                <a href="order_success.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-check-circle mr-3"></i>รายการที่จัดส่งสำเร็จ
+                </a>
+
+                <a href="order_failed.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-times-circle mr-3"></i>รายการที่จัดส่งไม่สำเร็จ
+                </a>
+
+                <a href="change_pw.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
+                </a>
+            </div>
+        </div>
+        <!-- Sidebar -->
     </header>
 
     <main class="pt-5 mx-lg-5">
 
         <div class="container-fluid mt-1">
-            <div class="row mt-5">
-                <div class="col-12">
-                    <h3 class="text-center">เลขที่สินค้า: <?php echo $order_no ?></h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <?php
-                    $query = "select IFNULL(sum(co.capacity),0) AS capacity from 
-                        car_orders co 
-                        where 1=1
-                        and order_id = $order_id";
-                    $result = mysqli_query($conn, $query);
-                    $row = mysqli_fetch_assoc($result);
-                    $sum_capacity = $row['capacity'];
 
-                    if ($sum_capacity > 0) {
-                        $sum_capacity_display = $sum_capacity_display - $sum_capacity;
-                    }
-                    ?>
-                    <h4 class="text-center">จำนวนรวม: <?php echo $amount_display ?></h4>
-                    <h4 class="text-center">ความจุรวม: <?php echo $sum_capacity_display ?></h4>
-                </div>
-            </div>
-            <div class="row">
+            <div class="row mt-5">
+
                 <div class="col-12">
                     <?php if (isset($_SESSION['suc_query'])) : ?>
-                        <div class="alert alert-danger" role="alert">
+                        <div class="alert alert-success" role="alert">
                             <strong><?php echo $_SESSION['suc_query']; ?></strong>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['err_query'])) : ?>
+                        <div class="alert alert-danger" role="alert">
+                            <strong><?php echo $_SESSION['err_query']; ?></strong>
                         </div>
                     <?php endif; ?>
 
@@ -118,6 +144,31 @@ if (!isLoggedIn()) {
                             <strong><?php echo $_SESSION['err_accept']; ?></strong>
                         </div>
                     <?php endif; ?>
+                    <h3 class="text-center">เลขที่สินค้า: <?php echo $order_no ?></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <?php
+                    $query = "select IFNULL(sum(co.capacity),0) AS capacity from 
+                        car_orders co 
+                        where 1=1
+                        and order_id = $order_id";
+                    $result = mysqli_query($conn, $query);
+                    $row = mysqli_fetch_assoc($result);
+                    $sum_capacity = $row['capacity'];
+
+                    if ($sum_capacity > 0) {
+                        $sum_capacity_display = $sum_capacity_display - $sum_capacity;
+                    }
+                    ?>
+                    <h4 class="text-center">จำนวนรวม: <?php echo $amount_display ?></h4>
+                    <h4 class="text-center">ความจุรวม: <?php echo $sum_capacity_display ?></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+
 
                     <form action="check_car_backend.php" method="post">
                         <select class="browser-default custom-select" name="license" id="license">
@@ -142,7 +193,7 @@ if (!isLoggedIn()) {
                     </form>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-2">
                 <div class="col-12">
                     <form action="check_car2_backend.php" method="post">
                         <label for="capacity">ความจุรถ</label>
@@ -159,7 +210,7 @@ if (!isLoggedIn()) {
                         <input type="text" name="use_capacity" onkeyup="numOnly(this)" onblur="numOnly(this)">
                         <input type="hidden" name="car_id" value="<?php echo $car_id; ?>">
                         <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
-                        <button type="submit" name="submit">OK</button>
+                        <button class="btn btn-info" type="submit" name="submit">OK</button>
 
 
                     </form>
@@ -167,76 +218,84 @@ if (!isLoggedIn()) {
             </div>
             <div class="row mt-3">
                 <div class="col-12">
-                    <table class="table table-bordered table-hover table-light">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <p class="text-center font-weight-bold">เลขที่สินค้า</p>
-                                </th>
-                                <th>
-                                    <p class="text-center font-weight-bold">ทะเบียนรถ</p>
-                                </th>
-                                <th>
-                                    <p class="text-center font-weight-bold">วันที่เริ่มส่งสินค้า</p>
-                                </th>
-                                <th>
-                                    <p class="text-center font-weight-bold">วันที่สิ้นสุดการส่งสินค้า</p>
-                                </th>
-                                <th>
-                                    <p class="text-center font-weight-bold">จำนวน</p>
-                                </th>
-                                <th>
-                                    <p class="text-center font-weight-bold">ลบรายการ</p>
-                                </th>
+                    <?php
+                    $query = "SELECT * FROM car_orders WHERE order_id = $order_id";
+                    $result = query($query);
+                    $row = mysqli_num_rows($result);
+                    ?>
+                    <?php if ($row != 0) : ?>
+                        <table class="table table-bordered table-hover table-light">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <p class="text-center font-weight-bold">เลขที่สินค้า</p>
+                                    </th>
+                                    <th>
+                                        <p class="text-center font-weight-bold">ทะเบียนรถ</p>
+                                    </th>
+                                    <th>
+                                        <p class="text-center font-weight-bold">วันที่เริ่มส่งสินค้า</p>
+                                    </th>
+                                    <th>
+                                        <p class="text-center font-weight-bold">วันที่สิ้นสุดการส่งสินค้า</p>
+                                    </th>
+                                    <th>
+                                        <p class="text-center font-weight-bold">จำนวน</p>
+                                    </th>
+                                    <th>
+                                        <p class="text-center font-weight-bold">ลบรายการ</p>
+                                    </th>
 
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
 
-                            $query = "SELECT co.car_order_id, o.order_no, c.license, co.start_date, co.end_date, co.capacity
+                                $query = "SELECT co.car_order_id, o.order_no, c.license, co.start_date, co.end_date, co.capacity
                             FROM car_orders co , cars c,orders o WHERE 1=1
                             AND co.car_id = c.car_id
                             AND co.order_id = o.order_id
                             AND co.order_id = $order_id";
-                            $result = mysqli_query($conn, $query);
+                                $result = mysqli_query($conn, $query);
 
-                            while ($row = mysqli_fetch_assoc($result)) { ?>
-                                <tr>
-                                    <?php
-                                    $start_date = strtotime($row['start_date']);
-                                    $start_date = date("d/m/Y H:i:s", $start_date);
-                                    $end_date = strtotime($row['end_date']);
-                                    $end_date = date("d/m/Y H:i:s", $end_date);
-                                    ?>
-                                    <td><?php echo $row['order_no']; ?></td>
-                                    <td><?php echo $row['license']; ?></td>
-                                    <td><?php echo $start_date; ?></td>
-                                    <td><?php echo $end_date; ?></td>
-                                    <td><?php echo $row['capacity']; ?></td>
-                                    <td>
-                                        <p class="text-center"><a href="delete_car_backend.php?car_order_id=<?php echo $row['car_order_id']; ?>" class="btn btn-danger btn-sm">DELETE</a></p>
-                                    </td>
-
-
-                                </tr>
-
-                            <?php } ?>
+                                while ($row = mysqli_fetch_assoc($result)) { ?>
+                                    <tr>
+                                        <?php
+                                        $start_date = strtotime($row['start_date']);
+                                        $start_date = date("d/m/Y H:i:s", $start_date);
+                                        $end_date = strtotime($row['end_date']);
+                                        $end_date = date("d/m/Y H:i:s", $end_date);
+                                        ?>
+                                        <td><?php echo $row['order_no']; ?></td>
+                                        <td><?php echo $row['license']; ?></td>
+                                        <td><?php echo $start_date; ?></td>
+                                        <td><?php echo $end_date; ?></td>
+                                        <td><?php echo $row['capacity']; ?></td>
+                                        <td>
+                                            <p class="text-center"><a href="delete_car_backend.php?car_order_id=<?php echo $row['car_order_id']; ?>" class="btn btn-danger btn-sm">DELETE</a></p>
+                                        </td>
 
 
-                        </tbody>
-                    </table>
+                                    </tr>
+
+                                <?php } ?>
+
+
+                            </tbody>
+                        </table>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-6 text-right">
-                    <a href="check_car3_backend.php?order_id=<?php echo $order_id; ?>&accept=Y"><button type="submit">ACCEPT</button></a>
+                    <a href="check_car3_backend.php?order_id=<?php echo $order_id; ?>&accept=Y"><button class="btn btn-success" type="submit">ACCEPT</button></a>
                 </div>
                 <div class="col-6">
-                    <a href="check_car3_backend.php?order_id=<?php echo $order_id; ?>&accept=N"><button type="submit">NOT ACCEPT</button></a>
+                    <a href="check_car3_backend.php?order_id=<?php echo $order_id; ?>&accept=N"><button class="btn btn-danger" type="submit">NOT ACCEPT</button></a>
                 </div>
             </div>
+
         </div>
     </main>
 
@@ -250,8 +309,6 @@ if (!isLoggedIn()) {
         function numOnly(selector) {
             selector.value = selector.value.replace(/[^0-9]/g, '');
         }
-
-        
     </script>
 
 </body>
@@ -259,8 +316,9 @@ if (!isLoggedIn()) {
 </html>
 
 <?php
-if (isset($_SESSION['suc_query']) || isset($_SESSION['err_check_amount']) || isset($_SESSION['capacity']) || isset($_SESSION['category']) || isset($_SESSION['err_choose_car']) || isset($_SESSION['err_over_capacity']) || isset($_SESSION['suc_delete_car']) || isset($_SESSION['err_delete_car']) || isset($_SESSION['err_accept'])) {
+if (isset($_SESSION['suc_query']) || isset($_SESSION['err_query']) || isset($_SESSION['err_check_amount']) || isset($_SESSION['capacity']) || isset($_SESSION['category']) || isset($_SESSION['err_choose_car']) || isset($_SESSION['err_over_capacity']) || isset($_SESSION['suc_delete_car']) || isset($_SESSION['err_delete_car']) || isset($_SESSION['err_accept'])) {
     unset($_SESSION['suc_query']);
+    unset($_SESSION['err_query']);
     unset($_SESSION['err_check_amount']);
     unset($_SESSION['capacity']);
     unset($_SESSION['category']);

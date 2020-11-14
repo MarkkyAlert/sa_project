@@ -137,6 +137,7 @@ $user_id = $_SESSION['user_id'];
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
                                         </th>
+                                        
 
                                     </tr>
                                 </thead>
@@ -170,31 +171,32 @@ $user_id = $_SESSION['user_id'];
                                             $request_time = strtotime($row['request_date']);
                                             $request_time = date("H:i:s", $request_time);
                                             ?>
-                                            <td><?php echo $i; ?></td>
+                                            <td><p class="text-center"><?php echo $i; ?></p></td>
                                             <td><u><a href="order_detail_status.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
-                                            <td><?php echo $row['amount']; ?></td>
+                                            <td><p class="text-center"><?php echo $row['amount']; ?></p></td>
                                             <td><?php
                                                 if ($row['order_status'] === 'checking' || $row['order_status'] === 'verifying') {
-                                                    echo "<p class=text-warning>กำลังตรวจสอบ</p>";
+                                                    echo "<p class=text-warning text-center>กำลังตรวจสอบ</p>";
                                                 } else if ($row['order_status'] === 'accept') {
-                                                    echo "<p class=text-success>อนุมัติ</p>";
+                                                    echo "<p class=text-success text-center>อนุมัติ</p>";
                                                 } else if ($row['order_status'] === 'not accept') {
-                                                    echo "<p class=text-danger>ไม่อนุมัติ</p>";
+                                                    echo "<p class=text-danger text-center>ไม่อนุมัติ</p>";
                                                 }
                                                 ?>
                                             </td>
-                                            <td><?php echo $date; ?></td>
-                                            <td><?php echo $time; ?></td>
-                                            <td><?php echo $row['sender']; ?></td>
-                                            <td><?php echo $row['receiver']; ?></td>
-                                            <td><?php echo $row['receiver_phone']; ?></td>
-                                            <td><?php echo $row['address']; ?></td>
-                                            <td><?php echo $row['province']; ?></td>
-                                            <td><?php echo $row['amphure']; ?></td>
-                                            <td><?php echo $row['district']; ?></td>
-                                            <td><?php echo $row['zipcode']; ?></td>
-                                            <td><?php echo $request_date; ?></td>
-                                            <td><?php echo $request_time; ?></td>
+                                            <td><p class="text-center"><?php echo $date; ?></p></td>
+                                            <td><p class="text-center"><?php echo $time; ?></td>
+                                            <td><p class="text-center"><?php echo $row['sender']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['receiver']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['receiver_phone']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['address']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['province']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['amphure']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['district']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $row['zipcode']; ?></p></td>
+                                            <td><p class="text-center"><?php echo $request_date; ?></p></td>
+                                            <td><p class="text-center"><?php echo $request_time; ?></p></td>
+                                            
                                             <?php $i++; ?>
                                         </tr>
 

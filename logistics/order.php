@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../auth.php');
+include('../connectdb.php');
 
 if (!isLoggedIn()) {
     header('location: ../login.php');
@@ -15,7 +16,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap</title>
+    <title>การจัดส่ง</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -58,7 +59,7 @@ if (!isLoggedIn()) {
                     <i class="fas fa-times-circle mr-3"></i>รายการที่ไม่อนุมัติ
                 </a>
 
-                <a href="order.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <a href="order.php" class="active list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
                 </a>
 
@@ -78,63 +79,37 @@ if (!isLoggedIn()) {
         <div class="container-fluid mt-1">
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <?php if (isset($_SESSION['err_add_emp'])) : ?>
-                        <div class="alert alert-danger" role="alert">
-                            <strong><?php echo $_SESSION['err_add_emp']; ?></strong>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if (isset($_SESSION['err_email'])) : ?>
-                        <div class="alert alert-danger" role="alert">
-                            <strong><?php echo $_SESSION['err_email']; ?></strong>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if (isset($_SESSION['suc_add_emp'])) : ?>
-                        <div class="alert alert-success" role="alert">
-                            <strong><?php echo $_SESSION['suc_add_emp']; ?></strong>
-                        </div>
-                    <?php endif; ?>
-                    <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
-
+                    <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 25rem; margin:0 auto;">
                         <div class="card-header bg-transparent border-info">
-                            <h3 class="text-center">เพิ่มข้อมูลพนักงาน</h3>
+                            <h3 class="text-center">การจัดส่ง</h3>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
-                                <form action="add_emp_backend.php" method="post" id="add_emp">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-outline mb-5">
-                                                <input type="text" id="firstname" name="firstname" class="form-control" />
-                                                <label class="form-label" for="firstname">ชื่อ</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-outline mb-5">
-                                                <input type="text" id="lastname" name="lastname" class="form-control" />
-                                                <label class="form-label" for="lastname">นามสกุล</label>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="list-group list-group-flush">
+                                   
 
-                                    <div class="form-outline mb-5">
-                                        <input type="email" id="email" name="email" class="form-control" />
-                                        <label class="form-label" for="email">Email</label>
-                                    </div>
+                                    <a href="order_all.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                                    <i class="fas fa-list-ul mr-3"></i>การจัดส่งทั้งหมด
+                                    </a>
+                                    <a href="order_success.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                                    <i class="fas fa-check-circle mr-3"></i>จัดส่งสำเร็จ
+                                    </a>
 
-                                    <div class="form-outline mb-5">
-                                        <input type="text" id="phone" name="phone" class="form-control" />
-                                        <label class="form-label" for="phone">เบอร์โทรศัพท์</label>
-                                    </div>
+                                    <a href="order_failed.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                                    <i class="fas fa-times-circle mr-3"></i>จัดส่งไม่สำเร็จ
+                                    </a>
 
-                                    <!-- Submit button -->
-                                    <button type="submit" name="submit" id="submit" class="btn btn-info btn-block">ADD</button>
-                                </form>
+                                    <a href="order_delivering.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                                    <i class="fas fa-spinner mr-3"></i>กำลังจัดส่ง
+                                    </a>
+
+                                    <a href="order_waiting.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                                    <i class="fas fa-truck mr-3"></i>รอจัดส่ง
+                                    </a>
+                                </div>
                             </p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -152,10 +127,3 @@ if (!isLoggedIn()) {
 
 </html>
 
-<?php
-if (isset($_SESSION['err_email']) || isset($_SESSION['err_add_emp']) || isset($_SESSION['suc_add_emp'])) {
-    unset($_SESSION['err_email']);
-    unset($_SESSION['err_add_emp']);
-    unset($_SESSION['suc_add_emp']);
-}
-?>
