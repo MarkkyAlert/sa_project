@@ -44,7 +44,8 @@ if (isset($_POST['submit'])) {
             $result = mysqli_query($conn, $query);
             $row = mysqli_fetch_assoc($result);
             $_SESSION['user_id'] = $row['user_id'];
-            header('location: ../index.php');
+            $_SESSION['firstname'] = $row['firstname'];
+            header('location: index.php');
         }
 
         else {
