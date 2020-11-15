@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2020 at 09:15 AM
+-- Generation Time: Nov 15, 2020 at 04:39 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.33
 
@@ -1058,7 +1058,7 @@ CREATE TABLE `cars` (
 --
 
 INSERT INTO `cars` (`car_id`, `license`, `category`, `capacity`, `status`) VALUES
-(1, 'ก0001', 'สี่ล้อ(ใหญ่)', 1500, 'ready'),
+(1, 'ก0001', 'สี่ล้อ(ใหญ่)', 5000, 'ready'),
 (2, 'ก0002', 'สี่ล้อ(เล็ก)', 1000, 'ready');
 
 -- --------------------------------------------------------
@@ -1073,8 +1073,17 @@ CREATE TABLE `car_orders` (
   `order_id` int(11) NOT NULL,
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
-  `amount` int(11) NOT NULL
+  `capacity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `car_orders`
+--
+
+INSERT INTO `car_orders` (`car_order_id`, `car_id`, `order_id`, `start_date`, `end_date`, `capacity`) VALUES
+(10, 1, 40, '2020-11-12 08:18:00', '2020-11-06 22:04:00', 3223),
+(22, 1, 42, '2020-11-11 13:12:00', '2020-11-12 08:08:00', 1000),
+(23, 2, 42, '2020-11-11 13:12:00', '2020-11-12 20:12:00', 1000);
 
 -- --------------------------------------------------------
 
@@ -9955,6 +9964,18 @@ INSERT INTO `districts` (`id`, `zip_code`, `name_th`, `name_en`, `amphure_id`) V
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `drivers`
+--
+
+CREATE TABLE `drivers` (
+  `driver_id` int(11) NOT NULL,
+  `license_no` varchar(255) DEFAULT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `employees`
 --
 
@@ -10003,33 +10024,79 @@ CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `employee_id` int(11) DEFAULT NULL,
-  `car_id` int(11) DEFAULT NULL,
   `province_id` int(11) NOT NULL,
   `amphure_id` int(11) NOT NULL,
   `district_id` int(11) NOT NULL,
   `reason_id` int(11) DEFAULT NULL,
+  `reason_desc` varchar(255) DEFAULT NULL,
   `order_no` varchar(255) NOT NULL,
   `sender` varchar(255) NOT NULL,
   `receiver` varchar(255) NOT NULL,
   `receiver_phone` varchar(100) NOT NULL,
   `address` varchar(255) NOT NULL,
   `zipcode` int(11) NOT NULL,
-  `amount` int(11) NOT NULL,
   `delivery_date` datetime NOT NULL,
   `request_date` datetime NOT NULL,
   `accept_date` datetime DEFAULT NULL,
   `order_status` varchar(255) NOT NULL,
   `delivery_status` varchar(255) DEFAULT NULL,
-  `file` varchar(255) DEFAULT NULL
+  `file` varchar(255) DEFAULT '-'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`order_id`, `user_id`, `employee_id`, `car_id`, `province_id`, `amphure_id`, `district_id`, `reason_id`, `order_no`, `sender`, `receiver`, `receiver_phone`, `address`, `zipcode`, `amount`, `delivery_date`, `request_date`, `accept_date`, `order_status`, `delivery_status`, `file`) VALUES
-(33, 8, NULL, NULL, 1, 3, 100302, NULL, '5f97bf0ab3874', 'aaaaa', 'bbbbb', '0911111111', '1544/111111', 10530, 1000, '2020-10-27 16:00:00', '2020-10-27 13:32:42', NULL, 'verifying', NULL, NULL),
-(34, 8, NULL, NULL, 4, 69, 130402, NULL, '5f97bf56a55c4', 'bbbbbb', 'cccccc', '0911111111', '1544/22222', 12170, 1500, '2020-10-28 14:30:00', '2020-10-27 13:33:58', NULL, 'verifying', NULL, NULL);
+INSERT INTO `orders` (`order_id`, `user_id`, `employee_id`, `province_id`, `amphure_id`, `district_id`, `reason_id`, `reason_desc`, `order_no`, `sender`, `receiver`, `receiver_phone`, `address`, `zipcode`, `delivery_date`, `request_date`, `accept_date`, `order_status`, `delivery_status`, `file`) VALUES
+(40, 8, 6, 1, 11, 101104, NULL, NULL, '5fa2aa4743c81', 'lllllllllll', 'lll', '0911111111', '151/11', 10520, '2020-11-12 08:18:00', '2020-11-04 20:19:03', '2020-11-05 22:04:41', 'accept', 'success', '20201110856808864.jpg'),
+(41, 8, 6, 4, 67, 130206, 1, NULL, '5fa7d9824e98f', 'zzzzzzzz', 'zzzzz', '0911111111', '1544/22222', 12120, '2020-11-09 09:44:00', '2020-11-08 18:41:54', '2020-11-14 21:52:38', 'checking', NULL, '-'),
+(42, 8, 6, 1, 4, 100401, 3, 'xcxz', '5faa8285304ed', 'dog', 'cat', '0911111111', '1544/12', 10500, '2020-11-11 13:12:00', '2020-11-10 19:07:33', NULL, 'verifying', NULL, '-');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_details`
+--
+
+CREATE TABLE `order_details` (
+  `order_detail_id` int(11) NOT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `amount` int(11) DEFAULT NULL,
+  `sum_capacity` int(11) DEFAULT NULL,
+  `order_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`order_detail_id`, `product_id`, `amount`, `sum_capacity`, `order_id`) VALUES
+(4, 1, 1223, 1223, 40),
+(5, 2, 1000, 2000, 40),
+(7, 1, 1000, 1000, 41),
+(8, 2, 1000, 2000, 42);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `product_id` int(11) NOT NULL,
+  `product_name` varchar(100) DEFAULT NULL,
+  `use_capacity` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`product_id`, `product_name`, `use_capacity`) VALUES
+(1, 'ถังสี 1 GL', 1),
+(2, 'ถังสี 2 GL', 2),
+(3, 'ถังสี 5 GL', 5),
+(4, 'ถังสี 10 GL', 10);
 
 -- --------------------------------------------------------
 
@@ -10139,6 +10206,15 @@ CREATE TABLE `reasons` (
   `reason` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `reasons`
+--
+
+INSERT INTO `reasons` (`reason_id`, `reason`) VALUES
+(1, 'ลูกค้าไม่อยู่'),
+(2, 'สินค้าชำรุด'),
+(3, 'อื่นๆ');
+
 -- --------------------------------------------------------
 
 --
@@ -10195,6 +10271,13 @@ ALTER TABLE `districts`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `drivers`
+--
+ALTER TABLE `drivers`
+  ADD PRIMARY KEY (`driver_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `employees`
 --
 ALTER TABLE `employees`
@@ -10213,12 +10296,25 @@ ALTER TABLE `geographies`
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `car_id` (`car_id`),
   ADD KEY `amphure_id` (`amphure_id`),
   ADD KEY `employee_id` (`employee_id`),
   ADD KEY `province_id` (`province_id`),
   ADD KEY `reason_id` (`reason_id`),
   ADD KEY `orders_ibfk_7` (`district_id`);
+
+--
+-- Indexes for table `order_details`
+--
+ALTER TABLE `order_details`
+  ADD PRIMARY KEY (`order_detail_id`),
+  ADD KEY `product_id` (`product_id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`product_id`);
 
 --
 -- Indexes for table `provinces`
@@ -10258,7 +10354,13 @@ ALTER TABLE `cars`
 -- AUTO_INCREMENT for table `car_orders`
 --
 ALTER TABLE `car_orders`
-  MODIFY `car_order_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `car_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `drivers`
+--
+ALTER TABLE `drivers`
+  MODIFY `driver_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `employees`
@@ -10276,7 +10378,19 @@ ALTER TABLE `geographies`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+
+--
+-- AUTO_INCREMENT for table `order_details`
+--
+ALTER TABLE `order_details`
+  MODIFY `order_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `provinces`
@@ -10288,13 +10402,13 @@ ALTER TABLE `provinces`
 -- AUTO_INCREMENT for table `reasons`
 --
 ALTER TABLE `reasons`
-  MODIFY `reason_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `reason_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
@@ -10308,6 +10422,12 @@ ALTER TABLE `car_orders`
   ADD CONSTRAINT `car_orders_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `drivers`
+--
+ALTER TABLE `drivers`
+  ADD CONSTRAINT `drivers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
 -- Constraints for table `employees`
 --
 ALTER TABLE `employees`
@@ -10318,12 +10438,18 @@ ALTER TABLE `employees`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`car_id`) REFERENCES `cars` (`car_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_ibfk_3` FOREIGN KEY (`amphure_id`) REFERENCES `amphures` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_ibfk_4` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_ibfk_5` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_ibfk_6` FOREIGN KEY (`reason_id`) REFERENCES `reasons` (`reason_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `orders_ibfk_7` FOREIGN KEY (`district_id`) REFERENCES `districts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `order_details`
+--
+ALTER TABLE `order_details`
+  ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
