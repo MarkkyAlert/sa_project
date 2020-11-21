@@ -180,7 +180,7 @@ if (!isLoggedIn()) {
                 </div>
             </div>
             <div class="row">
-                <div class="col-6 text-right">
+                <div class="col-12 text-center">
                     <a href="date_form2_backend.php?confirm=submit" class="btn btn-success btn-sm">SUBMIT</a>
                 </div>
 

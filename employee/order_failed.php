@@ -161,9 +161,7 @@ if (!isLoggedIn()) {
                                     <th>
                                         <p class="text-center font-weight-bold">รหัสไปรษณีย์</p>
                                     </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">เหตุผล</p>
-                                    </th>
+                                    
                                     
 
                                 </tr>

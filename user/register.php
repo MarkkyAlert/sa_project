@@ -32,7 +32,7 @@ session_start();
                 <ul class="navbar-nav ml-auto">
 
                     <li class="nav-item">
-                        <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/">
+                        <a class="nav-link waves-effect" href="../order_no.php">
                             <i class="fas fa-truck-moving mr-1"></i>ติดตามการจัดส่ง</a>
                     </li>
                 </ul>
@@ -99,7 +99,7 @@ session_start();
 
                                     <div class="col">
                                         <!-- Simple link -->
-                                        <a href="login.php">Have an account?</a>
+                                        <a href="../login.php">Have an account?</a>
                                     </div>
                                 </div>
 

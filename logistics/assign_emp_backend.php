@@ -13,7 +13,7 @@ if (isset($_REQUEST['id'])) {
 
         if ($result) {
             $_SESSION['suc_assign_emp'] = 'มอบหมายพนักงานเรียบร้อย';
-            header('location: assign_emp.php');
+            header('location: index.php');
         } else {
             $_SESSION['err_assign_emp'] = 'Cannot update data into database';
             header('location: assign_emp.php');

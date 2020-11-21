@@ -70,6 +70,9 @@ if (!isLoggedIn()) {
                 <a href="order.php" class="list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
                 </a>
+                <a href="report1.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-calendar-week mr-3"></i>เวลาการจัดส่ง
+                </a>
 
                 <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
                     <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
@@ -144,12 +147,13 @@ if (!isLoggedIn()) {
                 </div>
                 <div class="col-6 text-left">
                 <?php
-                        $query = "SELECT order_no FROM orders WHERE order_id = $order_id";
+                        $query = "SELECT order_no, delivery_date FROM orders WHERE order_id = $order_id";
                         $result = query($query);
                         $row = fetch_assoc($result);
+                        $_SESSION['delivery_date1'] = $row['delivery_date'];
                     ?>
                     
-                    <a href="order_no_backend.php?order_no=<?php echo $row['order_no']; ?>" class="btn btn-info btn-sm">Appoint</a>
+                    <a href="assign_emp.php?order_no=<?php echo $row['order_no']; ?>" class="btn btn-info btn-sm">Appoint</a>
                 </div>
                 
             </div>

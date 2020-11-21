@@ -109,6 +109,12 @@ if (!isLoggedIn()) {
                         </div>
                     <?php endif; ?>
 
+                    <?php if (isset($_SESSION['err_enddate'])) : ?>
+                        <div class="alert alert-danger" role="alert">
+                            <strong><?php echo $_SESSION['err_enddate']; ?></strong>
+                        </div>
+                    <?php endif; ?>
+
                     <?php if (isset($_SESSION['err_check_amount'])) : ?>
                         <div class="alert alert-danger" role="alert">
                             <strong><?php echo $_SESSION['err_check_amount']; ?></strong>
@@ -195,7 +201,7 @@ if (!isLoggedIn()) {
             </div>
             <div class="row mt-2">
                 <div class="col-12">
-                    <form action="check_car2_backend.php" method="post">
+                    <form action="check_car2_backend.php" id="capa" method="post">
                         <label for="capacity">ความจุรถ</label>
                         <input type="text" readonly value="<?php echo $capacity; ?>">
                         <label for="capacity">ประเภทรถ</label>
@@ -203,11 +209,11 @@ if (!isLoggedIn()) {
                         <label for="start_date">วันที่เริ่มส่งสินค้า</label>
                         <input type="text" name="start_date" readonly value="<?php echo $delivery_date3; ?>">
                         <label for="end_date">วันที่สิ้นสุดการส่งสินค้า</label>
-                        <input type="date" name="end_date">
+                        <input type="date" name="end_date" min="<?php echo date('Y-m-d');?>">
                         <label for="end_time">เวลาที่สิ้นสุดการส่งสินค้า</label>
                         <input type="time" name="end_time">
                         <label for="use_capacity">ความจุ</label>
-                        <input type="text" name="use_capacity" onkeyup="numOnly(this)" onblur="numOnly(this)">
+                        <input type="text" name="use_capacity"  onkeyup="numOnly(this)" onblur="numOnly(this)">
                         <input type="hidden" name="car_id" value="<?php echo $car_id; ?>">
                         <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
                         <button class="btn btn-info" type="submit" name="submit">OK</button>
@@ -240,7 +246,7 @@ if (!isLoggedIn()) {
                                         <p class="text-center font-weight-bold">วันที่สิ้นสุดการส่งสินค้า</p>
                                     </th>
                                     <th>
-                                        <p class="text-center font-weight-bold">จำนวน</p>
+                                        <p class="text-center font-weight-bold">ความจุสินค้า</p>
                                     </th>
                                     <th>
                                         <p class="text-center font-weight-bold">ลบรายการ</p>
@@ -309,6 +315,35 @@ if (!isLoggedIn()) {
         function numOnly(selector) {
             selector.value = selector.value.replace(/[^0-9]/g, '');
         }
+        $(document).ready(function() {
+            $('#capa').validate({
+                rules: {
+
+                    use_capacity: {
+                        required: true,
+                        minlength: 4
+
+                    }
+                },
+                messages: {
+
+                    use_capacity: {
+                        required: 'กรุณากรอกจำนวน',
+                        minlength: 'จำนวนต้องมากกว่า 1000'
+                    }
+                },
+                errorElement: 'div',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback')
+                    error.insertAfter(element)
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid').removeClass('is-valid')
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-valid').removeClass('is-invalid')
+                }
+            });
     </script>
 
 </body>
@@ -316,7 +351,7 @@ if (!isLoggedIn()) {
 </html>
 
 <?php
-if (isset($_SESSION['suc_query']) || isset($_SESSION['err_query']) || isset($_SESSION['err_check_amount']) || isset($_SESSION['capacity']) || isset($_SESSION['category']) || isset($_SESSION['err_choose_car']) || isset($_SESSION['err_over_capacity']) || isset($_SESSION['suc_delete_car']) || isset($_SESSION['err_delete_car']) || isset($_SESSION['err_accept'])) {
+if (isset($_SESSION['suc_query']) || isset($_SESSION['err_query']) || isset($_SESSION['err_check_amount']) || isset($_SESSION['capacity']) || isset($_SESSION['category']) || isset($_SESSION['err_choose_car']) || isset($_SESSION['err_over_capacity']) || isset($_SESSION['suc_delete_car']) || isset($_SESSION['err_delete_car']) || isset($_SESSION['err_accept']) || isset($_SESSION['err_enddate'])) {
     unset($_SESSION['suc_query']);
     unset($_SESSION['err_query']);
     unset($_SESSION['err_check_amount']);
@@ -327,5 +362,6 @@ if (isset($_SESSION['suc_query']) || isset($_SESSION['err_query']) || isset($_SE
     unset($_SESSION['suc_delete_car']);
     unset($_SESSION['err_delete_car']);
     unset($_SESSION['err_accept']);
+    unset($_SESSION['err_enddate']);
 }
 ?>

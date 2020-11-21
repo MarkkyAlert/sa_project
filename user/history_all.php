@@ -11,6 +11,7 @@ if (!isLoggedIn()) {
 } else if ($_SESSION['type'] != 'U') {
     header('location: ../page_not_found.php');
 }
+$user_id = $_SESSION['user_id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -137,12 +138,7 @@ if (!isLoggedIn()) {
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
                                         </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">บิล</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">เหตุผล</p>
-                                        </th>
+                                        
 
 
                                     </tr>
@@ -155,6 +151,7 @@ if (!isLoggedIn()) {
                             AND o.amphure_id = a.id
                             AND o.district_id = d.id
                             AND o.user_id = u.user_id
+                            AND o.user_id = $user_id
                             AND (o.delivery_status = 'waiting'
                             OR o.delivery_status = 'delivering'
                             OR o.delivery_status = 'success'
@@ -204,7 +201,8 @@ if (!isLoggedIn()) {
                                             <td><p class="text-center"><?php echo $row['zipcode']; ?></p></td>
                                             <td><p class="text-center"><?php echo $request_date; ?></p></td>
                                             <td><p class="text-center"><?php echo $request_time; ?></p></td>
-                                            <td><p class="text-center"><a target="_blank" href="../uploads/<?php echo $row['file']; ?>"><img src="../uploads/<?php echo $row['file']; ?>" width="50"></a></p></td>
+                                            
+                                            
 
                                             <?php $i++; ?>
                                         </tr>

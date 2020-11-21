@@ -30,7 +30,7 @@
                 $query = "INSERT INTO employees (user_id) VALUES ($user_id)";
                 $result = mysqli_query($conn, $query);
                 
-                $_SESSION['suc_add_emp'] = 'เพิ่มข้อมูลเรียบร้อย';
+                $_SESSION['suc_add_emp'] = 'เพิ่มพนักงานเรียบร้อย';
                 header('location: add_emp.php');
             }
             else {

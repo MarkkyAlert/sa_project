@@ -70,7 +70,7 @@ $user_id = $_SESSION['user_id'];
 
         <div class="container-fluid mt-1">
             <?php
-            $query_count = "SELECT COUNT(order_no) AS count FROM orders WHERE user_id = $user_id AND order_status = 'not accept' OR order_status = 'accept' OR order_status = 'verifying' OR order_status = 'checking'";
+            $query_count = "SELECT COUNT(order_no) AS count FROM orders WHERE user_id = $user_id AND order_status = 'not accept' OR order_status = 'accept' OR order_status = 'verifying' OR order_status = 'checking' AND user_id = $user_id";
             $result_count = mysqli_query($conn, $query_count);
             $row_count = mysqli_fetch_assoc($result_count);
             ?>
@@ -149,6 +149,7 @@ $user_id = $_SESSION['user_id'];
                                 AND o.amphure_id = a.id
                                 AND o.district_id = d.id
                                 AND o.user_id = u.user_id
+                                AND o.user_id = $user_id
                                 AND (o.order_status = 'not accept'
                                 OR o.order_status = 'accept'
                                 OR o.order_status = 'checking'

@@ -136,9 +136,7 @@ if (!isLoggedIn()) {
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">เวลาที่ทำรายการ</p>
                                         </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">เหตุผล</p>
-                                        </th>
+                                        
 
                                     </tr>
                                 </thead>
@@ -150,6 +148,7 @@ if (!isLoggedIn()) {
                             AND o.amphure_id = a.id
                             AND o.district_id = d.id
                             AND o.user_id = u.user_id
+                            AND o.user_id = $user_id
                             AND o.delivery_status = 'failed'";
                             
 

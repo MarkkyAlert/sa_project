@@ -194,7 +194,7 @@ if (!isLoggedIn()) {
                                         $time = strtotime($row['delivery_date']);
                                         $time = date("H:i:s", $time);
                                         ?>
-                                        <td><u><a href="order_detail.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
+                                        <td><u><a href="order_detail_delivering.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
                                         <td><?php echo $row['amount']; ?></td>
                                         <td><?php echo $row['capacity']; ?></td>
                                         <td><?php echo $date; ?></td>

@@ -161,9 +161,7 @@ if (!isLoggedIn()) {
                                     <th>
                                         <p class="text-center font-weight-bold">รหัสไปรษณีย์</p>
                                     </th>
-                                    <th>
-                                        <p class="text-center font-weight-bold">บิล</p>
-                                    </th>
+                                    
                                     
 
                                 </tr>
@@ -194,7 +192,7 @@ if (!isLoggedIn()) {
                                         <td><?php echo $row['amphure']; ?></td>
                                         <td><?php echo $row['district']; ?></td>
                                         <td><?php echo $row['zipcode']; ?></td>
-                                        <td><a target="_blank" href="../uploads/<?php echo $row['file']; ?>"><img src="../uploads/<?php echo $row['file']; ?>" width="50"></a></td>
+                                        
                                         
                                         
 

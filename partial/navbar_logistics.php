@@ -21,16 +21,13 @@
                             <a class="nav-link waves-effect" href="add_emp.php">
                             <i class="fas fa-user-plus mr-1"></i>เพิ่มพนักงาน</a>
                         </li>
-                    
-                    <li class="nav-item">
-                            <a class="nav-link waves-effect" href="order_no.php">
-                            <i class="fas fa-users mr-1"></i>มอบหมายพนักงาน</a>
-                        </li>
-
                         <li class="nav-item">
-                            <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/">
-                                <i class="fas fa-truck-moving mr-1"></i>ติดตามการจัดส่ง</a>
+                            <a class="nav-link waves-effect" href="emp_list.php">
+                            <i class="fas fa-users mr-1"></i>ดูรายชื่อพนักงาน</a>
                         </li>
+                    
+
+                        
 
                         <li class="nav-item">
                             <a class="nav-link waves-effect" href="../logout.php">

@@ -147,6 +147,7 @@ WHERE o.province_id = p.id
 AND o.amphure_id = a.id
 AND o.district_id = d.id
 AND o.user_id = u.user_id
+AND o.user_id = $user_id
 AND o.delivery_status = 'delivering'";
 
 

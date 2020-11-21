@@ -63,6 +63,9 @@ if (!isLoggedIn()) {
                 <a href="order.php" class="active list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
                 </a>
+                <a href="report1.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-calendar-week mr-3"></i>เวลาการจัดส่ง
+                </a>
 
                 <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
                     <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
@@ -156,21 +159,27 @@ if (!isLoggedIn()) {
                                 <tbody>
                                     <?php
 
-                                    $query = "SELECT o.order_id, o.delivery_status, o.order_status, o.request_date, (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, o.order_no, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode FROM orders o, users u, provinces p , amphures a, districts d
-                                WHERE o.province_id = p.id
-                                AND o.amphure_id = a.id
-                                AND o.district_id = d.id
-                                AND o.user_id = u.user_id
-                                AND o.delivery_status = 'failed'";
+                                    $query = "SELECT o.order_id, o.delivery_status, o.order_status, o.request_date, (select IFNULL (sum(od.amount), 0) from order_details od where od.order_id = o.order_id) as amount, o.order_no, o.delivery_date, o.sender, o.receiver, o.receiver_phone, o.address, p.name_th AS province, a.name_th AS amphure, d.name_th AS district, o.zipcode , o.reason_id,o.reason_desc ,(SELECT r.reason from reasons r where r.reason_id = o.reason_id) as reasons 
+                                    FROM orders o, users u, provinces p , amphures a, districts d
+                                                                    WHERE o.province_id = p.id
+                                                                    AND o.amphure_id = a.id
+                                                                    AND o.district_id = d.id
+                                                                    AND o.user_id = u.user_id
+                                                                    AND o.delivery_status = 'failed'";
                                     $result = mysqli_query($conn, $query);
+                                    
 
-
-
+                                    
                                     $i = 1;
                                     while ($row = mysqli_fetch_assoc($result)) { ?>
                                         <tr>
                                             <?php
-
+                                            if ($row['reason_id'] == 3) {
+                                                $reason = $row['reason_desc'];
+                                            }
+                                            else {
+                                                $reason = $row['reasons'];
+                                            }
                                             $date = strtotime($row['delivery_date']);
                                             $date = date("d/m/Y", $date);
                                             $time = strtotime($row['delivery_date']);
@@ -209,7 +218,8 @@ if (!isLoggedIn()) {
                                             <td><p class="text-center"><?php echo $row['zipcode']; ?></p></td>
                                             <td><p class="text-center"><?php echo $request_date; ?></p></td>
                                             <td><p class="text-center"><?php echo $request_time; ?></p></td>
-                                            
+                                            <td><p class="text-center"><?php echo $reason; ?></p></td>
+
                                             <?php $i++; ?>
                                         </tr>
 

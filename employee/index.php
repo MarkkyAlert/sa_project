@@ -46,7 +46,7 @@ $emp_id = $_SESSION['employee_id'];
 
 
             <div class="list-group list-group-flush">
-                <p>ยินดีต้อนรับคุณ...</p>
+                <p>ยินดีต้อนรับคุณ<strong><?php echo $_SESSION['firstname']; ?></strong></p>
 
                 <a href="index.php" class="active list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-tasks mr-3"></i>งานที่ได้รับมอบหมาย
@@ -80,6 +80,16 @@ $emp_id = $_SESSION['employee_id'];
     <main class="pt-5 mx-lg-5">
 
         <div class="container-fluid mt-1">
+            <?php if (isset($_SESSION['suc_accept'])) : ?>
+                <div class="alert alert-success" role="alert">
+                    <strong><?php echo $_SESSION['suc_accept']; ?></strong>
+                </div>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['suc_not_accept'])) : ?>
+                <div class="alert alert-success" role="alert">
+                    <strong><?php echo $_SESSION['suc_not_accept']; ?></strong>
+                </div>
+            <?php endif; ?>
             <?php
             $query_count = "SELECT COUNT(order_no) AS count FROM orders WHERE order_status = 'checking' AND employee_id = $emp_id";
             $result_count = mysqli_query($conn, $query_count);
@@ -109,7 +119,7 @@ $emp_id = $_SESSION['employee_id'];
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">จำนวน</p>
                                         </th>
-                                        
+
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
                                         </th>
@@ -180,7 +190,7 @@ $emp_id = $_SESSION['employee_id'];
                                             <td><?php echo $i; ?></td>
                                             <td><u><a href="order_detail.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
                                             <td><?php echo $row['amount']; ?></td>
-                                            
+
                                             <td><?php echo $date; ?></td>
                                             <td><?php echo $time; ?></td>
                                             <td><?php echo $row['sender']; ?></td>
@@ -221,61 +231,16 @@ $emp_id = $_SESSION['employee_id'];
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#add_emp').validate({
-
-                rules: {
-                    firstname: 'required',
-                    lastname: 'required',
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    phone: {
-                        required: true,
-                        number: true,
-                        minlength: 9,
-                        maxlength: 10
-                    },
-                },
-                messages: {
-                    firstname: 'กรุณากรอกชื่อต้น',
-                    lastname: 'กรุณากรอกนามสกุล',
-                    email: {
-                        required: 'กรุณากรอกอีเมล์',
-                        email: 'กรุณากรอกอีเมล์ให้ถูกต้อง'
-                    },
-                    phone: {
-                        required: 'กรุณากรอกเบอร์โทรศัพท์',
-                        number: 'กรุณากรอกตัวเลขเท่านั้น',
-                        minlength: 'เบอร์โทรศัพท์ต้องมี 9-10 ตัว',
-                        maxlength: 'เบอร์โทรศัพท์ต้องไม่เกิน 10 ตัว'
-                    }
-                },
-                errorElement: 'div',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback')
-                    error.insertAfter(element)
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid').removeClass('is-valid')
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-valid').removeClass('is-invalid')
-                }
-            });
-        })
-    </script>
+    
 
 </body>
 
 </html>
 
 <?php
-if (isset($_SESSION['err_email']) || isset($_SESSION['err_add_emp']) || isset($_SESSION['suc_add_emp'])) {
-    unset($_SESSION['err_email']);
-    unset($_SESSION['err_add_emp']);
-    unset($_SESSION['suc_add_emp']);
+if (isset($_SESSION['suc_accept']) || isset($_SESSION['suc_not_accept'])) {
+   
+    unset($_SESSION['suc_accept']);
+    unset($_SESSION['suc_not_accept']);
 }
 ?>

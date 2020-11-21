@@ -17,7 +17,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap</title>
+    <title>รายการที่รอตรวจสอบ</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -63,6 +63,9 @@ if (!isLoggedIn()) {
                 <a href="order.php" class="list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
                 </a>
+                <a href="report1.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-calendar-week mr-3"></i>เวลาการจัดส่ง
+                </a>
 
                 <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
                     <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
@@ -78,8 +81,13 @@ if (!isLoggedIn()) {
     <main class="pt-5 mx-lg-5">
 
         <div class="container-fluid mt-1">
+            <?php if (isset($_SESSION['suc_assign_emp'])) : ?>
+                <div class="alert alert-success" role="alert">
+                    <strong><?php echo $_SESSION['suc_assign_emp']; ?></strong>
+                </div>
+            <?php endif; ?>
             <?php
-            $query_count = "SELECT COUNT(order_no) AS count FROM orders WHERE order_status = 'verifying' OR order_status = 'checking'";
+            $query_count = "SELECT COUNT(order_no) AS count FROM orders WHERE order_status = 'verifying'";
             $result_count = mysqli_query($conn, $query_count);
             $row_count = mysqli_fetch_assoc($result_count);
             ?>
@@ -110,7 +118,7 @@ if (!isLoggedIn()) {
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">สถานะ</p>
                                         </th>
-                                        
+
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">วันที่ต้องการส่ง</p>
                                         </th>
@@ -158,8 +166,7 @@ if (!isLoggedIn()) {
                                 AND o.amphure_id = a.id
                                 AND o.district_id = d.id
                                 AND o.user_id = u.user_id
-                                AND (o.order_status = 'verifying'
-                                OR o.order_status = 'checking')";
+                                AND (o.order_status = 'verifying')";
                                     $result = mysqli_query($conn, $query);
 
 
@@ -178,9 +185,13 @@ if (!isLoggedIn()) {
                                             $request_time = strtotime($row['request_date']);
                                             $request_time = date("H:i:s", $request_time);
                                             ?>
-                                            <td><p class="text-center"><?php echo $i; ?></p></td>
+                                            <td>
+                                                <p class="text-center"><?php echo $i; ?></p>
+                                            </td>
                                             <td><u><a href="order_detail.php?order_id=<?php echo $row['order_id']; ?>" class="text-primary"><?php echo $row['order_no']; ?></a></u></td>
-                                            <td><p class="text-center"><?php echo $row['amount']; ?></p></td>
+                                            <td>
+                                                <p class="text-center"><?php echo $row['amount']; ?></p>
+                                            </td>
                                             <td><?php
                                                 if ($row['order_status'] === 'checking' || $row['order_status'] === 'verifying') {
                                                     echo "<p class=text-warning text-center>รอตรวจสอบ</p>";
@@ -191,18 +202,42 @@ if (!isLoggedIn()) {
                                                 }
                                                 ?>
                                             </td>
-                                            <td><p class="text-center"><?php echo $date; ?></p></td>
-                                            <td><p class="text-center"><?php echo $time; ?></p></td>
-                                            <td><p class="text-center"><?php echo $row['sender']; ?></p></td>
-                                            <td><p class="text-center"><?php echo $row['receiver']; ?></p></td>
-                                            <td><p class="text-center"><?php echo $row['receiver_phone']; ?></p></td>
-                                            <td><p class="text-center"><?php echo $row['address']; ?></p></td>
-                                            <td><p class="text-center"><?php echo $row['province']; ?></p></td>
-                                            <td><p class="text-center"><?php echo $row['amphure']; ?></p></td>
-                                            <td><p class="text-center"><?php echo $row['district']; ?></p></td>
-                                            <td><p class="text-center"><?php echo $row['zipcode']; ?></p></td>
-                                            <td><p class="text-center"><?php echo $request_date; ?></p></td>
-                                            <td><p class="text-center"><?php echo $request_time; ?></p></td>
+                                            <td>
+                                                <p class="text-center"><?php echo $date; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $time; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $row['sender']; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $row['receiver']; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $row['receiver_phone']; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $row['address']; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $row['province']; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $row['amphure']; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $row['district']; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $row['zipcode']; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $request_date; ?></p>
+                                            </td>
+                                            <td>
+                                                <p class="text-center"><?php echo $request_time; ?></p>
+                                            </td>
                                             <?php $i++; ?>
                                         </tr>
 
@@ -231,61 +266,15 @@ if (!isLoggedIn()) {
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#add_emp').validate({
-
-                rules: {
-                    firstname: 'required',
-                    lastname: 'required',
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    phone: {
-                        required: true,
-                        number: true,
-                        minlength: 9,
-                        maxlength: 10
-                    },
-                },
-                messages: {
-                    firstname: 'กรุณากรอกชื่อต้น',
-                    lastname: 'กรุณากรอกนามสกุล',
-                    email: {
-                        required: 'กรุณากรอกอีเมล์',
-                        email: 'กรุณากรอกอีเมล์ให้ถูกต้อง'
-                    },
-                    phone: {
-                        required: 'กรุณากรอกเบอร์โทรศัพท์',
-                        number: 'กรุณากรอกตัวเลขเท่านั้น',
-                        minlength: 'เบอร์โทรศัพท์ต้องมี 9-10 ตัว',
-                        maxlength: 'เบอร์โทรศัพท์ต้องไม่เกิน 10 ตัว'
-                    }
-                },
-                errorElement: 'div',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback')
-                    error.insertAfter(element)
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid').removeClass('is-valid')
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-valid').removeClass('is-invalid')
-                }
-            });
-        })
-    </script>
+    
 
 </body>
 
 </html>
 
 <?php
-if (isset($_SESSION['err_email']) || isset($_SESSION['err_add_emp']) || isset($_SESSION['suc_add_emp'])) {
-    unset($_SESSION['err_email']);
-    unset($_SESSION['err_add_emp']);
-    unset($_SESSION['suc_add_emp']);
+if (isset($_SESSION['suc_assign_emp'])) {
+    unset($_SESSION['suc_assign_emp']);
+    
 }
 ?>

@@ -19,7 +19,7 @@ if (isset($_POST['submit'])) {
         header('location: check_car.php');
     } else {
         if ($start_date > $end_date) {
-            $_SESSION['err_choose_car'] = 'ไม่สามารถระบุวันส่งย้อนหลังได้';
+            $_SESSION['err_choose_car'] = 'ไม่สามารถระบุวันที่ย้อนหลังได้';
 
             header('location: check_car.php');
         } else {
@@ -46,19 +46,44 @@ if (isset($_POST['submit'])) {
                     $_SESSION['err_over_capacity'] = 'สินค้าเกินความจุรถ';
                     header('location: check_car.php');
                 } else {
-                    $query = "INSERT INTO car_orders (start_date, end_date, capacity, car_id, order_id) VALUES ('$start_date', '$end_date', $use_capacity, $car_id, $order_id)";
-                    $result = mysqli_query($conn, $query);
+                    $query2 = "select distinct co.end_date from car_orders co where co.order_id = $order_id";
+                    $result2 = query($query2);
+                    $row2 = mysqli_num_rows($result2);
+                    $row3 = fetch_assoc($result2);
+                    $err_enddate = '';
+                    if ($row2 > 0) {
+                        if ($row3['end_date'] == $end_date) {
+                            $query = "INSERT INTO car_orders (start_date, end_date, capacity, car_id, order_id) VALUES ('$start_date', '$end_date', $use_capacity, $car_id, $order_id)";
+                            
+                        }
+                        else {
+                            $err_enddate = 'กรุณาระบุวันและเวลาให้ตรงกัน';
+                            
+                        }
+                    }
+                    else {
+                        $query = "INSERT INTO car_orders (start_date, end_date, capacity, car_id, order_id) VALUES ('$start_date', '$end_date', $use_capacity, $car_id, $order_id)";
+                    }
+                    if ($err_enddate ==='') {
+                        $result = mysqli_query($conn, $query);
+                    
 
-                    if ($result) {
-                        $_SESSION['suc_query'] = 'ทำรายการเรียบร้อย';
-                        header('location: check_car.php');
-                    } else {
-                        $_SESSION['err_query'] = 'Cannot insert data into database';
+                        if ($result) {
+                            $_SESSION['suc_query'] = 'ทำรายการเรียบร้อย';
+                            header('location: check_car.php');
+                        } else {
+                            $_SESSION['err_query'] = 'Cannot insert data into database';
+                            header('location: check_car.php');
+                        }
+                    }
+                    else {
+                        $_SESSION['err_enddate'] = $err_enddate;
                         header('location: check_car.php');
                     }
+                    
                 }
             } else {
-                $_SESSION['err_check_amount'] = 'จำนวนสินค้าเกินกำหนด';
+                $_SESSION['err_over_capacity'] = 'สินค้าเกินความจุรถ';
                 header('location: check_car.php');
             }
         }

@@ -28,7 +28,7 @@
                 <ul class="navbar-nav ml-auto">
 
                     <li class="nav-item">
-                        <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/">
+                        <a class="nav-link waves-effect" href="order_no.php">
                             <i class="fas fa-truck-moving mr-1"></i>ติดตามการจัดส่ง</a>
                     </li>
                 </ul>
@@ -50,15 +50,15 @@
                     </div>
                     <div class="card-body">
                         <p class="card-text">
-                            <form action="login_backend.php" method="post">
+                            <form action="login_backend.php" id="form_login" method="post">
 
                                 <div class="form-outline mb-4">
-                                    <input type="email" name="email" id="form1Example1" class="form-control" value="<?php if (isset($_COOKIE['email'])) { echo $_COOKIE['email'];} ?>" />
+                                    <input type="email" name="email" id="email" class="form-control" value="<?php if (isset($_COOKIE['email'])) { echo $_COOKIE['email'];} ?>" />
                                     <label class="form-label" for="form1Example1">Email</label>
                                 </div>
 
                                 <div class="form-outline mb-4">
-                                    <input type="password" name="password" id="form1Example2" class="form-control" value="<?php if (isset($_COOKIE['password'])) { echo $_COOKIE['password'];} ?>" />
+                                    <input type="password" name="password" id="password" class="form-control" value="<?php if (isset($_COOKIE['password'])) { echo $_COOKIE['password'];} ?>" />
                                     <label class="form-label" for="form1Example2">Password</label>
                                 </div>
 
@@ -76,7 +76,7 @@
 
                                     <div class="col">
                                         <!-- Simple link -->
-                                        <a href="register.php">Need an account?</a>
+                                        <a href="user/register.php">Need an account?</a>
                                     </div>
                                 </div>
 
@@ -96,6 +96,53 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
+    <script src="node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#form_login').validate({
+                rules: {
+                    
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    
+                    
+                    password: {
+                        required: true,
+                        minlength: 6
+                    },
+                    
+                },
+                messages: {
+                    
+                    email: {
+                        required: 'กรุณากรอกอีเมล์',
+                        email: 'กรุณากรอกอีเมล์ให้ถูกต้อง'
+                    },
+                    
+                    password: {
+                        required: 'กรุณากรอกรหัสผ่าน',
+                        minlength: 'กรุณากรอกรหัสผ่านไม่น้อยกว่า 6 ตัวอักษร'
+                    },
+                    
+                },
+                errorElement: 'div',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback')
+                    error.insertAfter(element)
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid').removeClass('is-valid')
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-valid').removeClass('is-invalid')
+                }
+            });
+        })
+
+        
+    </script>
 </body>
 
 </html>

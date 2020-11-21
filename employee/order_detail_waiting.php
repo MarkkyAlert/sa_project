@@ -109,7 +109,7 @@ if (!isLoggedIn()) {
                                     <p class="text-center font-weight-bold">จำนวนสินค้า</p>
                                 </th>
                                 <th>
-                                    <p class="text-center font-weight-bold">ความจุรวม</p>
+                                    <p class="text-center font-weight-bold">ความจุสินค้า</p>
                                 </th>
 
                             </tr>
@@ -145,10 +145,12 @@ if (!isLoggedIn()) {
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 text-center">
+                <div class="col-6 text-right">
                     <a href="order_waiting.php" class="btn btn-danger btn-sm">BACK</a>
                 </div>
-                
+                <div class="col-6 text-left">
+                    <a href="order_detail_waiting2.php?order_id=<?php echo $order_id; ?>" class="btn btn-info btn-sm">DETAIL</a>
+                </div>
 
             </div>
         </div>

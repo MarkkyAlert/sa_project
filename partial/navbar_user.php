@@ -17,10 +17,7 @@
 
                     <ul class="navbar-nav ml-auto">
 
-                        <li class="nav-item">
-                            <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/">
-                                <i class="fas fa-truck-moving mr-1"></i>ติดตามการจัดส่ง</a>
-                        </li>
+                        
 
                         <li class="nav-item">
                             <a class="nav-link waves-effect" href="../logout.php">

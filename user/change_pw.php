@@ -93,7 +93,7 @@ if (!isLoggedIn()) {
                                         <label class="form-label" for="confirm">ยืนยันรหัสผ่าน</label>
                                     </div>
                                     <!-- Submit button -->
-                                    <button type="submit" name="submit" class="btn btn-info btn-block">เปลี่ยนรหัสผ่าน</button>
+                                    <button type="submit" name="submit" class="btn btn-info btn-block">change password</button>
                                 </form>
                             </p>
                         </div>

@@ -8,7 +8,7 @@
 
         if ($confirm === 'submit') {
             $_SESSION['suc_date_form'] = 'กำลังตรวจสอบ';
-            header('location: date_form.php');
+            header('location: status_all2.php');
         }
     }
     

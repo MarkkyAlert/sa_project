@@ -109,7 +109,7 @@ if (!isLoggedIn()) {
                                     <p class="text-center font-weight-bold">จำนวนสินค้า</p>
                                 </th>
                                 <th>
-                                    <p class="text-center font-weight-bold">ความจุรวม</p>
+                                    <p class="text-center font-weight-bold">ความจุสินค้า</p>
                                 </th>
 
                             </tr>

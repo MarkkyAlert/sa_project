@@ -65,6 +65,9 @@ if (!isLoggedIn()) {
                 <a href="order.php" class="active list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
                 </a>
+                <a href="report1.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-calendar-week mr-3"></i>เวลาการจัดส่ง
+                </a>
 
                 <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
                     <i class="fas fa-unlock-alt mr-3"></i>เปลี่ยนรหัสผ่าน
@@ -217,7 +220,7 @@ if (!isLoggedIn()) {
                                             <td><p class="text-center"><a target="_blank" href="../uploads/<?php echo $row['file']; ?>"><img src="../uploads/<?php echo $row['file']; ?>" width="50"></a></p></td>
                                             <?php endif; ?>
                                             <?php if ($row['file'] === '-') : ?>
-                                                <td><h4 class="text-center text-danger">-</h4></td>
+                                                <td><h4 class="text-center">-</h4></td>
                                             <?php endif; ?>
                                             <?php $i++; ?>
                                         </tr>
