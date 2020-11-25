@@ -71,7 +71,10 @@ if (!isLoggedIn()) {
                     <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
                 </a>
                 <a href="report1.php" class="list-group-item list-group-item-action waves-effect mb-1">
-                    <i class="fas fa-calendar-week mr-3"></i>เวลาการจัดส่ง
+                    <i class="fas fa-calendar-week mr-3"></i>รายการส่่งมอบสินค้า
+                </a>
+                <a href="history_deliver_main.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-history mr-3"></i>ประวัติงานที่มอบหมาย
                 </a>
 
                 <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">

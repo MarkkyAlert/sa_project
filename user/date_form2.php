@@ -206,15 +206,16 @@ if (!isLoggedIn()) {
 
                     amount: {
                         required: true,
-                        minlength: 4
-
+                        minlength: 4,
+                        maxlength: 4
                     }
                 },
                 messages: {
 
                     amount: {
                         required: 'กรุณากรอกจำนวน',
-                        minlength: 'จำนวนสินค้าต้องมากกว่า 1000'
+                        minlength: 'จำนวนสินค้าต้องมากกว่า 1000',
+                        maxlength: 'จำนวนสินค้าต้องไม่เกิน 10000'
                     }
                 },
                 errorElement: 'div',

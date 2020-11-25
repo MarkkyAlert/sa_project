@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../auth.php');
+include('../connectdb.php');
 
 if (!isLoggedIn()) {
     header('location: ../login.php');
@@ -15,7 +16,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap</title>
+    <title>ประวัติ</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -28,9 +29,8 @@ if (!isLoggedIn()) {
 <body class="grey lighten-3">
 
     <header>
-        <?php include('../partial/navbar_logistics.php'); ?>
+        <?php include('../partial/navbar_user.php'); ?>
         <!-- Sidebar -->
-
         <div class="sidebar-fixed position-fixed overflow-auto">
             <div class="container">
                 <div class="row">
@@ -64,7 +64,7 @@ if (!isLoggedIn()) {
                 <a href="report1.php" class="list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-calendar-week mr-3"></i>รายการส่่งมอบสินค้า
                 </a>
-                <a href="history_deliver_main.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <a href="history_deliver_main.php" class="active list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-history mr-3"></i>ประวัติงานที่มอบหมาย
                 </a>
 
@@ -75,7 +75,6 @@ if (!isLoggedIn()) {
 
             </div>
         </div>
-
         <!-- Sidebar -->
     </header>
 
@@ -84,63 +83,29 @@ if (!isLoggedIn()) {
         <div class="container-fluid mt-1">
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <?php if (isset($_SESSION['err_add_emp'])) : ?>
-                        <div class="alert alert-danger" role="alert">
-                            <strong><?php echo $_SESSION['err_add_emp']; ?></strong>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if (isset($_SESSION['err_email'])) : ?>
-                        <div class="alert alert-danger" role="alert">
-                            <strong><?php echo $_SESSION['err_email']; ?></strong>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if (isset($_SESSION['suc_add_emp'])) : ?>
-                        <div class="alert alert-success" role="alert">
-                            <strong><?php echo $_SESSION['suc_add_emp']; ?></strong>
-                        </div>
-                    <?php endif; ?>
-                    <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
-
+                    <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 25rem; margin:0 auto;">
                         <div class="card-header bg-transparent border-info">
-                            <h3 class="text-center">เพิ่มข้อมูลพนักงาน</h3>
+                            <h3 class="text-center">ประวัติงานที่มอบหมาย</h3>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
-                                <form action="add_emp_backend.php" method="post" id="add_emp">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-outline mb-5">
-                                                <input type="text" id="firstname" name="firstname" class="form-control" />
-                                                <label class="form-label" for="firstname">ชื่อ</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-outline mb-5">
-                                                <input type="text" id="lastname" name="lastname" class="form-control" />
-                                                <label class="form-label" for="lastname">นามสกุล</label>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="list-group list-group-flush">
+                                   
 
-                                    <div class="form-outline mb-5">
-                                        <input type="email" id="email" name="email" class="form-control" />
-                                        <label class="form-label" for="email">Email</label>
-                                    </div>
+                                    <a href="history_deliver.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                                    <i class="fas fa-list-ul mr-3"></i>ค้นหาตามรายชื่อพนักงาน
+                                    </a>
+                                    <a href="history_deliver2.php" class="list-group-item list-group-item-action waves-effect mb-2">
+                                    <i class="fas fa-table mr-3"></i>ค้นหาตามวันที่
+                                    </a>
 
-                                    <div class="form-outline mb-5">
-                                        <input type="text" id="phone" name="phone" class="form-control" />
-                                        <label class="form-label" for="phone">เบอร์โทรศัพท์</label>
-                                    </div>
+                                    
 
-                                    <!-- Submit button -->
-                                    <button type="submit" name="submit" id="submit" class="btn btn-info btn-block">ADD</button>
-                                </form>
+                                    
+                                </div>
                             </p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -158,10 +123,3 @@ if (!isLoggedIn()) {
 
 </html>
 
-<?php
-if (isset($_SESSION['err_email']) || isset($_SESSION['err_add_emp']) || isset($_SESSION['suc_add_emp'])) {
-    unset($_SESSION['err_email']);
-    unset($_SESSION['err_add_emp']);
-    unset($_SESSION['suc_add_emp']);
-}
-?>

@@ -2,20 +2,13 @@
 session_start();
 include('../auth.php');
 include('../connectdb.php');
-error_reporting(E_ALL ^ E_NOTICE);
-
-if (isset($_REQUEST['order_id'])) {
-   
-    $order_id = $_REQUEST['order_id'];
-}
-
-
 
 if (!isLoggedIn()) {
     header('location: ../login.php');
 } else if ($_SESSION['type'] != 'L') {
     header('location: ../page_not_found.php');
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +17,7 @@ if (!isLoggedIn()) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>รายละเอียดออเดอร์</title>
+    <title>ค้นประวัติ</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/mdb.min.css" rel="stylesheet">
@@ -67,13 +60,13 @@ if (!isLoggedIn()) {
                     <i class="fas fa-times-circle mr-3"></i>รายการที่ไม่อนุมัติ
                 </a>
 
-                <a href="order.php" class="active list-group-item list-group-item-action waves-effect mb-1">
+                <a href="order.php" class="list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
                 </a>
                 <a href="report1.php" class="list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-calendar-week mr-3"></i>รายการส่่งมอบสินค้า
                 </a>
-                <a href="history_deliver_main.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <a href="history_deliver_main.php" class="active list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-history mr-3"></i>ประวัติงานที่มอบหมาย
                 </a>
 
@@ -91,66 +84,40 @@ if (!isLoggedIn()) {
     <main class="pt-5 mx-lg-5">
 
         <div class="container-fluid mt-1">
-            <div class="row mt-5">
-                <div class="col-12">
-                <?php
-                        $query = "SELECT order_no FROM orders WHERE order_id = $order_id";
-                        $result = query($query);
-                        $row = fetch_assoc($result);
-                    ?>
-                    <h3 class="text-center">เลขที่สินค้า: <mark><?php echo $row['order_no']; ?></mark></h3>
+        <div class="row mt-3" style="width: 30rem; margin:0 auto;">
+            <div class="col-md-12">
+                <?php if (isset($_SESSION['err_history'])) : ?>
+                    <div class="alert alert-danger" role="alert">
+                        <strong><?php echo $_SESSION['err_history']; ?></strong>
+                    </div>
+                <?php endif; ?>
+                <div class="card mt-5 border border-info rounded shadow-0 mb-3 animated fadeInDownBig" style="width: 30rem; margin:0 auto;">
+                    <div class="card-header bg-transparent border-info">
+                        <h3 class="text-center">ค้นประวัติตามชื่อพนักงาน</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <form action="history_deliver_backend.php" method="post">
+
+                                <div class="form-outline mb-4">
+                                    <input type="text" name="name"  class="form-control" required>
+                                    <label class="form-label" for="form1Example1">ชื่อพนักงาน</label>
+                                </div>
+
+                                
+
+                                <!-- 2 column grid layout for inline styling -->
+                                
+
+                                <!-- Submit button -->
+                                <button type="submit" name="submit" class="btn btn-info btn-block">SUBMIT</button>
+                            </form>
+                        </p>
+                    </div>
                 </div>
+
             </div>
-         
-            <div class="row mt-3">
-                <div class="col-12">
-                    <table class="table table-bordered table-hover table-light">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <p class="text-center font-weight-bold">ชื่อสินค้า</p>
-                                </th>
-                                <th>
-                                    <p class="text-center font-weight-bold">จำนวนสินค้า</p>
-                                </th>
-                                <th>
-                                    <p class="text-center font-weight-bold">ความจุรวม</p>
-                                </th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-
-                            $query = "select p.product_name, od.order_detail_id , od.amount, od.sum_capacity from products p, order_details od 
-                            where 1=1
-                            and p.product_id = od.product_id
-                            and od.order_id = $order_id";
-                            $result = mysqli_query($conn, $query);
-
-                            while ($row = mysqli_fetch_assoc($result)) { ?>
-                                <tr>
-                                    
-                                    <td><p class="text-center"><?php echo $row['product_name']; ?></p></td>
-                                    <td><p class="text-center"><?php echo $row['amount']; ?></p></td>
-                                    <td><p class="text-center"><?php echo $row['sum_capacity']; ?></p></td>
-                                 
-                                </tr>
-
-                            <?php } ?>
-
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 text-center">
-                    <a href="order_waiting.php" class="btn btn-danger btn-sm">BACK</a>
-                </div>
-                
-                
-            </div>
+        </div>
         </div>
     </main>
 
@@ -160,9 +127,15 @@ if (!isLoggedIn()) {
     <script type="text/javascript" src="../js/mdb.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"></script>
     <script src="../node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-    
+
 
 </body>
 
 </html>
+
+<?php
+    if (isset($_SESSION['err_history'])) {
+        unset($_SESSION['err_history']);
+    }
+?>
 

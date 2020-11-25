@@ -62,11 +62,11 @@ if (isset($_REQUEST['order_no'])) {
                     <i class="fas fa-times-circle mr-3"></i>รายการที่ไม่อนุมัติ
                 </a>
 
-                <a href="order.php" class="list-group-item list-group-item-action waves-effect mb-1">
-                    <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
-                </a>
                 <a href="report1.php" class="list-group-item list-group-item-action waves-effect mb-1">
-                    <i class="fas fa-calendar-week mr-3"></i>เวลาการจัดส่ง
+                    <i class="fas fa-calendar-week mr-3"></i>รายการส่่งมอบสินค้า
+                </a>
+                <a href="history_deliver_main.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                    <i class="fas fa-history mr-3"></i>ประวัติงานที่มอบหมาย
                 </a>
 
                 <a href="change_pw.php" class="list-group-item list-group-item-action  waves-effect mb-2">
@@ -114,6 +114,9 @@ if (isset($_REQUEST['order_no'])) {
                                 <th>
                                     <p class="text-center font-weight-bold">นามสกุล</p>
                                 </th>
+                                <th>
+                                    <p class="text-center font-weight-bold">จำนวนออเดอร์</p>
+                                </th>
                                 
                                 <th>
                                     <p class="text-center font-weight-bold">มอบหมาย</p>
@@ -123,13 +126,12 @@ if (isset($_REQUEST['order_no'])) {
                         <tbody>
                             <?php
 
-                            $query = "SELECT e.employee_id, u.firstname, u.lastname
-                            FROM employees e, users u 
-                            WHERE e.user_id = u.user_id 
-                            AND u.type = 'E' 
-                            AND  (SELECT COUNT(1) FROM orders o 
-                            WHERE o.employee_id = e.employee_id  
-                            AND date('$delivery_date') = date(o.delivery_date)) = 0 ";
+                            $query = "SELECT e.employee_id, u.firstname, u.lastname, 
+                            (SELECT COUNT(1) FROM orders o WHERE o.employee_id = e.employee_id  AND 
+                            date('$delivery_date') = date(o.delivery_date)) AS order_amount,
+                            (select count(1) from car_orders co , orders o 
+                            where co.order_id = o.order_id and o.employee_id = e.employee_id and '$delivery_date' between start_date and end_date) as deliverFlag
+                            FROM employees e, users u WHERE e.user_id = u.user_id AND u.type = 'E' ORDER BY order_amount";
                             
                             $result = mysqli_query($conn, $query);
 
@@ -141,11 +143,19 @@ if (isset($_REQUEST['order_no'])) {
                                     <td>
                                         <p class="text-center"><?php echo $row['lastname']; ?></p>
                                     </td>
-                                    
                                     <td>
-                                        <p class="text-center"><a href="assign_emp_backend.php?id=<?php echo $row['employee_id']; ?>" class="btn btn-warning btn-sm">มอบหมาย</a></p>
+                                        <p class="text-center"><?php echo $row['order_amount']; ?></p>
                                     </td>
-
+                                    <?php if ($row['deliverFlag'] > 0): ?>
+                                    <td>
+                                        <p class="text-center"><a  href="#" class="btn btn-muted btn-sm">มอบหมาย</a></p>
+                                    </td>
+                                    <?php endif; ?>
+                                    <?php if ($row['deliverFlag'] <= 0) : ?>
+                                    <td>
+                                        <p class="text-center"><a  href="assign_emp_backend.php?id=<?php echo $row['employee_id']; ?>" class="btn btn-warning btn-sm">มอบหมาย</a></p>
+                                    </td>
+                                    <?php endif; ?>
                                 </tr>
 
                             <?php } ?>

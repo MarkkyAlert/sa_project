@@ -66,10 +66,10 @@ $delivery_date = $_SESSION['deli'];
                 <a href="order.php" class="list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-truck mr-3"></i></i>การจัดส่ง
                 </a>
-                <a href="report1.php" class="active list-group-item list-group-item-action waves-effect mb-1">
+                <a href="report1.php" class="list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-calendar-week mr-3"></i>รายการส่่งมอบสินค้า
                 </a>
-                <a href="history_deliver_main.php" class="list-group-item list-group-item-action waves-effect mb-1">
+                <a href="history_deliver_main.php" class="active list-group-item list-group-item-action waves-effect mb-1">
                     <i class="fas fa-history mr-3"></i>ประวัติงานที่มอบหมาย
                 </a>
 
@@ -102,47 +102,36 @@ $delivery_date = $_SESSION['deli'];
                             <strong><?php echo $_SESSION['err_report']; ?></strong>
                         </div>
                     <?php endif; ?>
-                    <h3 class="text-center ">รายการส่งมอบสินค้า</h3>
-                    <form action="report1_backend.php" method="post">
-                    <?php $b = substr(date('Y-d-m'),8);
-$c = number_format($b);
-if ($c == 1) {
-	$c = '02';
-}
-else if($c == 2) {
-    $c = '03';
-}
-else if ($c == 3){
-    $c = '04';
-}
-else if ($c == 4){
-    $c = '05';
-}
-else if ($c == 5){
-    $c = '06';
-}
-else if ($c == 6){
-    $c = '07';
-}
-else if ($c == 7){
-    $c = '08';
-}
-else if ($c == 8){
-    $c = '09';
-}
-else if ($c == 9){
-    $c = '10';
-}
-else if ($c == 10){
-    $c = '11';
-}
-else if ($c == 11){
-    $c = '12';
-}
-else if ($c == 12){
-    $c = '01';
-}?>
-                        เลือกวันที่ <input type="date" name="date" max="<?php echo date('Y-'.$c.'-d'); ?>"><br>
+                    <h3 class="text-center ">ประวัติงานที่มอบหมาย</h3>
+                    <form action="history_deliver2_backend.php" method="post">
+                        <?php $b = substr(date('Y-d-m'), 8);
+                        $c = number_format($b);
+                        if ($c == 1) {
+                            $c = '02';
+                        } else if ($c == 2) {
+                            $c = '03';
+                        } else if ($c == 3) {
+                            $c = '04';
+                        } else if ($c == 4) {
+                            $c = '05';
+                        } else if ($c == 5) {
+                            $c = '06';
+                        } else if ($c == 6) {
+                            $c = '07';
+                        } else if ($c == 7) {
+                            $c = '08';
+                        } else if ($c == 8) {
+                            $c = '09';
+                        } else if ($c == 9) {
+                            $c = '10';
+                        } else if ($c == 10) {
+                            $c = '11';
+                        } else if ($c == 11) {
+                            $c = '12';
+                        } else if ($c == 12) {
+                            $c = '01';
+                        } ?>
+                        เลือกวันที่ <input type="date" name="date" max="<?php echo date('Y-' . $c . '-d'); ?>"><br>
                         <button class="btn btn-info" type="submit" name="submit">OK</button><br>
 
                     </form>
@@ -168,24 +157,16 @@ else if ($c == 12){
                                             <p class="text-center font-weight-bold">ลำดับที่</p>
                                         </th>
                                         <th scope="col">
-                                            <p class="text-center font-weight-bold">เลขที่ออเดอร์</p>
+                                            <p class="text-center font-weight-bold">ชื่อ</p>
                                         </th>
+                                        <th scope="col">
+                                            <p class="text-center font-weight-bold">นามสกุล</p>
+                                        </th scope="col">
                                         <th scope="col">
                                             <p class="text-center font-weight-bold">จำนวน</p>
                                         </th scope="col">
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">ชื่อพนักงาน</p>
-                                        </th scope="col">
 
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">ชื่อผู้รับ</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">อำเภอ</p>
-                                        </th>
-                                        <th scope="col">
-                                            <p class="text-center font-weight-bold">เวลาที่ต้องส่ง</p>
-                                        </th>
+
 
 
                                     </tr>
@@ -193,7 +174,14 @@ else if ($c == 12){
                                 <tbody>
                                     <?php
 
-                                    $query = "SELECT DISTINCT o.order_no, o.order_id, (SELECT IFNULL (SUM(od.amount), 0) FROM order_details od WHERE od.order_id = o.order_id) as amount,  CONCAT(u.firstname, ' ', u.lastname) AS name, o.receiver, d.name_th, TIME(o.delivery_date) AS time FROM orders o , users u, employees e, order_details od, districts d WHERE (o.employee_id = e.employee_id AND e.user_id = u.user_id and o.district_id = d.id AND date(o.delivery_date) = '$delivery_date')";
+                                    $query = "select u.firstname , u.lastname, count(1) as num
+                                    from orders o , employees e , users u  where 1=1
+                                    and o.employee_id = e.employee_id
+                                    and e.user_id = u.user_id
+                                    and date(o.delivery_date) = date('$delivery_date')
+                                    
+                                    group by u.firstname , u.lastname
+                                    order by num desc";
                                     $result = mysqli_query($conn, $query);
 
 
@@ -205,26 +193,18 @@ else if ($c == 12){
                                             <td>
                                                 <p class="text-center"><?php echo $i; ?></p>
                                             </td>
-                                            <td>
-                                                <u><p class="text-center"><a class="text-primary" href="report2.php?order_id=<?php echo $row['order_id']; ?>"><?php echo $row['order_no']; ?></p></u>
-                                            </td>
-                                            <td>
-                                                <p class="text-center"><?php echo $row['amount']; ?></p>
-                                            </td>
 
 
                                             <td>
-                                                <p class="text-center"><?php echo $row['name']; ?></p>
+                                                <p class="text-center"><?php echo $row['firstname']; ?></p>
                                             </td>
                                             <td>
-                                                <p class="text-center"><?php echo $row['receiver']; ?></p>
+                                                <p class="text-center"><?php echo $row['lastname']; ?></p>
                                             </td>
                                             <td>
-                                                <p class="text-center"><?php echo $row['name_th']; ?></p>
+                                                <p class="text-center"><?php echo $row['num']; ?></p>
                                             </td>
-                                            <td>
-                                                <p class="text-center"><?php echo $row['time']; ?></p>
-                                            </td>
+
                                             <?php $i++; ?>
                                         </tr>
 
